@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/assets/styles/css/style.css">
+    <link rel="stylesheet" href="~/assets/styles/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/styles/css/owl.theme.default.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="shortcut icon" href="~/assets/Images/quenIcon.png" type="image/x-icon" />
+
+    <title>PULSUZ ELAN SAYTI</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Header Up Start -->
+        <section class="secDisplay" id="headerUp">
+            <div class="casket">
+                <div class="row">
+                    <!-- Head Logo Start -->
+                    <div class="col-6 headLogo">
+                        <div class="headImageBox">
+                            <a asp-controller="anasehife" asp-action="index" >
+                                <img src="~/assets/Images/tempLogo.png" alt="">
+
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Head Logo End -->
+                    <!-- Head Login Start -->
+                    <div class="col-6  d-flex justify-content-end align-items-center ">
+                        <ul class="headCreateLogin me-2">
+                            <li class="headCreateBtn media800">
+                                <a href="createPoster.html" class="btn">
+                                    <i class="fa-regular fa-square-plus"></i>
+                                    <span>Elan yarat</span>
+                                </a>
+                            </li>
+                            <li class="headWishBtn ">
+                                <a href="wishlist.html">
+                                    <i class="fa-solid fa-heart"></i>
+                                </a>
+                            </li>
+                            <li class="headLogin">
+                                <a href="login.html">
+                                    <i class="fa-solid fa-circle-user"></i>
+                                    <span>Giriş</span>
+                                </a>
+                            </li>
+
+                            <li class="headUser">
+                                <a href="profile.html">
+                                    <i class="fa-solid fa-circle-user"></i>
+                                    <span>Elnur</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Head Login End -->
+                </div>
+            </div>
+        </section>
+        <!-- Header Up Start -->
+        <!-- Head Search Start -->
+        <section class="secDisplay " id="headSearch">
+            <div class="casket">
+                <div class="row">
+                    <div class="col-lg-11 col-md-10 headSearch">
+                        <form action="#">
+                            <div class="col-1 d-flex justify-content-end">
+                                <a href="">
+                                    <i class=" fa-solid fa-magnifying-glass"></i>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-7 ">
+                                <input placeholder="Axtarış" type="text" class="form-control">
+                            </div>
+                            <div class="col-lg-2 media800">
+                                <select class="form-select">
+                                    <option selected disabled>Şəhər</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-1">
+                                <button type="submit" class="ms-5 btn">Axtar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- Head Search End -->
+        <!-- TabBar Start -->
+        <section class=" mediaB800" id="tabBar">
+            <ul class="tabBar-ul">
+                <li class="tabBar-li tabBar-li-main">
+                    <a class="tabBar-link" asp-controller="anasehife" asp-action="index">
+                        <i class="tabBar-icon fa-solid fa-house"></i>
+                        <span class="tabBar-text">Əsas</span>
+                    </a>
+                </li>
+                <li class="tabBar-li tabBar-li-rules">
+                    <a class="tabBar-link" href="userTerms.html">
+                        <i class=" tabBar-icon  fa-solid fa-question"></i>
+                        <span class="tabBar-text">Qaydalar</span>
+                    </a>
+                </li>
+                <li class="tabBar-addIcon tabBar-li-addIcon">
+                    <a class="tabBar-link" href="createPoster.html">
+                        <i class=" tabBar-icon fa-solid fa-plus"></i>
+                        <span class="tabBar-text">Yeni Elan</span>
+                    </a>
+                </li>
+                <li class="tabBar-li tabBar-li-contact">
+                    <a class="tabBar-link" href="wishlist.html">
+                        <i class=" tabBar-icon fa-solid fa-heart"></i>
+                        <span class="tabBar-text">Sevimlilər</span>
+                    </a>
+                </li>
+                <li class="tabBar-li tabBar-li-login">
+                    <a class="tabBar-link" href="login.html">
+                        <i class="tabBar-icon fa-solid fa-circle-user"></i>
+                        <span class="tabBar-text">Giriş</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- TabBar End -->
+
+    </header>
+    <!-- Header -->
+    @RenderBody()
+
+    <!-- Footer -->
+    <footer>
+
+        <!-- Section: Links  -->
+        <section id="footerInfo">
+            <div class="container">
+                <!-- Grid row -->
+                <div class="row justify-content-center ">
+                    <div class="col-lg-10 col-md-12 col-sm-12">
+                        <div class="col-12 footerCol row">
+                            <!-- Grid column -->
+                            <div class="footerPage    col-lg-3 col-md-3 col-6   ">
+                                <!-- Links -->
+                                <h5 class="text-uppercase fw-bold ">
+                                    SƏHİFƏ
+                                </h5>
+                                <p>
+                                    <a asp-controller="anasehife" asp-action="index">Ana səhifə</a>
+                                </p>
+                                <p>
+                                    <a href="login.html">Daxil ol</a>
+                                </p>
+                                <p>
+                                    <a href="createPoster.html">Yeni Elan</a>
+                                </p>
+
+                            </div>
+                            <!-- Grid column -->
+                            <!-- Grid column -->
+                            <div class="footerInformation  col-lg-3 col-md-3 col-6 ">
+                                <!-- Links -->
+                                <h5 class="text-uppercase fw-bold ">
+                                    İnformasiya
+                                </h5>
+                                <p>
+                                    <a href="userTerms.html">
+                                        İstifadə
+                                        qaydaları
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="wishlist.html">Sevimlilər</a>
+                                </p>
+
+
+                                <p>
+                                    <a href="contact.html">Əlaqə</a>
+                                </p>
+
+
+
+
+                            </div>
+                            <!-- Grid column -->
+                            <!-- Grid column -->
+                            <div class="footerContact   col-lg-3 col-md-4 col-sm-12 ">
+                                <!-- Links -->
+                                <h5 class="text-uppercase fw-bold ">Əlaqə</h5>
+                                <p>
+                                    <i class="fas fa-home me-3"></i>
+                                    <span>Bakı Şəhəri </span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-envelope me-3"></i>
+                                    <a href="mailto:"> info@example.com</a>
+                                </p>
+                                <p>
+                                    <i class="fas fa-phone me-3"></i>
+                                    <a href="tel:+994777777777">
+                                        +994777777777
+                                    </a>
+                                </p>
+                            </div>
+                            <!-- Grid column -->
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+        <!-- Copyright Start -->
+        <section id="footerCopyright">
+            <div class="casket">
+                <div class="row">
+                    <div class="col-12 copyRightBox">
+                        <p>© 2023, HƏR KƏSİN FERMASI. BÜTÜN HÜQUQLAR QORUNUR.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Copyright End -->
+
+    </footer>
+    <!-- Footer -->
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="~/assets/js/owl.carousel.js"></script>
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+            integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+            crossorigin="anonymous"></script>
+    <script src="~/assets/js/owlCarouselSetting.js"></script>
+
+
+    <script>
+
+    </script>
+
+</body>
+
+</html>

@@ -1,6 +1,12 @@
 using Ferma.Core.Entites;
+using Ferma.Core.IUnitOfWork;
 using Ferma.Data.Datacontext;
+using Ferma.Data.UnitOfWork;
 using Ferma.Mvc.ServiceExtentions;
+using Ferma.Service.Services.Implementations;
+using Ferma.Service.Services.Implementations.User;
+using Ferma.Service.Services.Interfaces;
+using Ferma.Service.Services.User.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,6 +45,10 @@ namespace Ferma.Mvc
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<DataContext>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailServices, EmailServices>();
+            services.AddScoped<IPosterCreateServices, PosterCreateServices>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

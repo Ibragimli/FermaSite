@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ferma.Service.Services.User.Interfaces
+namespace Ferma.Service.Services.Interfaces.User
 {
     public interface IPosterCreateServices
     {

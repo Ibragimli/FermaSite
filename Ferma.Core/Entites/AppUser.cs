@@ -9,7 +9,7 @@ namespace Ferma.Core.Entites
     {
         public string Name { get; set; }
         public bool IsAdmin { get; set; }
-        public int Balance { get; set; }
+        public decimal? Balance { get; set; }
         public ICollection<PosterUserId> PosterUserIds { get; set; }
         public ICollection<WishItem> WishItems { get; set; }
 

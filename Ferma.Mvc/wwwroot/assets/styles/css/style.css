@@ -917,7 +917,7 @@ body {
     }
 
         main #breadCrumbs .casket .row .breadCrumbBox ul li a span {
-            font-size: 17px
+            font-size: 16px
         }
 
     main #posters {
@@ -1151,7 +1151,7 @@ body {
         }
 
             main #breadCrumbs .casket .row .breadCrumbBox ul li a span {
-                font-size: 16px
+                font-size: 15px
             }
 
     main #profile .profileTitleAccount ul li .personalBalanceBox {
@@ -2511,7 +2511,7 @@ footer #footerCopyright {
             }
 
                 #breadCrumbs .casket .row .breadCrumbBox ul li a span {
-                    font-size: 19px;
+                    font-size: 17px;
                     -webkit-transition: all 0.4s;
                     transition: all 0.4s;
                     color: gray

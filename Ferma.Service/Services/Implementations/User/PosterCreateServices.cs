@@ -1,14 +1,14 @@
 ﻿using Ferma.Core.Entites;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.HelperService.Interfaces;
-using Ferma.Service.Services.User.Interfaces;
+using Ferma.Service.Services.Interfaces.User;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Implementations.User
 {
+
     public class PosterCreateServices : IPosterCreateServices
     {
         private readonly IUnitOfWork _unitOfWork;

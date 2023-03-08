@@ -11,7 +11,7 @@ namespace Ferma.Core.Entites
         public string Describe { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public int Price { get; set; }
+        public decimal? Price { get; set; }
         public bool PriceCurrency { get; set; }
         public int ViewCount { get; set; }
         public int WishCount { get; set; }

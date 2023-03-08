@@ -3,10 +3,12 @@ using Ferma.Core.IUnitOfWork;
 using Ferma.Data.Datacontext;
 using Ferma.Data.UnitOfWork;
 using Ferma.Mvc.ServiceExtentions;
+using Ferma.Service.HelperService.Implementations;
+using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Implementations;
 using Ferma.Service.Services.Implementations.User;
 using Ferma.Service.Services.Interfaces;
-using Ferma.Service.Services.User.Interfaces;
+using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -48,6 +50,9 @@ namespace Ferma.Mvc
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailServices, EmailServices>();
             services.AddScoped<IPosterCreateServices, PosterCreateServices>();
+            services.AddScoped<IManageImageHelper, ManageImageHelper>();
+            services.AddScoped<IImageValue, ImageValue>();
+
 
         }
 

@@ -1,10 +1,14 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
+using Ferma.Service.Dtos.User;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Implementations.User
 {
@@ -20,26 +24,69 @@ namespace Ferma.Service.Services.Implementations.User
             _manageImageHelper = manageImageHelper;
         }
 
-        public async void CreateImage(Poster Image, bool value)
+        public async void CreateImage(List<IFormFile> imageFiles, int posterId)
         {
-            PosterImage Posterimage = new PosterImage
+            int i = 1;
+            bool posterStatus;
+            foreach (var image in imageFiles)
             {
-                IsPoster = value,
-                Poster = Image,
-                Image = _manageImageHelper.FileSave(Image, "poster"),
+                posterStatus = false;
+                if (i == 1)
+                    posterStatus = true;
+                PosterImage Posterimage = new PosterImage
+                {
+                    IsPoster = posterStatus,
+                    PosterId = posterId,
+                    Image = _manageImageHelper.FileSave(image, "poster"),
+                };
+                await _unitOfWork.PosterImageRepository.InsertAsync(Posterimage);
+                i++;
+            }
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto)
+        {
+            PosterFeatures features = new PosterFeatures
+            {
+                Name = PosterDto.PosterName,
+                CityId = PosterDto.CityId,
+                Describe = PosterDto.Describe,
+                Email = PosterDto.Email,
+                PhoneNumber = PosterDto.PhoneNumber,
+                SubCategoryId = PosterDto.SubCategoryId,
+                Price = PosterDto.Price,
+                PriceCurrency = PosterDto.PriceCurrency,
+                ViewCount = 0,
+                WishCount = 0,
+                IsPremium = false,
+                IsVip = false,
+                PosterStatus = PosterStatus.Waiting,
+                IsDisabled = false,
+                ModifiedDate = DateTime.UtcNow.AddHours(4),
+                IsDelete = false,
+
             };
-            await _unitOfWork.PosterImageRepository.InsertAsync(Posterimage);
+            await _unitOfWork.PosterFeaturesRepository.InsertAsync(features);
+            await _unitOfWork.CommitAsync();
+            return features;
         }
 
-        public void ImagesCheck(Poster Images)
+
+
+        public async Task<Poster> CreatePoster(PosterFeatures features, List<IFormFile> imageFiles)
         {
-            throw new NotImplementedException();
+            Poster poster = new Poster
+            {
+                PosterFeaturesId = features.Id,
+                ImageFiles = imageFiles,
+            };
+            await _unitOfWork.PosterRepository.InsertAsync(poster);
+            await _unitOfWork.CommitAsync();
+            return poster;
         }
 
-        public void PosterCheck(Poster Image)
-        {
-            throw new NotImplementedException();
-        }
+
+
 
         public async void SaveChange(Poster Poster)
         {

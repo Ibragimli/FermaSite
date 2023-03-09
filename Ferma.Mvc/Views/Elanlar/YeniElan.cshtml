@@ -3,7 +3,7 @@
     ViewData["Title"] = "YeniElan";
 }
 
-
+@model PosterCreateViewModels
 <main>
     <!-- Bread Crumb  Start -->
     <section class="secDisplay" id="breadCrumbs">
@@ -41,31 +41,30 @@
                 <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
                     <h1>Yeni Elan</h1>
                     <form class="form-control" asp-action="yenielan" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
+
                         <!-- Poster Kategoriya Start -->
                         <div class=" mb-3 posterCategorys">
                             <label class="  form-label">Kategoriya*</label>
-                            <select class="form-select">
-                                <option value="">Siyahıdan seçin</option>
-                                <optgroup label="Balıqlar">
-                                    <option value="55">dəniz, cay balıqları</option>
-                                    <option value="56">akvarium balıqları</option>
-                                    <option value="57">akvariumlar və digər</option>
-                                    <option value="59">balıqlar üçün yem</option>
-                                </optgroup>
-
-                                <optgroup label="ARIÇILIQ">
-                                    <option value="131">arıçılıq avadanlıqları</option>
-                                    <option value="130">arı yeşikləri</option>
-                                    <option value="133">digər</option>
-                                </optgroup>
-
+                            <select asp-for="PosterCreateDto.SubCategoryId" asp class="form-select">
+                                <option disabled selected>Siyahıdan seçin</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <optgroup label="@category.Name"> </optgroup>
+                                    @foreach (var subCategory in Model.SubCategories.Where(x => x.CategoryId == category.Id))
+                                    {
+                                        <option value="@subCategory.Id">@subCategory.Name </option>
+                                    }
+                                }
                             </select>
+                            <span asp-validation-for="PosterCreateDto.SubCategoryId" class="text-danger"></span>
                         </div>
                         <!-- Poster Kategoriya End -->
                         <!-- Poster  Start -->
                         <div class="mb-3 posterName">
-                            <label class="form-label">Elanın adı*</label>
-                            <input maxlength="100" type="text" class="form-control">
+                            <label asp-for="PosterCreateDto.PosterName" class="form-label">Elanın adı*</label>
+                            <input asp-for="PosterCreateDto.PosterName" maxlength="100" type="text" class="form-control">
+                            <span asp-validation-for="PosterCreateDto.PosterName" class="text-danger"></span>
                         </div>
                         <!-- Poster   End -->
                         <!-- Poster Price  Start -->
@@ -73,24 +72,27 @@
                             <label class="form-label">Qiymət*</label>
 
                             <div class="posterPrice">
-                                <input title="" min="0" max="999999" type="number"
+                                <input placeholder="0,00" asp-for="PosterCreateDto.Price" title="" min="0" max="9999999" type="text"
                                        class="form-control posterPriceInput">
+                                <span asp-validation-for="PosterCreateDto.UserName" class="text-danger"></span>
 
                                 <div class="posterPriceCurrency">
                                     <div class="form-check ">
-                                        <input class="form-check-input" type="radio" name="exampleRadios"
-                                               id="exampleRadios1" value="option1" checked>
+                                        <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
+                                               value="false" checked>
                                         <label class="form-check-label" for="exampleRadios1">
                                             AZN, ₼
                                         </label>
                                     </div>
                                     <div class="form-check ">
-                                        <input class="form-check-input" type="radio" name="exampleRadios"
-                                               id="exampleRadios2" value="option2">
+                                        <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
+                                               value="true" checked>
                                         <label class="form-check-label" for="exampleRadios2">
                                             USD, $
                                         </label>
                                     </div>
+                                    <span asp-validation-for="PosterCreateDto.PriceCurrency" class="text-danger"></span>
+
                                 </div>
                             </div>
 
@@ -99,48 +101,65 @@
                         <!-- Poster City Start -->
                         <div class="mb-3 posterCitys">
                             <label class="form-label">Şəhər*</label>
-                            <select class="form-select">
-                                <option selected="selected" value="">Bakı</option>
+                            <select asp-for="PosterCreateDto.CityId" class="form-select">
+                                @foreach (var city in Model.Cities)
+                                {
+                                    if (city.Name == "Bakı")
+                                    {
+                                        <option selected="selected" value="@city.Id">@city.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@city.Id">@city.Name</option>
+                                    }
+                                }
                             </select>
+                            <span asp-validation-for="PosterCreateDto.CityId" class="text-danger"></span>
+
                         </div>
                         <!-- Poster City End -->
                         <!-- Poster Describe  Start -->
                         <div class="mb-3 posterDescribe">
                             <label class="form-label">Məzmun</label>
-                            <textarea class="form-control" maxlength="3000" type="text" cols="10"
+                            <textarea asp-for="PosterCreateDto.Describe" class="form-control" maxlength="3000" type="text" cols="10"
                                       rows="7"></textarea>
+                            <span asp-validation-for="PosterCreateDto.Describe" class="text-danger"></span>
+
                         </div>
                         <!-- Poster Describe End -->
                         <!-- Poster Image  Start -->
                         <div class="mb-3 posterImages">
-                            <label class="form-label">Elanın Şəkillər*</label>
+                            <label asp-for="PosterCreateDto.ImageFiles" class="form-label">Elanın Şəkillər*</label>
                             <!-- Şəkil əlavə et -->
-
-
-                            <input id="imageInput" type="file" name="images[]" accept="image/png,  image/jpeg"
+                            <input asp-for="PosterCreateDto.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
                                    class="form-control" multiple="">
                             <div>
                                 <p id="imageErrorMessage" class="fw-bold "></p>
+                                <span asp-validation-for="PosterCreateDto.ImageFiles" class="text-danger"></span>
                             </div>
                             <div class="row" id="temperoryImages"></div>
-
                         </div>
                         <!-- Poster Image End -->
                         <!-- Poster User  Start -->
                         <div class="mb-3 posterUser">
                             <div class="mb-3 posterName">
-                                <label class="form-label">Adınız*</label>
-                                <input placeholder="Elnur Ibrahimli" maxlength="100" type="text"
+                                <label asp-for="PosterCreateDto.UserName" class="form-label">Adınız*</label>
+                                <input asp-for="PosterCreateDto.UserName" placeholder="Elnur Ibrahimli" maxlength="100" type="text"
                                        class="form-control">
+                                <span asp-validation-for="PosterCreateDto.UserName" class="text-danger"></span>
+
                             </div>
                             <div class="mb-3 posterEmail">
-                                <label class="form-label">Emailiniz</label>
-                                <input placeholder="nümünə@gmail.com" maxlength="100" type="email"
+                                <label asp-for="PosterCreateDto.Email" class="form-label">Emailiniz</label>
+                                <input asp-for="PosterCreateDto.Email" placeholder="nümünə@gmail.com" maxlength="100" type="email"
                                        class="form-control">
+                                <span asp-validation-for="PosterCreateDto.Email" class="text-danger"></span>
+
                             </div>
                             <div class="mb-3 posterPhone">
-                                <label class="form-label">Nömrəniz*</label>
-                                <input class="form-control " placeholder="(077) 777-77-77" type="text" id="phone">
+                                <label asp-for="PosterCreateDto.PhoneNumber" class="form-label">Nömrəniz*</label>
+                                <input asp-for="PosterCreateDto.PhoneNumber" class="form-control " placeholder="(077) 777-77-77" type="text" id="phone">
+                                <span asp-validation-for="PosterCreateDto.PhoneNumber" class="text-danger"></span>
 
                             </div>
                         </div>

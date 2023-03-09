@@ -1,6 +1,8 @@
 using Ferma.Core.Entites;
 using Ferma.Core.IUnitOfWork;
+using Ferma.Core.Repositories;
 using Ferma.Data.Datacontext;
+using Ferma.Data.Repositories;
 using Ferma.Data.UnitOfWork;
 using Ferma.Mvc.ServiceExtentions;
 using Ferma.Service.HelperService.Implementations;
@@ -47,11 +49,30 @@ namespace Ferma.Mvc
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<DataContext>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IPosterRepository, PosterRepository>();
+            services.AddScoped<IPosterFeaturesRepository, PosterFeaturesRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IContactUsRepository, ContactUsRepository>();
+            services.AddScoped<IImageSettingRepository, ImageSettingRepository>();
+            services.AddScoped<IPosterFeaturesRepository, PosterFeaturesRepository>();
+            services.AddScoped<IPosterImageRepository, PosterImageRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
+            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWishItemRepository, WishItemRepository>();
+            
+
+
             services.AddScoped<IEmailServices, EmailServices>();
             services.AddScoped<IPosterCreateServices, PosterCreateServices>();
             services.AddScoped<IManageImageHelper, ManageImageHelper>();
             services.AddScoped<IImageValue, ImageValue>();
+            services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
+
 
 
         }

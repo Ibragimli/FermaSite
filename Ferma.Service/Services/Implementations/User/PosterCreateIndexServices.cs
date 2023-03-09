@@ -4,6 +4,7 @@ using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces.User;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,31 +19,32 @@ namespace Ferma.Service.Services.Implementations.User
         {
             _unitOfWork = unitOfWork;
         }
+
         public async Task<List<Category>> Categories()
         {
-            throw new NotImplementedException();
+
+            var list = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
+
+            return list.ToList(); 
+        }
+
+        public async Task<List<City>> Cities()
+        {
+            var list = await _unitOfWork.CityRepository.GetAllAsync(x => !x.IsDelete);
+            return list.ToList(); ;
 
         }
 
-        public Task<List<City>> Cities()
+        public PosterCreateDto PosterDto()
         {
-            throw new NotImplementedException();
+            PosterCreateDto posterCreateDto = new PosterCreateDto();
+            return posterCreateDto;
         }
 
-        //public async Task<List<City>> Cities()
-        //{
-        //    return await _unitOfWork.CityRepository.GetAllAsync(x => !x.IsDelete);
-
-        //}
-
-        public PosterCreateDto PosterCreateDto()
+        public async Task<List<SubCategory>> SubCategories()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<SubCategory>> SubCategories()
-        {
-            throw new NotImplementedException();
+            var list = await _unitOfWork.SubCategoryRepository.GetAllAsync(x => !x.IsDelete);
+            return list.ToList(); ;
         }
     }
 }

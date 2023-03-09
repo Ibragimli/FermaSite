@@ -1,16 +1,19 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Service.Dtos.User;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Interfaces.User
 {
     public interface IPosterCreateServices
     {
-        void PosterCheck(Poster Image);
-        void ImagesCheck(Poster Images);
-        void CreateImage(Poster Image, bool value);
+        void CreateImage(List<IFormFile> imageFiles, int posterId);
+        Task<Poster> CreatePoster(PosterFeatures features, List<IFormFile> imageFiles);
         void SaveChange(Poster Poster);
         void SaveContext(Poster Poster);
+        Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto);
     }
 }

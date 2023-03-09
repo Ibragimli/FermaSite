@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "NumberAuthentication";
+    Layout = null;
+}
+<body>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+              integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="~/assets/styles/css/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <link rel="shortcut icon" href="~/assets/Images/quenIcon.png" type="image/x-icon" />
+        <title>Kod Doğrulama</title>
+
+    </head>
+
+
+    <main>
+        <!-- Authentication Start -->
+        <section id="authentication">
+            <div class="container">
+                <div class="row justify-content-center align-items-center ">
+                    <div class="col-11 col-md-7 col-lg-5 col-xl-4">
+                        <div class="card shadow-2-strong">
+                            <div class="card-body p-5 text-center">
+                                <a href="main.html" class="btn backBtn "><i class=" fa-solid fa-chevron-left"></i></a>
+
+                                <!-- <button class="btn backBtn "><i class=" fa-solid fa-chevron-left"></i></button> -->
+                                <h3 class="mb-3">Kod doğrulama</h3>
+                                <form asp-action="">
+                                    <div class="form-outline mb-1">
+                                        <input placeholder="******" maxlength="6" type="text" pattern="[0-9]*"
+                                               autocomplete="off" class="form-control " />
+                                    </div>
+                                    <div class="form-outline mb-1">
+                                        <span class="timer">05:00</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit">
+                                        Göndər
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Authentication End -->
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+            integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+            crossorigin="anonymous"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+</body>

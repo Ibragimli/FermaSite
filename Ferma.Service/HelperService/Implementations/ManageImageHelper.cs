@@ -3,6 +3,7 @@ using Ferma.Service.CustomExceptions;
 using Ferma.Service.Helper;
 using Ferma.Service.HelperService.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,32 +20,32 @@ namespace Ferma.Service.HelperService.Implementations
             _env = env;
             _key = key;
         }
-        public async void PosterCheck(Poster Image)
+        public  void PosterCheck(Poster Image)
         {
-            if (Image.PosterImageFile.ContentType != await _key.ValueStr("ImageType1") && Image.PosterImageFile.ContentType != await _key.ValueStr("ImageType2"))
+            if (Image.PosterImageFile.ContentType !=  _key.ValueStr("ImageType1") && Image.PosterImageFile.ContentType !=  _key.ValueStr("ImageType2"))
                 throw new ImageFormatException("Poster şekli yalnız (png ve ya jpg) type-ında ola biler");
 
-            if (Image.PosterImageFile.Length > await _key.ValueInt("ImageSize") * 1048576)
+            if (Image.PosterImageFile.Length >  _key.ValueInt("ImageSize") * 1048576)
                 throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
         }
-        public async void ImagesCheck(Poster Images)
+        public  void ImagesCheck(List<IFormFile> Images)
         {
-            foreach (var image in Images.ImageFiles)
+            foreach (var image in Images)
             {
-                if (image.ContentType != await _key.ValueStr("ImageType1") && image.ContentType != await _key.ValueStr("ImageType2"))
-                    throw new ImageFormatException("Poster şekli yalnız (png ve ya jpg) type-ında ola biler");
-                if (image.Length > await _key.ValueInt("ImageSize") * 1048576)
+                if (image.ContentType !=  _key.ValueStr("ImageType1") && image.ContentType !=  _key.ValueStr("ImageType2"))
+                    throw new ImageFormatException("Poster şekli yalnız (png ve ya jpeg) type-ında ola biler");
+                if (image.Length >  _key.ValueInt("ImageSize") * 1048576)
                     throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
             }
         }
-        public string FileSave(Poster Image, string folderName)
+        public string FileSave(IFormFile Image, string folderName)
         {
-            string image = FileManager.Save(_env.WebRootPath, "uploads/folderName", Image.PosterImageFile);
+            string image = FileManager.Save(_env.WebRootPath, "uploads/" + folderName, Image);
             return image;
         }
         public void DeleteFile(string image, string folderName)
         {
-            FileManager.Delete(_env.WebRootPath, "uploads/folderName", image);
+            FileManager.Delete(_env.WebRootPath, "uploads/" + folderName, image);
         }
     }
 }

@@ -65,9 +65,9 @@ const setImages = () => {
 
 const removeFile = (index) => {
     const fileInput = document.getElementById('imageInput')
-    dt.items.remove(index)
+    dt.items.remove(index-1)
     fileInput.files = dt.files
-    selectedFiles.splice(index, 1)
+    selectedFiles.splice(index-1, 1)
     setImages()
 }
 

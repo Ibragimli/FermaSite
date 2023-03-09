@@ -7,8 +7,10 @@ namespace Ferma.Service.HelperService.Interfaces
 {
     public interface IImageValue
     {
-        public Task<string> ValueStr(string key);
-        public Task<int> ValueInt(string key);
+        public string ValueStr(string key);
+        public int ValueInt(string key);
+        //public Task<string> ValueStr(string key);
+        //public Task<int> ValueInt(string key);
 
     }
 }

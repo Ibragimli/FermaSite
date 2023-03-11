@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +67,6 @@ namespace Ferma.Mvc
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IWishItemRepository, WishItemRepository>();
-            
 
 
             services.AddScoped<IEmailServices, EmailServices>();
@@ -72,6 +74,9 @@ namespace Ferma.Mvc
             services.AddScoped<IManageImageHelper, ManageImageHelper>();
             services.AddScoped<IImageValue, ImageValue>();
             services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
+
+            //services.AddScoped<IUrlHelper>();
+            //services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
 
 
 

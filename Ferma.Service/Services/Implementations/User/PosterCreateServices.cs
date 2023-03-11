@@ -3,10 +3,13 @@ using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.Dtos.User;
 using Ferma.Service.HelperService.Interfaces;
+using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,11 +20,13 @@ namespace Ferma.Service.Services.Implementations.User
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IManageImageHelper _manageImageHelper;
+        private readonly IEmailServices _emailServices;
 
-        public PosterCreateServices(IUnitOfWork unitOfWork, IManageImageHelper manageImageHelper) : base()
+        public PosterCreateServices(IUnitOfWork unitOfWork, IManageImageHelper manageImageHelper, IEmailServices emailServices) : base()
         {
             _unitOfWork = unitOfWork;
             _manageImageHelper = manageImageHelper;
+            _emailServices = emailServices;
         }
 
         public async void CreateImage(List<IFormFile> imageFiles, int posterId)
@@ -96,5 +101,34 @@ namespace Ferma.Service.Services.Implementations.User
         {
             await _unitOfWork.CommitAsync();
         }
+
+
+        public string AutenticationCodeCreate()
+        {
+            Random random = new Random();
+            string code = random.Next(100000, 999999).ToString();
+
+            return code;
+        }
+
+        public void SendCode(string email, string code)
+        {
+            _emailServices.Send(email, "Doğrulama kodunuz", code);
+        }
+
+        public string CreateUrl(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public string CreateUrl(string email)
+        //{
+        //    string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        //    var random = new Random();
+        //    var token = new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
+        //    var url = _urlHelper.Action("NumberAuthentication", "elanlar", new { email = email, token = token }, _httpContextAccessor.HttpContext.Request.Scheme);
+        //    return url;
+        //}
     }
 }

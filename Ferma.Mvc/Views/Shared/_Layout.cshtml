@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject ILayoutServices services
+@inject UserManager<AppUser> userManager;
+@{
+    AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
+
+    //List<Setting> settings = await services.GetSettingsAsync();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,11 +23,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="shortcut icon" href="~/assets/Images/quenIcon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>PULSUZ ELAN SAYTI</title>
 </head>
 
 <body>
+    @if (TempData["Error"] != null)
+    {
+        <input type="hidden" id="toaster-error" value="@TempData["Error"]" />
+    }
+    @if (TempData["Success"] != null)
+    {
+        <input type="hidden" id="toaster-success" value="@TempData["Success"]" />
+    }
     <!-- Header -->
     <header>
         <!-- Header Up Start -->
@@ -49,19 +67,34 @@
                                     <i class="fa-solid fa-heart"></i>
                                 </a>
                             </li>
-                            <li class="headLogin">
-                                <a href="login.html">
-                                    <i class="fa-solid fa-circle-user"></i>
-                                    <span>Giriş</span>
-                                </a>
-                            </li>
+                            @if (user != null && user.IsAdmin == false)
+                            {
+                                <li class="headUser">
+                                    <a asp-action="index" asp-controller="profile" >
+                                        <i class="fa-solid fa-circle-user"></i>
+                                        <span>Elnur</span>
+                                    </a>
 
-                            <li class="headUser">
-                                <a href="profile.html">
-                                    <i class="fa-solid fa-circle-user"></i>
-                                    <span>Elnur</span>
-                                </a>
-                            </li>
+                                </li>
+                                <li class="headLogin">
+                                    <a asp-action="logout" asp-controller="profile">
+                                        <i class="fa-solid fa-circle-right"></i>
+                                        <span>Çıxış</span>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="headLogin">
+                                    <a asp-action="daxilol" asp-controller="profile">
+                                        <i class="fa-solid fa-circle-user"></i>
+                                        <span>Giriş</span>
+                                    </a>
+                                </li>
+                            }
+
+
+
                         </ul>
                     </div>
                     <!-- Head Login End -->
@@ -149,7 +182,7 @@
                     </a>
                 </li>
                 <li class="tabBar-li tabBar-li-login">
-                    <a class="tabBar-link" href="login.html">
+                    <a class="tabBar-link" asp-action="daxilol" asp-controller="profile">
                         <i class="tabBar-icon fa-solid fa-circle-user"></i>
                         <span class="tabBar-text">Giriş</span>
                     </a>
@@ -182,7 +215,7 @@
                                     <a asp-controller="anasehife" asp-action="index">Ana səhifə</a>
                                 </p>
                                 <p>
-                                    <a href="login.html">Daxil ol</a>
+                                    <a asp-action="daxilol" asp-controller="profile">Daxil ol</a>
                                 </p>
                                 <p>
                                     <a asp-controller="elanlar" asp-action="yenielan">Yeni Elan</a>
@@ -274,6 +307,37 @@
             integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
             crossorigin="anonymous"></script>
     <script src="~/assets/js/owlCarouselSetting.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        $(document).ready(function () {
+            if ($("#toaster-error").length) {
+                console.log($("#toaster-error"))
+                toastr["error"]($("#toaster-error").val())
+            }
+            if ($("#toaster-success").length) {
+                console.log($("#toaster-success"))
+                toastr["success"]($("#toaster-success").val())
+            }
+        })
+    </script>
 
     @RenderSection("Scripts", required: false)
 

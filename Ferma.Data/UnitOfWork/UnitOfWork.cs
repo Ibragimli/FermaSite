@@ -24,6 +24,7 @@ namespace Ferma.Data.UnitOfWork
         private ISubCategoryRepository _subCategoryRepository;
         private IUserRepository _userRepository;
         private IWishItemRepository _wishItemRepository;
+        private IUserAuthenticationRepository _userAuthenticationRepository;
 
 
         public UnitOfWork(DataContext context)
@@ -55,6 +56,8 @@ namespace Ferma.Data.UnitOfWork
         public ICategoryRepository CategoryRepository => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IPosterUserIdRepository PosterUserIdRepository => throw new NotImplementedException();
+
+        public IUserAuthenticationRepository UserAuthenticationRepository => _userAuthenticationRepository = _userAuthenticationRepository ?? new UserAuthenticationRepository(_context);
 
         public async Task<int> CommitAsync()
         {

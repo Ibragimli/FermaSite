@@ -49,6 +49,7 @@ namespace Ferma.Mvc
             {
                 opt.Password.RequiredUniqueChars = 0;
                 opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<DataContext>();
@@ -74,6 +75,7 @@ namespace Ferma.Mvc
             services.AddScoped<IManageImageHelper, ManageImageHelper>();
             services.AddScoped<IImageValue, ImageValue>();
             services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
+            services.AddScoped<ILayoutServices, LayoutServices>();
 
             //services.AddScoped<IUrlHelper>();
             //services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();

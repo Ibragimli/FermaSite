@@ -24,6 +24,7 @@ namespace Ferma.Data.Datacontext
         public DbSet<PosterUserId> PosterUserIds { get; set; }
         public DbSet<WishItem> WishItems { get; set; }
         public DbSet<PosterImage> PosterImages { get; set; }
+        public DbSet<UserAuthentication> UserAuthentications { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -1,8 +1,10 @@
-﻿@model NumberAuthenticationViewModel
+﻿
+@model LoginAuthenticationViewModel
 @{
-    ViewData["Title"] = "NumberAuthentication";
+    ViewData["Title"] = "LoginAuthentication";
     Layout = null;
 }
+
 <body>
     <!DOCTYPE html>
     <html lang="en">
@@ -31,13 +33,13 @@
                     <div class="col-11 col-md-7 col-lg-5 col-xl-4">
                         <div class="card shadow-2-strong">
                             <div class="card-body p-5 text-center">
-                                <a href="main.html" class="btn backBtn "><i class=" fa-solid fa-chevron-left"></i></a>
+                                <a asp-action="daxilol" asp-controller="profile" class="btn backBtn "><i class=" fa-solid fa-chevron-left"></i></a>
 
                                 <!-- <button class="btn backBtn "><i class=" fa-solid fa-chevron-left"></i></button> -->
                                 <h3 class="mb-1">Kod doğrulama</h3>
                                 <span asp-validation-for="Code" style=" font-size: 18px; color: red; "></span>
 
-                                <form asp-action="NumberAuthentication" method="post">
+                                <form asp-action="LoginAuthentication" method="post">
                                     <div class="form-outline mb-1">
                                         <input asp-for="Code" placeholder="******" maxlength="6" type="text" pattern="[0-9]*"
                                                autocomplete="off" class="form-control " />
@@ -180,3 +182,4 @@
                                 //}
     </script>
 </body>
+

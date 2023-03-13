@@ -9,6 +9,6 @@ namespace Ferma.Core.Repositories
 
     public interface IPosterRepository : IRepository<Poster>
     {
-        IQueryable<Poster> asQueryableProduct();
+        IQueryable<Poster> asQueryablePoster();
     }
 }

@@ -129,13 +129,13 @@
                         <!-- Poster Describe End -->
                         <!-- Poster Image  Start -->
                         <div class="mb-3 posterImages">
-                            <label asp-for="PosterCreateDto.ImageFiles" class="form-label">Elanın Şəkillər*</label>
+                            <label asp-for="PosterCreateDto.PosterImageFiles.ImageFiles" class="form-label">Elanın Şəkillər*</label>
                             <!-- Şəkil əlavə et -->
-                            <input asp-for="PosterCreateDto.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
+                            <input asp-for="PosterCreateDto.PosterImageFiles.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
                                    class="form-control" multiple="">
                             <div>
                                 <p id="imageErrorMessage" class="fw-bold "></p>
-                                <span asp-validation-for="PosterCreateDto.ImageFiles" class="text-danger"></span>
+                                <span asp-validation-for="PosterCreateDto.PosterImageFiles.ImageFiles" class="text-danger"></span>
                             </div>
                             <div class="row" id="temperoryImages"></div>
                         </div>
@@ -166,7 +166,7 @@
                         <!-- Poster User End -->
                         <!-- Button  Start -->
                         <div class="mb-3 posterButton text-end">
-                            <button class="btn ">Əlavə et</button>
+                            <button type="submit" class="btn ">Əlavə et</button>
                         </div>
                         <!-- Button  Start -->
 

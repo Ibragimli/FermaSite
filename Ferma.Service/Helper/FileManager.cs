@@ -21,6 +21,7 @@ namespace Ferma.Service.Helper
             }
             return filename;
         }
+        
         public static bool Delete(string rootPath, string folder, string filename)
         {
             string path = Path.Combine(rootPath, folder, filename);

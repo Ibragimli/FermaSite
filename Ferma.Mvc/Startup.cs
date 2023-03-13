@@ -74,8 +74,10 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterCreateServices, PosterCreateServices>();
             services.AddScoped<IManageImageHelper, ManageImageHelper>();
             services.AddScoped<IImageValue, ImageValue>();
-            services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
             services.AddScoped<ILayoutServices, LayoutServices>();
+            services.AddScoped<IAnaSehifeIndexServices, AnaSehifeIndexServices>();
+            services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
+            services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 
             //services.AddScoped<IUrlHelper>();
             //services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();

@@ -28,6 +28,13 @@ namespace Ferma.Mvc.ServiceExtentions
 
                         if (contextFeature.Error is ItemNotFoundException)
                             code = 404;
+                        if (contextFeature.Error is ImageFormatException)
+                            code = 400;
+                        if (contextFeature.Error is AuthenticationCodeException)
+                            code = 400;
+                        if (contextFeature.Error is CookieNotActiveException)
+                            code = 404;
+
 
                     }
 

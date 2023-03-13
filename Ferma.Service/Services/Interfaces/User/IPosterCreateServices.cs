@@ -10,13 +10,23 @@ namespace Ferma.Service.Services.Interfaces.User
 {
     public interface IPosterCreateServices
     {
-        void CreateImage(List<IFormFile> imageFiles, int posterId);
+        Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto);
+        void CreateImageString(List<string> imageFiles, int posterId);
+        void CreateImageFormFile(List<IFormFile> imageFiles, int posterId);
+        void CreatePosterCookie(List<IFormFile> imageFiles, PosterCreateDto posterCreateDto);
         void SendCode(string email, string code);
-        Task<Poster> CreatePoster(PosterFeatures features, List<IFormFile> imageFiles);
+        Task<Poster> CreatePoster(PosterFeatures features);
+        Task<Poster> CreatePosterForm(PosterFeatures features, List<IFormFile> imageFiles);
         void SaveChange(Poster Poster);
         void SaveContext(Poster Poster);
-        Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto);
-        string AutenticationCodeCreate();
-        string CreateUrl(string email);
+
+        Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token);
+        string PhoneNumberFilter(string phoneNumber);
+        PosterCreateDto GetPosterCookie();
+        List<string> GetImageFilesCookie();
+        Task<AppUser> CreateNewUser(string code, string phoneNumber, string email, string fullname);
+        void CreatePosterUserId(string userId, int posterId, AppUser user);
+        void ChangeAuthenticationStatus(UserAuthentication authentication);
+
     }
 }

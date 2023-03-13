@@ -19,11 +19,15 @@ namespace Ferma.Data.Repositories
             _context = context;
         }
 
-        public IQueryable<Poster> asQueryableProduct()
+        public IQueryable<Poster> asQueryablePoster()
         {
             var posters = _context.Posters
                 .Include(x => x.PosterImages)
                 .Include(x => x.PosterFeatures)
+                .ThenInclude(x => x.City)
+                .Include(x => x.PosterFeatures)
+                .ThenInclude(x => x.SubCategory)
+                .ThenInclude(x => x.Category)
                 .AsQueryable();
             return posters;
         }

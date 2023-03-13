@@ -1,12 +1,15 @@
 ﻿using Ferma.Core.Entites;
 using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
+using Ferma.Service.CustomExceptions;
 using Ferma.Service.Dtos.User;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +21,21 @@ namespace Ferma.Service.Services.Implementations.User
 
     public class PosterCreateServices : IPosterCreateServices
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IManageImageHelper _manageImageHelper;
         private readonly IEmailServices _emailServices;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public PosterCreateServices(IUnitOfWork unitOfWork, IManageImageHelper manageImageHelper, IEmailServices emailServices) : base()
+        public PosterCreateServices(UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IManageImageHelper manageImageHelper, IEmailServices emailServices, IHttpContextAccessor contextAccessor) : base()
         {
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _manageImageHelper = manageImageHelper;
             _emailServices = emailServices;
+            _contextAccessor = contextAccessor;
         }
-
-        public async void CreateImage(List<IFormFile> imageFiles, int posterId)
+        public async void CreateImageFormFile(List<IFormFile> imageFiles, int posterId)
         {
             int i = 1;
             bool posterStatus;
@@ -49,6 +55,28 @@ namespace Ferma.Service.Services.Implementations.User
             }
             await _unitOfWork.CommitAsync();
         }
+
+        public async void CreateImageString(List<string> imageFiles, int posterId)
+        {
+            int i = 1;
+            bool posterStatus;
+            foreach (var image in imageFiles)
+            {
+                posterStatus = false;
+                if (i == 1)
+                    posterStatus = true;
+                PosterImage Posterimage = new PosterImage
+                {
+                    IsPoster = posterStatus,
+                    PosterId = posterId,
+                    Image = image,
+                };
+                await _unitOfWork.PosterImageRepository.InsertAsync(Posterimage);
+                i++;
+            }
+            await _unitOfWork.CommitAsync();
+        }
+
         public async Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto)
         {
             PosterFeatures features = new PosterFeatures
@@ -78,7 +106,18 @@ namespace Ferma.Service.Services.Implementations.User
 
 
 
-        public async Task<Poster> CreatePoster(PosterFeatures features, List<IFormFile> imageFiles)
+        public async Task<Poster> CreatePoster(PosterFeatures features)
+        {
+            Poster poster = new Poster
+            {
+                PosterFeaturesId = features.Id,
+            };
+            await _unitOfWork.PosterRepository.InsertAsync(poster);
+            await _unitOfWork.CommitAsync();
+            return poster;
+        }
+
+        public async Task<Poster> CreatePosterForm(PosterFeatures features, List<IFormFile> imageFiles)
         {
             Poster poster = new Poster
             {
@@ -88,6 +127,7 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.PosterRepository.InsertAsync(poster);
             await _unitOfWork.CommitAsync();
             return poster;
+
         }
 
 
@@ -103,13 +143,7 @@ namespace Ferma.Service.Services.Implementations.User
         }
 
 
-        public string AutenticationCodeCreate()
-        {
-            Random random = new Random();
-            string code = random.Next(100000, 999999).ToString();
 
-            return code;
-        }
 
         public void SendCode(string email, string code)
         {
@@ -121,14 +155,144 @@ namespace Ferma.Service.Services.Implementations.User
             throw new NotImplementedException();
         }
 
-        //public string CreateUrl(string email)
-        //{
-        //    string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        public void CreatePosterCookie(List<IFormFile> imageFiles, PosterCreateDto posterCreateDto)
+        {
+            foreach (var item in imageFiles)
+            {
+                var filename = _manageImageHelper.FileSave(item, "poster");
+                posterCreateDto.ImageFilesStr.Add(filename);
+            }
+            var posterImageStr = JsonConvert.SerializeObject(posterCreateDto.ImageFilesStr);
+            _contextAccessor.HttpContext.Response.Cookies.Append("posterImageFiles", posterImageStr);
+            posterCreateDto.PosterImageFiles = null;
+            var posterStr = JsonConvert.SerializeObject(posterCreateDto);
+            _contextAccessor.HttpContext.Response.Cookies.Append("posterVM", posterStr);
+        }
 
-        //    var random = new Random();
-        //    var token = new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
-        //    var url = _urlHelper.Action("NumberAuthentication", "elanlar", new { email = email, token = token }, _httpContextAccessor.HttpContext.Request.Scheme);
-        //    return url;
-        //}
+
+
+        public string PhoneNumberFilter(string phoneNumber)
+        {
+            string number = "";
+            string[] charsNumber = phoneNumber.Split('_', '-', ' ', '(', ')', ',', '.', '/', '?', '!', '+', '=', '|', '.');
+
+            foreach (var item in charsNumber)
+            {
+                number += item;
+            }
+            return number;
+        }
+        public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token)
+        {
+            var authentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Code == code && x.Token == token && x.PhoneNumber == phoneNumber);
+            var existAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Token == token);
+            //Kod yanlişdir erroru və təkrar yoxlama limiti
+            if (authentication == null)
+            {
+                if (existAuthentication != null)
+                {
+                    if (existAuthentication.Count > 1)
+                        existAuthentication.Count -= 1;
+                    else
+                    {
+                        existAuthentication.IsDisabled = true;
+                    }
+                    await _unitOfWork.CommitAsync();
+                }
+                throw new AuthenticationCodeException("Kod yanlışdır!");
+            }
+            return authentication;
+        }
+
+        public PosterCreateDto GetPosterCookie()
+        {
+            PosterCreateDto posterCreateDto = new PosterCreateDto();
+
+            //cookie
+            string posterItem = _contextAccessor.HttpContext.Request.Cookies["posterVM"];
+
+            if (posterItem != null)
+            {
+                posterCreateDto = JsonConvert.DeserializeObject<PosterCreateDto>(posterItem);
+            }
+            else
+            {
+                throw new CookieNotActiveException("Cookie-nizi aktiv edin!");
+            }
+            return posterCreateDto;
+
+        }
+
+        public List<string> GetImageFilesCookie()
+        {
+            List<string> images = new List<string>();
+            string imageItem = _contextAccessor.HttpContext.Request.Cookies["posterImageFiles"];
+
+            if (imageItem != null)
+            {
+                images = JsonConvert.DeserializeObject<List<string>>(imageItem);
+            }
+            else
+            {
+                throw new CookieNotActiveException("Cookie-nizi aktiv edin!");
+            }
+            return images;
+        }
+
+        public async Task<AppUser> CreateNewUser(string code, string phoneNumber, string email, string fullname)
+        {
+            AppUser newUser = new AppUser();
+            //hesab yaradmaq
+
+            var UserExists = await _unitOfWork.UserRepository.GetAsync(x => x.PhoneNumber == phoneNumber);
+            if (UserExists == null)
+            {
+                newUser = new AppUser
+                {
+                    UserName = phoneNumber,
+                    PhoneNumber = phoneNumber,
+                    IsAdmin = false,
+                    Balance = 0,
+                    Email = email,
+                    Name = fullname,
+                };
+                var result = await _userManager.CreateAsync(newUser, code);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        throw new Exception(error.Description);
+                    }
+                }
+                await _userManager.AddToRoleAsync(newUser, "User");
+                await _unitOfWork.CommitAsync();
+                return newUser;
+
+            }
+            return UserExists;
+            //hesab yaradmaq
+        }
+
+
+
+        public async void CreatePosterUserId(string userId, int posterId, AppUser user)
+        {
+            PosterUserId posterUserId = new PosterUserId();
+
+            //poster user elaqesi
+            posterUserId = new PosterUserId
+            {
+                AppUserId = user.Id,
+                PosterId = posterId,
+            };
+            await _unitOfWork.PosterUserIdRepository.InsertAsync(posterUserId);
+        }
+        public async void ChangeAuthenticationStatus(UserAuthentication authentication)
+        {
+            authentication.IsDisabled = true;
+            await _unitOfWork.CommitAsync();
+        }
+
+
     }
 }

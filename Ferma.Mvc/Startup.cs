@@ -5,12 +5,14 @@ using Ferma.Data.Datacontext;
 using Ferma.Data.Repositories;
 using Ferma.Data.UnitOfWork;
 using Ferma.Mvc.ServiceExtentions;
+using Ferma.Service.Dtos.User;
 using Ferma.Service.HelperService.Implementations;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Implementations;
 using Ferma.Service.Services.Implementations.User;
 using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,7 +44,7 @@ namespace Ferma.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AdminLoginPostDto>());
+            services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<PosterCreateDto>());
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddIdentity<AppUser, IdentityRole>(opt =>
@@ -78,9 +80,9 @@ namespace Ferma.Mvc
             services.AddScoped<IAnaSehifeIndexServices, AnaSehifeIndexServices>();
             services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
             services.AddScoped<IAuthenticationServices, AuthenticationServices>();
+            services.AddScoped<IPosterCreateValueCheckServices, PosterCreateValueCheckServices>();
 
             //services.AddScoped<IUrlHelper>();
-            //services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
 
 
 

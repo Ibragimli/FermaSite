@@ -66,6 +66,13 @@ namespace Ferma.Data.Repositories
             await _context.Set<TEntity>().AddAsync(entity);
         }
 
+
+        public bool IsExist(Expression<Func<TEntity, bool>> exp, params string[] includes)
+        {
+            var query = _query(_context, includes);
+
+            return query.Any(exp);
+        }
         public async Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> exp, params string[] includes)
         {
             var query = _query(_context, includes);
@@ -73,7 +80,7 @@ namespace Ferma.Data.Repositories
             return await query.AnyAsync(exp);
         }
 
-        public async void Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
         }

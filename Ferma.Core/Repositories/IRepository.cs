@@ -17,6 +17,7 @@ namespace Ferma.Core.Repositories
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> exp, params string[] includes);
         Task<int> GetTotalCountAsync(Expression<Func<TEntity, bool>> exp, params string[] includes);
         Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> exp, params string[] includes);
+        bool IsExist(Expression<Func<TEntity, bool>> exp, params string[] includes);
         void Remove(TEntity entity);
     }
 }

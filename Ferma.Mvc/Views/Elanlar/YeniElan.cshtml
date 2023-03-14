@@ -41,7 +41,9 @@
                 <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
                     <h1>Yeni Elan</h1>
                     <form class="form-control" asp-action="yenielan" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
+                        <div asp-validation-summary="ModelOnly" style="color:red;">
+                            
+                        </div>
 
                         <!-- Poster Kategoriya Start -->
                         <div class=" mb-3 posterCategorys">
@@ -72,27 +74,28 @@
                             <label class="form-label">Qiymət*</label>
 
                             <div class="posterPrice">
-                                <input placeholder="0,00" asp-for="PosterCreateDto.Price" title="" min="0" max="9999999" type="text"
-                                       class="form-control posterPriceInput">
-                                <span asp-validation-for="PosterCreateDto.UserName" class="text-danger"></span>
+                                <div>
+                                    <input placeholder="0,00" asp-for="PosterCreateDto.Price" title="" value="" min="0" max="9999999" type="text"
+                                           class="form-control posterPriceInput">
+                                    <span asp-validation-for="PosterCreateDto.Price" class="text-danger"></span>
+                                </div>
 
                                 <div class="posterPriceCurrency">
                                     <div class="form-check ">
                                         <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
-                                               value="false" checked>
+                                               value="false" >
                                         <label class="form-check-label" for="exampleRadios1">
                                             AZN, ₼
                                         </label>
                                     </div>
                                     <div class="form-check ">
                                         <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
-                                               value="true" checked>
+                                               value="true" >
                                         <label class="form-check-label" for="exampleRadios2">
                                             USD, $
                                         </label>
                                     </div>
                                     <span asp-validation-for="PosterCreateDto.PriceCurrency" class="text-danger"></span>
-
                                 </div>
                             </div>
 
@@ -129,13 +132,13 @@
                         <!-- Poster Describe End -->
                         <!-- Poster Image  Start -->
                         <div class="mb-3 posterImages">
-                            <label asp-for="PosterCreateDto.PosterImageFiles.ImageFiles" class="form-label">Elanın Şəkillər*</label>
+                            <label asp-for="PosterCreateDto.ImageFiles" class="form-label">Elanın Şəkillər*</label>
                             <!-- Şəkil əlavə et -->
-                            <input asp-for="PosterCreateDto.PosterImageFiles.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
+                            <input asp-for="PosterCreateDto.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
                                    class="form-control" multiple="">
                             <div>
                                 <p id="imageErrorMessage" class="fw-bold "></p>
-                                <span asp-validation-for="PosterCreateDto.PosterImageFiles.ImageFiles" class="text-danger"></span>
+                                <span asp-validation-for="PosterCreateDto.ImageFiles" class="text-danger"></span>
                             </div>
                             <div class="row" id="temperoryImages"></div>
                         </div>

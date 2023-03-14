@@ -43,7 +43,6 @@ namespace Ferma.Data.UnitOfWork
 
         public IPosterImageRepository PosterImageRepository => _posterImageRepository = _posterImageRepository ?? new PosterImageRepository(_context);
 
-        //public IPosterUserIdRepository PosterUserIdRepository => _posterUserIdRepository = _posterUserIdRepository ?? new PosterappusIdRepository(_context);
 
         public ISettingRepository SettingRepository => _settingRepository = _settingRepository ?? new SettingRepository(_context);
 
@@ -55,7 +54,7 @@ namespace Ferma.Data.UnitOfWork
 
         public ICategoryRepository CategoryRepository => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
-        public IPosterUserIdRepository PosterUserIdRepository => throw new NotImplementedException();
+        public IPosterUserIdRepository PosterUserIdRepository => _posterUserIdRepository = _posterUserIdRepository ?? new PosterUserIdRepository(_context);
 
         public IUserAuthenticationRepository UserAuthenticationRepository => _userAuthenticationRepository = _userAuthenticationRepository ?? new UserAuthenticationRepository(_context);
 

@@ -30,11 +30,16 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 404;
                         if (contextFeature.Error is ImageFormatException)
                             code = 400;
+                        if (contextFeature.Error is ImageNullException)
+                            code = 404;
                         if (contextFeature.Error is AuthenticationCodeException)
                             code = 400;
                         if (contextFeature.Error is CookieNotActiveException)
                             code = 404;
-
+                        if (contextFeature.Error is ItemNullException)
+                            code = 404;
+                        if (contextFeature.Error is ItemFormatException)
+                            code = 400;
 
                     }
 

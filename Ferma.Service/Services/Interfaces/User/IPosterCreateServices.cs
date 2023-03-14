@@ -11,8 +11,8 @@ namespace Ferma.Service.Services.Interfaces.User
     public interface IPosterCreateServices
     {
         Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto);
-        void CreateImageString(List<string> imageFiles, int posterId);
-        void CreateImageFormFile(List<IFormFile> imageFiles, int posterId);
+        Task CreateImageString(List<string> imageFiles, int posterId);
+        Task CreateImageFormFile(List<IFormFile> imageFiles, int posterId);
         void CreatePosterCookie(List<IFormFile> imageFiles, PosterCreateDto posterCreateDto);
         void SendCode(string email, string code);
         Task<Poster> CreatePoster(PosterFeatures features);
@@ -25,8 +25,9 @@ namespace Ferma.Service.Services.Interfaces.User
         PosterCreateDto GetPosterCookie();
         List<string> GetImageFilesCookie();
         Task<AppUser> CreateNewUser(string code, string phoneNumber, string email, string fullname);
-        void CreatePosterUserId(string userId, int posterId, AppUser user);
-        void ChangeAuthenticationStatus(UserAuthentication authentication);
+        Task CreatePosterUserId(string userId, int posterId, AppUser user);
+        Task ChangeAuthenticationStatus(UserAuthentication authentication);
+        Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber);
 
     }
 }

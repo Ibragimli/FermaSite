@@ -35,7 +35,7 @@ namespace Ferma.Service.Services.Implementations.User
             _emailServices = emailServices;
             _contextAccessor = contextAccessor;
         }
-        public async void CreateImageFormFile(List<IFormFile> imageFiles, int posterId)
+        public async Task CreateImageFormFile(List<IFormFile> imageFiles, int posterId)
         {
             int i = 1;
             bool posterStatus;
@@ -56,7 +56,7 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
         }
 
-        public async void CreateImageString(List<string> imageFiles, int posterId)
+        public async Task CreateImageString(List<string> imageFiles, int posterId)
         {
             int i = 1;
             bool posterStatus;
@@ -164,7 +164,7 @@ namespace Ferma.Service.Services.Implementations.User
             }
             var posterImageStr = JsonConvert.SerializeObject(posterCreateDto.ImageFilesStr);
             _contextAccessor.HttpContext.Response.Cookies.Append("posterImageFiles", posterImageStr);
-            posterCreateDto.PosterImageFiles = null;
+            posterCreateDto.ImageFiles = null;
             var posterStr = JsonConvert.SerializeObject(posterCreateDto);
             _contextAccessor.HttpContext.Response.Cookies.Append("posterVM", posterStr);
         }
@@ -275,7 +275,7 @@ namespace Ferma.Service.Services.Implementations.User
 
 
 
-        public async void CreatePosterUserId(string userId, int posterId, AppUser user)
+        public async Task CreatePosterUserId(string userId, int posterId, AppUser user)
         {
             PosterUserId posterUserId = new PosterUserId();
 
@@ -286,11 +286,37 @@ namespace Ferma.Service.Services.Implementations.User
                 PosterId = posterId,
             };
             await _unitOfWork.PosterUserIdRepository.InsertAsync(posterUserId);
+            await _unitOfWork.CommitAsync();
         }
-        public async void ChangeAuthenticationStatus(UserAuthentication authentication)
+        public async Task ChangeAuthenticationStatus(UserAuthentication authentication)
         {
             authentication.IsDisabled = true;
             await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber)
+        {
+            var oldAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAllAsync(x => x.IsDisabled == false && x.PhoneNumber == phoneNumber);
+
+            if (oldAuthentication != null)
+            {
+                foreach (var item in oldAuthentication)
+                {
+                    item.IsDisabled = true;
+                }
+            }
+
+            UserAuthentication authentication = new UserAuthentication
+            {
+                Code = code,
+                Token = token,
+                IsDisabled = false,
+                PhoneNumber = phoneNumber,
+                Count = 3,
+            };
+            await _unitOfWork.UserAuthenticationRepository.InsertAsync(authentication);
+            await _unitOfWork.CommitAsync();
+            return authentication;
         }
 
 

@@ -1,0 +1,506 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject UserManager<AppUser> userManager;
+@{
+    ViewData["Title"] = "Elan";
+    var i = 1;
+    var c = 1;
+    var posterFeature = Model.Poster.PosterFeatures;
+    AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
+
+}
+
+
+@model ElanDetailViewModel
+
+
+
+
+<main>
+    <!-- Bread Crumb  Start -->
+    <section class="secDisplay" id="breadCrumbs">
+        <div class="casket">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-9 col-sm-9 col-9 ">
+                    <div class="breadCrumbBox">
+                        <ul>
+                            <li>
+                                <a asp-action="index" asp-controller="anasehife">
+                                    <span>
+                                        Ana Səhifə
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        @posterFeature.SubCategory.Category.Name
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        @posterFeature.SubCategory.Name
+
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Bread Crumb End -->
+    <!-- FlexSlider   Start -->
+    <section id="flexSlider">
+        <div class=" container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-7 col-sm-8">
+                    <div class="flexSliderBox">
+                        <div id="slider" class="flexslider">
+
+                            <ul class="slides">
+                                @if (Model.Poster.PosterImages.FirstOrDefault(x => x.IsDelete == false) != null)
+                                {
+                                    @foreach (var item in Model.Poster.PosterImages)
+                                    {
+
+                                        <li>
+                                            <img onclick="openModal();currentSlide(@i)" src="~/uploads/poster/@item.Image" class="hover-shadow" />
+                                        </li>
+                                        @(i = i + 1);
+
+                                    }
+                                }
+
+                                @*<li>
+                                        <img onclick="openModal();currentSlide(1)"
+                                             src="~/assets/Images/inek1.jpg" />
+                                    </li>
+                                    <li>
+                                        <img onclick="openModal();currentSlide(2)" class="hover-shadow"
+                                             src="~/assets/Images/inek2.jpg" />
+                                    </li>
+                                    <li>
+                                        <img onclick="openModal();currentSlide(2)" class="hover-shadow"
+                                             src="~/assets/Images/inek3.jpg" />
+                                    </li>*@
+                            </ul>
+                        </div>
+                        <div id="carousel" class="flexslider">
+                            <ul class="slides">
+
+                                @foreach (var item in Model.Poster.PosterImages.Where(x => x.IsDelete == false))
+                                {
+
+                                    <li>
+                                        <img src="~/uploads/poster/@item.Image" />
+                                    </li>
+
+                                }
+
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  FlexSlider  End -->
+    <!-- FlexSliderModal   Start -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close cursor" onclick="closeModal()">&times;</span>
+            @foreach (var item in Model.Poster.PosterImages.Where(x => x.IsDelete == false))
+            {
+
+                <div class="mySlides">
+                    <div class="numbertext">@(c) / @Model.Poster.PosterImages.Count</div>
+                    <img src="~/uploads/poster/@item.Image" />
+                </div>
+                @(c = c + 1);
+
+            }
+            <!-- Next/previous controls -->
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+    <!-- FlexSliderModal   End -->
+    <!-- posterInfoUpBox   Start -->
+    <section id="posterInfoUpBox">
+        <div class=" container">
+            <div class="row justify-content-center">
+                <div class="posterInfo col-lg-8 col-md-10 col-sm-12">
+                    <div class="col-lg-3 col-md-3 col-sm-4 posterPriceBox">
+                        <p>
+                            @*@((posterFeature.Price).ToString(""))*@
+                            @String.Format("{0:0.##}", posterFeature.Price)
+
+                            <span style=" padding-left:5px;color: #fff; font-size: 26px;  font-weight: 700; background-color: green;">
+                                @(posterFeature.PriceCurrency?"USD":"AZN" )
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-lg-9 col-md-12 posterTitleBox">
+                        <div class="titleBox">
+                            <h3>
+                                @posterFeature.Name
+
+                            </h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="posterService col-lg-8 col-md-10 col-sm-12">
+                    <div class="col-lg-12 colInfo">
+                        <div class="detailServiceBox row">
+                            <div class="col-lg-5 col-md-6 col-sm-8 detailServiceButton">
+                                <button data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
+                                    <i class="fa-brands fa-sketch"></i>
+                                    <span>
+                                        <span class="serviceWord">Elanı VIP et </span>
+                                        3,00 AZN-dən
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-8  detailServiceButton">
+                                <button data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
+                                        class="preButton btn ">
+                                    <i class="fa-solid fa-crown"></i>
+                                    <span>
+                                        <span class="serviceWord">Elanı Premium et</span>
+                                        5,00 AZN-dən
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  posterInfoUpBox  End -->
+    <!-- Vip Service Modal Start -->
+    <div class="modal fade" id="vipServiceModal" tabindex="-1" aria-labelledby="VipServiceModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        <i class="fa-brands fa-sketch"></i>
+                        VIP et
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
+                        göstəriləcək.
+                    </p>
+
+                    <hr>
+                    <h1>XİDMƏTİN MÜDDƏTİ</h1>
+                    <hr>
+                    <form action="#">
+                        <div class="formBody">
+                            <div class="form-check">
+                                <input class="form-check-input" name="vipChoice" type="radio" checked>
+                                <label class="form-check-label"> 15 gün / 6,00 AZN</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="vipChoice" type="radio">
+                                <label class="form-check-label">5 gün / 2,00 AZN</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="vipChoice" type="radio">
+                                <label class="form-check-label"> 10 gün / 4,00 AZN</label>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h1>ÖDƏNİŞ ÜSULU</h1>
+                        <hr>
+                        <div class="formBody">
+                            @if (user != null)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" name="vipPaymentChoice" type="radio" checked>
+                                    <label class="form-check-label">Hesab Balansı</label>
+                                </div>
+                            }
+                            <div class="form-check">
+                                <input class="form-check-input" name="vipPaymentChoice" type="radio">
+                                <label class="form-check-label">Bank kartı</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">ÖDƏ</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Vip Service modal End -->
+    <!-- Premium Service Modal Start -->
+    <div class="modal fade" id="PremiumServiceModal" tabindex="-1" aria-labelledby="PremiumServiceModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        <i class="fa-solid fa-crown"></i>
+                        Premium et
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
+                        göstəriləcək.
+                    </p>
+
+                    <hr>
+                    <h1>XİDMƏTİN MÜDDƏTİ</h1>
+                    <hr>
+                    <form action="#">
+                        <div class="formBody">
+                            <div class="form-check">
+                                <input class="form-check-input" name="premiumChoice" type="radio" checked>
+                                <label class="form-check-label"> 15 gün / 6,00 AZN</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="premiumChoice" type="radio">
+                                <label class="form-check-label">5 gün / 2,00 AZN</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="premiumChoice" type="radio">
+                                <label class="form-check-label"> 10 gün / 4,00 AZN</label>
+                            </div>
+
+                        </div>
+                        <hr>
+
+
+                        <h1>ÖDƏNİŞ ÜSULU</h1>
+                        <hr>
+                        <div class="formBody">
+                            @if (user != null)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" name="premiumPaymentChoice" type="radio" checked>
+                                    <label class="form-check-label">Hesab Balansı</label>
+                                </div>
+                            }
+                            <div class="form-check">
+                                <input class="form-check-input" name="premiumPaymentChoice" type="radio">
+                                <label class="form-check-label">Bank kartı</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">ÖDƏ</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Premium Service modal End -->
+    <!-- Poster Down Box   Start -->
+    <section id="posterInfoDownBox">
+        <div class=" container">
+            <div class="row justify-content-center">
+                <div class=" col-lg-8 col-md-12 col-sm-12 posterInfo row ">
+                    <div class="col-lg-4 col-md-6 col-sm-6 posterFeaturesBox">
+                        <div class="posterFeatures">
+                            <p>
+                                Şəhər:<span>@posterFeature.City.Name</span>
+                            </p>
+
+
+                            <p>
+                                Elanın kategorisi:
+                                <a href="#"><span>@posterFeature.SubCategory.Category.Name</span></a>
+                            </p>
+                            <p>
+                                Elanın növü:<a href="#"><span>@posterFeature.SubCategory.Name</span></a>
+                            </p>
+                            <p>
+                                Çatdırılma:<span>Bəli</span>
+                            </p>
+                            <p>
+                                Yeni:<span>Bəli</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 posterAuthorView">
+                        <div class="posterViewTimeInfo">
+                            <p>
+                                Elanın nömrəsi:
+                                <span>@Model.Poster.Id</span>
+                            </p>
+                            <p>
+                                Baxışların sayı:
+                                <span>@posterFeature.ViewCount</span>
+                            </p>
+                            <p>
+                                Seçilmişlərdə:
+                                <span>@posterFeature.WishCount</span>
+                            </p>
+                            <p>
+                                Yeniləndi:
+                                <span>@posterFeature.ModifiedDate</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 posterAuthor">
+                        <div class="posterAuthorLink">
+                            <span class="authorName">@Model.User.AppUser.Name</span>
+                            <a href="#" class="authorPosters">İstifadəçinin bütün elanları</a>
+                        </div>
+                        <div class="authorNumbersBox">
+                            <div class="authorNumbers">
+                                <div class="authorNumber">
+                                    <a href="tel:@posterFeature.PhoneNumber">
+                                        <i class="fa-solid fa-phone"></i>
+                                        <span class="authorNumberLink"> @posterFeature.PhoneNumber</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Poster Down Box  End -->
+    <!--  Warning Message  Start -->
+    <section id="warningMessage">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-12">
+                    <div class="warningMessageBox">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p>
+                            Xəbərdarlıq!
+                            <span>
+                                Məhsul sahibi ilə real görüşərək, ödəniş mərhələsini tamamlamağınız məsləhət
+                                görülür! Dələduzluq və başqa xoşa gəlməz hadisələrin olmaması üçün alqı-satqını
+                                ciddi şəkildə etməyiniz sizin üçün əhəmiyyətlidir!
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Warning Message  End -->
+    <!-- posterDescribe   Start -->
+    <section id="posterDescribe">
+        <div class=" container">
+            <div class="row justify-content-center">
+                <div class="describeTitle col-lg-8 col-md-12 col-sm-12">
+                    <h3>Elanın təsviri</h3>
+                </div>
+                <div class="describes col-lg-8 col-md-12 col-sm-12">
+                    <p>
+                        @posterFeature.Describe
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  posterDescribe  End -->
+    <!-- detailSlider   Start -->
+    <section id="detailSlider">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class=" col-lg-8 col-md-12 col-sm-12">
+                    @if (Model.SimilarPosters.Count != 0)
+                    {
+                        <div class="owl-carousel owl-theme owl-carousel-detail">
+                            @foreach (var poster in Model.SimilarPosters)
+                            {
+                                <div class="item">
+                                    <div class="sliderImageBox">
+                                        <a asp-action="elan" asp-route-id="@poster.Id">
+                                            <img class="img-fluid"
+                                                 src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image"
+                                                 alt="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image">
+                                        </a>
+                                    </div>
+                                    <div class="itemDown">
+                                        <div class="itemPrice">
+                                            <a asp-action="elan" asp-route-id="@poster.Id">
+
+                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                            </a>
+                                        </div>
+                                        <div class="itemTitle">
+                                            <a asp-action="elan" asp-route-id="@poster.Id">
+                                                <h2>
+                                                    @poster.PosterFeatures.Name
+                                                </h2>
+                                            </a>
+                                        </div>
+                                        <div class="itemDate">
+                                            <a asp-action="elan" asp-route-id="@poster.Id">
+                                                <span>
+                                                    @poster.PosterFeatures.City.Name, @poster.PosterFeatures.ModifiedDate
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <h3 style=" color: gray; font-size: 22px; text-align: center; ">Bu elana oxşar elan mövcud deyil</h3>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  detailSlider  End -->
+
+</main>
+
+
+
+
+
+@section Scripts{
+
+
+    <script src="~/assets/js/owl.carousel.js"></script>
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    <script src="~/assets/js/productDetailOwl.js"></script>
+    <script src="~/assets/js/productImageModel.js"></script>
+
+    <!-- FlexSlider -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="~/assets/js/jquery.flexslider-min.js"></script>
+    <script src="~/assets/js/jquery.flexslider.js"></script>
+    <script src="~/assets/js/productDetail.js"></script>
+
+}

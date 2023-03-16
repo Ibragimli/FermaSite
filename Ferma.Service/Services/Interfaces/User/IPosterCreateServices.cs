@@ -20,7 +20,7 @@ namespace Ferma.Service.Services.Interfaces.User
         void SaveChange(Poster Poster);
         void SaveContext(Poster Poster);
 
-        Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token);
+        Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token,List<string> images);
         string PhoneNumberFilter(string phoneNumber);
         PosterCreateDto GetPosterCookie();
         List<string> GetImageFilesCookie();

@@ -42,7 +42,7 @@
                     <h1>Yeni Elan</h1>
                     <form class="form-control" asp-action="yenielan" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" style="color:red;">
-                            
+
                         </div>
 
                         <!-- Poster Kategoriya Start -->
@@ -83,14 +83,14 @@
                                 <div class="posterPriceCurrency">
                                     <div class="form-check ">
                                         <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
-                                               value="false" >
+                                               value="false">
                                         <label class="form-check-label" for="exampleRadios1">
                                             AZN, ₼
                                         </label>
                                     </div>
                                     <div class="form-check ">
                                         <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
-                                               value="true" >
+                                               value="true">
                                         <label class="form-check-label" for="exampleRadios2">
                                             USD, $
                                         </label>
@@ -100,6 +100,23 @@
                             </div>
 
                         </div>
+                        <!-- Poster Price  End -->
+                        <!-- Poster Price  Start -->
+                       
+                        @* Çatdirilma *@
+                        @*<div class="col-2 d-flex align-items-center">
+                            <input class="form-check-input" asp-for="@Model.ProductParametr.Bluetooth" placeholder="...." /> @Html.DisplayNameFor(model => model.ProductParametr.Bluetooth)
+                            <span asp-validation-for="@Model.ProductParametr.Bluetooth" class="text-danger"></span>
+                        </div>*@
+                        @* Çatdirilma *@
+
+                        @* Yeni-Kohne *@
+                        @*<div class="col-2 d-flex align-items-center">
+                            <input class="form-check-input" asp-for="@Model.ProductParametr.Bluetooth" placeholder="...." /> @Html.DisplayNameFor(model => model.ProductParametr.Bluetooth)
+                            <span asp-validation-for="@Model.ProductParametr.Bluetooth" class="text-danger"></span>
+                        </div>*@
+                        @* Yeni-Kohne *@
+
                         <!-- Poster Price  End -->
                         <!-- Poster City Start -->
                         <div class="mb-3 posterCitys">

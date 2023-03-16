@@ -182,11 +182,11 @@ namespace Ferma.Service.Services.Implementations.User
             }
             return number;
         }
-        public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token)
+        public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token, List<string> images)
         {
             var authentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Code == code && x.Token == token && x.PhoneNumber == phoneNumber);
             var existAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Token == token);
-            //Kod yanlişdir erroru və təkrar yoxlama limiti
+            //Kod dogrulugunun yoxlanilmasi, təkrar yoxlama limiti
             if (authentication == null)
             {
                 if (existAuthentication != null)
@@ -195,7 +195,13 @@ namespace Ferma.Service.Services.Implementations.User
                         existAuthentication.Count -= 1;
                     else
                     {
+                        foreach (var image in images)
+                        {
+                            _manageImageHelper.DeleteFile(image, "poster");
+                        }
                         existAuthentication.IsDisabled = true;
+                        _contextAccessor.HttpContext.Response.Cookies.Delete("posterVM");
+                        _contextAccessor.HttpContext.Response.Cookies.Delete("posterImageFiles");
                     }
                     await _unitOfWork.CommitAsync();
                 }
@@ -291,6 +297,8 @@ namespace Ferma.Service.Services.Implementations.User
         public async Task ChangeAuthenticationStatus(UserAuthentication authentication)
         {
             authentication.IsDisabled = true;
+            _contextAccessor.HttpContext.Response.Cookies.Delete("posterVM");
+            _contextAccessor.HttpContext.Response.Cookies.Delete("posterImageFiles");
             await _unitOfWork.CommitAsync();
         }
 

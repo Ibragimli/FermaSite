@@ -491,7 +491,7 @@ body {
 }
 
     body h1, body h2, body h3, body h4, body h5, body h6, body a, body p, body span, body li {
-        font-family: BitterItalic;
+        font-family: BitterRegular;
         color: #111111
     }
 

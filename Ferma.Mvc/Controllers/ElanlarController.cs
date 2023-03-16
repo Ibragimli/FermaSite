@@ -22,6 +22,7 @@ namespace Ferma.Mvc.Controllers
     public class ElanlarController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IElanDetailIndexServices _elanDetailIndexServices;
         private readonly IPosterCreateValueCheckServices _posterCreateValueCheckServices;
         private readonly IAuthenticationServices _autenticationServices;
         private readonly IManageImageHelper _imageHelper;
@@ -29,9 +30,10 @@ namespace Ferma.Mvc.Controllers
         private readonly IPosterCreateServices _createServices;
         private readonly DataContext _context;
 
-        public ElanlarController(UserManager<AppUser> userManager, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
+        public ElanlarController(UserManager<AppUser> userManager, IElanDetailIndexServices elanDetailIndexServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
         {
             _userManager = userManager;
+            _elanDetailIndexServices = elanDetailIndexServices;
             _posterCreateValueCheckServices = posterCreateValueCheckServices;
             _autenticationServices = autenticationServices;
             _imageHelper = imageHelper;
@@ -39,6 +41,49 @@ namespace Ferma.Mvc.Controllers
             _createServices = createServices;
             _context = context;
         }
+        public IActionResult Elan(int id)
+        {
+
+            //ElanDetailViewModel elanDetail = new ElanDetailViewModel
+            //{
+            //    Poster = await _elanDetailIndexServices.GetPoster(id),
+            //    SimilarPosters = await _elanDetailIndexServices.GetSimilarPosters(id),
+            //};
+            //return View(elanDetail);
+            var poster = _context.Posters.Include(x => x.PosterFeatures)
+                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
+                .Include(x => x.PosterImages)
+                .Where(x => x.IsDelete == false)
+                .FirstOrDefault(x => x.Id == id);
+            if (poster == null)
+                return RedirectToAction("index", "notfound");
+
+            var similarPoster = _context.Posters
+                .Include(x => x.PosterFeatures)
+                .Include(x => x.PosterImages)
+                .Include(x => x.PosterFeatures)
+                .ThenInclude(x => x.City)
+                .Where(x => x.IsDelete == false && x.Id != id && x.PosterFeatures.SubCategory.CategoryId == poster.PosterFeatures.SubCategory.CategoryId).ToList();
+
+            if (similarPoster == null)
+                return RedirectToAction("index", "notfound");
+
+            var user = _context.PosterUserIds.Where(x => x.IsDelete == false).FirstOrDefault(x => x.PosterId == id);
+            if (user == null)
+                return RedirectToAction("index", "notfound");
+            ElanDetailViewModel elanDetail = new ElanDetailViewModel
+            {
+                Poster = poster,
+                SimilarPosters = similarPoster,
+                User = user,
+            };
+            return View(elanDetail);
+        }
+
+
         public IActionResult YeniElan()
         {
             var posterCreateView = _posterVM();
@@ -109,21 +154,9 @@ namespace Ferma.Mvc.Controllers
                     //Link
                     url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
 
-                    //Cookie yaradilmasi
+                    //Cookie yaradilmasi ve seklin uploads papkasina yuklenmesi
                     _createServices.CreatePosterCookie(posterCreateDto.ImageFiles, posterCreateDto);
                     return Redirect(url);
-
-                    //foreach (var item in posterCreateDto.PosterImageFiles.ImageFiles)
-                    //{
-                    //    var filename = _imageHelper.FileSave(item, "poster");
-                    //    posterCreateDto.ImageFilesStr.Add(filename);
-                    //}
-
-                    //var posterImageStr = JsonConvert.SerializeObject(posterCreateDto.ImageFilesStr);
-                    //HttpContext.Response.Cookies.Append("posterImageFiles", posterImageStr);
-                    //posterCreateDto.PosterImageFiles = null;
-                    //var posterStr = JsonConvert.SerializeObject(posterCreateDto);
-                    //HttpContext.Response.Cookies.Append("posterVM", posterStr);
                 }
                 //Hesaba daxil olubsa
                 else
@@ -210,19 +243,22 @@ namespace Ferma.Mvc.Controllers
 
             try
             {
-                authentication = await _createServices.CheckAuthentication(code, phoneNumber, token);
+                //imagescookie
+                images = _createServices.GetImageFilesCookie();
+
+                authentication = await _createServices.CheckAuthentication(code, phoneNumber, token, images);
+
 
                 //postercookie
                 posterCreateDto = _createServices.GetPosterCookie();
 
-                //imagescookie
-                images = _createServices.GetImageFilesCookie();
 
+                //eger databsede user yoxdusa yeni  user yaradilmasi
                 user = await _createServices.CreateNewUser(code, phoneNumber, posterCreateDto.Email, posterCreateDto.UserName);
 
-
+                //feature entites yaradilmasi
                 var feature = await _createServices.CreatePosterFeature(posterCreateDto);
-
+                //poster entites yaradilmasi
                 var poster = await _createServices.CreatePoster(feature);
 
                 //Şəkil yaratmaq prosesi
@@ -230,6 +266,7 @@ namespace Ferma.Mvc.Controllers
                 await _createServices.CreatePosterUserId(user.Id, poster.Id, user);
 
                 await _createServices.ChangeAuthenticationStatus(authentication);
+
             }
             catch (Exception ex)
             {

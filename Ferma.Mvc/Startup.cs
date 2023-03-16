@@ -81,6 +81,7 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
             services.AddScoped<IAuthenticationServices, AuthenticationServices>();
             services.AddScoped<IPosterCreateValueCheckServices, PosterCreateValueCheckServices>();
+            services.AddScoped<IElanDetailIndexServices, ElanDetailIndexServices>();
 
             //services.AddScoped<IUrlHelper>();
 

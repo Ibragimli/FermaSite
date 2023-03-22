@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Ferma.Core.Enums
 {
-    public enum Service
+    public enum PaymentService
     {
-        sadasd = 1,
-        asdasd = 2,
-        asdassd = 3,
+        PosterPayment = 1,
+        BalancePayment = 2,
 
     }
 }

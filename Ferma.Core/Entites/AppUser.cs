@@ -12,6 +12,7 @@ namespace Ferma.Core.Entites
         public decimal? Balance { get; set; }
         public ICollection<PosterUserId> PosterUserIds { get; set; }
         public ICollection<WishItem> WishItems { get; set; }
+        public ICollection<Payment> Payments { get; set; }
 
     }
 }

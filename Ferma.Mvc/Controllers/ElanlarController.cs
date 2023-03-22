@@ -22,6 +22,8 @@ namespace Ferma.Mvc.Controllers
     public class ElanlarController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IPhoneNumberServices _numberServices;
+        private readonly IPaymentCreateServices _paymentCreateServices;
         private readonly IElanDetailIndexServices _elanDetailIndexServices;
         private readonly IPosterCreateValueCheckServices _posterCreateValueCheckServices;
         private readonly IAuthenticationServices _autenticationServices;
@@ -30,9 +32,11 @@ namespace Ferma.Mvc.Controllers
         private readonly IPosterCreateServices _createServices;
         private readonly DataContext _context;
 
-        public ElanlarController(UserManager<AppUser> userManager, IElanDetailIndexServices elanDetailIndexServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
+        public ElanlarController(UserManager<AppUser> userManager, IPhoneNumberServices numberServices, IPaymentCreateServices paymentCreateServices, IElanDetailIndexServices elanDetailIndexServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
         {
             _userManager = userManager;
+            _numberServices = numberServices;
+            _paymentCreateServices = paymentCreateServices;
             _elanDetailIndexServices = elanDetailIndexServices;
             _posterCreateValueCheckServices = posterCreateValueCheckServices;
             _autenticationServices = autenticationServices;
@@ -50,40 +54,60 @@ namespace Ferma.Mvc.Controllers
             //    SimilarPosters = await _elanDetailIndexServices.GetSimilarPosters(id),
             //};
             //return View(elanDetail);
-            var poster = _context.Posters.Include(x => x.PosterFeatures)
-                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
-                .Include(x => x.PosterImages)
-                .Where(x => x.IsDelete == false)
-                .FirstOrDefault(x => x.Id == id);
-            if (poster == null)
-                return RedirectToAction("index", "notfound");
+            var elanDetail = _posterDetailVM(id);
 
-            var similarPoster = _context.Posters
-                .Include(x => x.PosterFeatures)
-                .Include(x => x.PosterImages)
-                .Include(x => x.PosterFeatures)
-                .ThenInclude(x => x.City)
-                .Where(x => x.IsDelete == false && x.Id != id && x.PosterFeatures.SubCategory.CategoryId == poster.PosterFeatures.SubCategory.CategoryId).ToList();
-
-            if (similarPoster == null)
-                return RedirectToAction("index", "notfound");
-
-            var user = _context.PosterUserIds.Where(x => x.IsDelete == false).FirstOrDefault(x => x.PosterId == id);
-            if (user == null)
-                return RedirectToAction("index", "notfound");
-            ElanDetailViewModel elanDetail = new ElanDetailViewModel
-            {
-                Poster = poster,
-                SimilarPosters = similarPoster,
-                User = user,
-            };
             return View(elanDetail);
         }
 
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> PosterPayment(PaymentCreateDto paymentCreateDto)
+        {
+            var elanDetail = new ElanDetailViewModel();
+
+            try
+            {
+                elanDetail = _posterDetailVM(paymentCreateDto.PosterId);
+                await _paymentCreateServices.PaymentCheck(paymentCreateDto);
+                await _paymentCreateServices.PaymentCreate(paymentCreateDto);
+
+            }
+            catch (NotFoundException ex)
+            {
+
+                ModelState.AddModelError("", ex.Message);
+                //TempData["Error"] = ("Proses uğursuz oldu!");
+                return View("Elan", elanDetail);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("", ex.Message);
+                TempData["Error"] = ("Proses uğursuz oldu!");
+                return View("Elan", elanDetail);
+
+            }
+
+            //return RedirectToAction("index", "anasehife");
+            TempData["Error"] = ("Proses uğursuz oldu!");
+
+            return View("Elan", elanDetail);
+
+        }
+       
+
+        public IActionResult ConfirmPayment()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult ConfirmPayment(ConfirmViewModel confirm)
+        {
+            return Ok(confirm);
+        }
         public IActionResult YeniElan()
         {
             var posterCreateView = _posterVM();
@@ -120,14 +144,14 @@ namespace Ferma.Mvc.Controllers
                 _posterCreateValueCheckServices.CityValidation(posterCreateDto.CityId);
 
                 //nomre yoxlanilmasi
-                _posterCreateValueCheckServices.PhoneNumberValidation(posterCreateDto.PhoneNumber);
+                _numberServices.PhoneNumberValidation(posterCreateDto.PhoneNumber);
 
                 //sekil yoxlanilmasi
                 _posterCreateValueCheckServices.ImageCheck(posterCreateDto.ImageFiles);
 
 
                 //nomre filterlemesi
-                posterCreateDto.PhoneNumber = _createServices.PhoneNumberFilter(posterCreateDto.PhoneNumber);
+                posterCreateDto.PhoneNumber = _numberServices.PhoneNumberFilter(posterCreateDto.PhoneNumber);
 
 
                 //CheckImage
@@ -149,7 +173,7 @@ namespace Ferma.Mvc.Controllers
                     var token = _autenticationServices.CreateToken();
 
                     //tesdiqleme modelinin yaranmasi
-                    var authentication = await _createServices.CreateAuthentication(token, code, posterCreateDto.PhoneNumber);
+                    var authentication = await _autenticationServices.CreateAuthentication(token, code, posterCreateDto.PhoneNumber);
 
                     //Link
                     url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
@@ -291,6 +315,43 @@ namespace Ferma.Mvc.Controllers
                 Cities = _context.Cities.ToList(),
             };
             return posterCreateView;
+        }
+
+        private ElanDetailViewModel _posterDetailVM(int id)
+        {
+            var poster = _context.Posters.Include(x => x.PosterFeatures)
+                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
+                .Include(x => x.PosterImages)
+                .Where(x => x.IsDelete == false)
+                .FirstOrDefault(x => x.Id == id);
+            if (poster == null) throw new Exception();
+
+            var similarPoster = _context.Posters
+                .Include(x => x.PosterFeatures)
+                .Include(x => x.PosterImages)
+                .Include(x => x.PosterImages)
+                .Include(x => x.PosterFeatures)
+                .ThenInclude(x => x.City)
+                .Where(x => x.IsDelete == false && x.Id != id && x.PosterFeatures.SubCategory.CategoryId == poster.PosterFeatures.SubCategory.CategoryId).ToList();
+
+            if (similarPoster == null) throw new Exception();
+
+
+            var user = _context.PosterUserIds.Where(x => x.IsDelete == false).FirstOrDefault(x => x.PosterId == id);
+            if (user == null)
+                throw new Exception();
+            ElanDetailViewModel elanDetail = new ElanDetailViewModel
+            {
+                Poster = poster,
+                SimilarPosters = similarPoster,
+                User = user,
+                PaymentCreateDto = new PaymentCreateDto(),
+                ServiceDurations = _context.ServiceDurations.Where(x => !x.IsDelete).ToList(),
+            };
+            return elanDetail;
         }
         private NumberAuthenticationViewModel _autenticaitonVM(string token, string phoneNumber)
         {

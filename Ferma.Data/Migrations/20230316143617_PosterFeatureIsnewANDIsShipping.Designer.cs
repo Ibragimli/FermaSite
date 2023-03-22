@@ -4,14 +4,16 @@ using Ferma.Data.Datacontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ferma.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230316143617_PosterFeatureIsnewANDIsShipping")]
+    partial class PosterFeatureIsnewANDIsShipping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,52 +151,6 @@ namespace Ferma.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ImageSettings");
-                });
-
-            modelBuilder.Entity("Ferma.Core.Entites.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PosterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Service")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Source")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("PosterId");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Ferma.Core.Entites.Poster", b =>
@@ -367,36 +323,6 @@ namespace Ferma.Data.Migrations
                     b.HasIndex("PosterId");
 
                     b.ToTable("PosterUserIds");
-                });
-
-            modelBuilder.Entity("Ferma.Core.Entites.ServiceDuration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ServiceType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceDurations");
                 });
 
             modelBuilder.Entity("Ferma.Core.Entites.Setting", b =>
@@ -747,19 +673,6 @@ namespace Ferma.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("AppUser");
-                });
-
-            modelBuilder.Entity("Ferma.Core.Entites.Payment", b =>
-                {
-                    b.HasOne("Ferma.Core.Entites.AppUser", "AppUser")
-                        .WithMany("Payments")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("Ferma.Core.Entites.Poster", "Posters")
-                        .WithMany("Payments")
-                        .HasForeignKey("PosterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ferma.Core.Entites.Poster", b =>

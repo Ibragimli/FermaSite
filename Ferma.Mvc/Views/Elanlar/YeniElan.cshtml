@@ -102,20 +102,25 @@
                         </div>
                         <!-- Poster Price  End -->
                         <!-- Poster Price  Start -->
-                       
-                        @* Çatdirilma *@
-                        @*<div class="col-2 d-flex align-items-center">
-                            <input class="form-check-input" asp-for="@Model.ProductParametr.Bluetooth" placeholder="...." /> @Html.DisplayNameFor(model => model.ProductParametr.Bluetooth)
-                            <span asp-validation-for="@Model.ProductParametr.Bluetooth" class="text-danger"></span>
-                        </div>*@
-                        @* Çatdirilma *@
+                      
+                        <div class="row">
 
-                        @* Yeni-Kohne *@
-                        @*<div class="col-2 d-flex align-items-center">
-                            <input class="form-check-input" asp-for="@Model.ProductParametr.Bluetooth" placeholder="...." /> @Html.DisplayNameFor(model => model.ProductParametr.Bluetooth)
-                            <span asp-validation-for="@Model.ProductParametr.Bluetooth" class="text-danger"></span>
-                        </div>*@
-                        @* Yeni-Kohne *@
+                            @* Çatdirilma *@
+                            <div class="col-3 d-flex align-items-center">
+                                <input style="margin-right:4px; margin-top:0px !important;" class="form-check-input" asp-for="@Model.PosterCreateDto.IsShipping" placeholder="...." />
+                                <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Çatdırılma</span>
+                                <span asp-validation-for="@Model.PosterCreateDto.IsShipping" class="text-danger"></span>
+                            </div>
+                            @* Çatdirilma *@
+
+                            @* Yeni-Kohne *@
+                            <div class="col-3 d-flex align-items-center">
+                                <input style="margin-right: 4px; margin-top: 0px !important;" class="form-check-input" asp-for="@Model.PosterCreateDto.IsNew" placeholder="...." />
+                                <span  style="font-size:17px; font-weight:700" class="d-flex align-items-center">Yeni</span>
+                                <span asp-validation-for="@Model.PosterCreateDto.IsNew" class="text-danger"></span>
+                            </div>
+                            @* Yeni-Kohne *@
+                        </div>
 
                         <!-- Poster Price  End -->
                         <!-- Poster City Start -->

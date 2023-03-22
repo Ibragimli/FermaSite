@@ -29,19 +29,7 @@ namespace Ferma.Service.Services.Implementations.User
             if (!check)
                 throw new ItemNotFoundException("Düzgün kategoriya seçilməyib");
         }
-        public void PhoneNumberValidation(string phoneNumber)
-        {
-            if (phoneNumber != null)
-            {
-                if (Regex.IsMatch(phoneNumber, "[a-zA-Z]"))
-                    throw new ItemFormatException("Nömrə yanlışdır");
-
-                if (phoneNumber.Length > 15)
-                    throw new ItemFormatException("Nömrə yanlışdır");
-            }
-
-
-        }
+       
 
         public void ImageCheck(List<IFormFile> images)
         {

@@ -6,6 +6,7 @@
     var c = 1;
     var posterFeature = Model.Poster.PosterFeatures;
     AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
+    int count = 0;
 
 }
 
@@ -69,7 +70,7 @@
                                         <li>
                                             <img onclick="openModal();currentSlide(@i)" src="~/uploads/poster/@item.Image" class="hover-shadow" />
                                         </li>
-                                        @(i = i + 1);
+                                        <li class="d-none">  @(i = i + 1)</li>
 
                                     }
                                 }
@@ -121,7 +122,7 @@
                     <div class="numbertext">@(c) / @Model.Poster.PosterImages.Count</div>
                     <img src="~/uploads/poster/@item.Image" />
                 </div>
-                @(c = c + 1);
+                <div class="d-none">@(c = c + 1);</div>
 
             }
             <!-- Next/previous controls -->
@@ -160,23 +161,51 @@
                     <div class="col-lg-12 colInfo">
                         <div class="detailServiceBox row">
                             <div class="col-lg-5 col-md-6 col-sm-8 detailServiceButton">
-                                <button data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
-                                    <i class="fa-brands fa-sketch"></i>
-                                    <span>
-                                        <span class="serviceWord">Elanı VIP et </span>
-                                        3,00 AZN-dən
-                                    </span>
-                                </button>
+
+                                @if (!posterFeature.IsVip)
+                                {
+                                    <button data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
+                                        <i class="fa-brands fa-sketch"></i>
+                                        <span>
+                                            <span class="serviceWord me-1">Elanı VIP et </span>
+                                            @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Vip).FirstOrDefault(x => x.Id == 1).Amount AZN-dən
+                                        </span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
+                                        <i style="color:whitesmoke;" class="fa-brands fa-sketch"></i>
+                                        <span>
+                                            <span style="color:white;" class="serviceWord"> VIP Elan </span>
+
+                                        </span>
+                                    </button>
+                                }
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-8  detailServiceButton">
-                                <button data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
-                                        class="preButton btn ">
-                                    <i class="fa-solid fa-crown"></i>
-                                    <span>
-                                        <span class="serviceWord">Elanı Premium et</span>
-                                        5,00 AZN-dən
-                                    </span>
-                                </button>
+                                @if (!posterFeature.IsPremium)
+                                {
+                                    <button data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
+                                            class="preButton btn ">
+                                        <i class="fa-solid fa-crown"></i>
+                                        <span>
+                                            <span class="serviceWord">Elanı Premium et</span>
+                                            @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Premium).FirstOrDefault(x => x.Id == 4)?.Amount AZN-dən
+                                        </span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
+                                            class="preButton btn ">
+                                        <i style="color:whitesmoke;" class="fa-solid fa-crown"></i>
+                                        <span>
+                                            <span style="color:white;" class="serviceWord">Elanı Premium et</span>
+                                        </span>
+                                    </button>
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -186,136 +215,11 @@
     </section>
     <!--  posterInfoUpBox  End -->
     <!-- Vip Service Modal Start -->
-    <div class="modal fade" id="vipServiceModal" tabindex="-1" aria-labelledby="VipServiceModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        <i class="fa-brands fa-sketch"></i>
-                        VIP et
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p>
-                        Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
-                        göstəriləcək.
-                    </p>
-
-                    <hr>
-                    <h1>XİDMƏTİN MÜDDƏTİ</h1>
-                    <hr>
-                    <form action="#">
-                        <div class="formBody">
-                            <div class="form-check">
-                                <input class="form-check-input" name="vipChoice" type="radio" checked>
-                                <label class="form-check-label"> 15 gün / 6,00 AZN</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" name="vipChoice" type="radio">
-                                <label class="form-check-label">5 gün / 2,00 AZN</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" name="vipChoice" type="radio">
-                                <label class="form-check-label"> 10 gün / 4,00 AZN</label>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <h1>ÖDƏNİŞ ÜSULU</h1>
-                        <hr>
-                        <div class="formBody">
-                            @if (user != null)
-                            {
-                                <div class="form-check">
-                                    <input class="form-check-input" name="vipPaymentChoice" type="radio" checked>
-                                    <label class="form-check-label">Hesab Balansı</label>
-                                </div>
-                            }
-                            <div class="form-check">
-                                <input class="form-check-input" name="vipPaymentChoice" type="radio">
-                                <label class="form-check-label">Bank kartı</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">ÖDƏ</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("_VipServiceModalPartial", Model)
     <!-- Vip Service modal End -->
     <!-- Premium Service Modal Start -->
-    <div class="modal fade" id="PremiumServiceModal" tabindex="-1" aria-labelledby="PremiumServiceModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+    @await Html.PartialAsync("_premiumServiceModalPartial", Model)
 
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        <i class="fa-solid fa-crown"></i>
-                        Premium et
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p>
-                        Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
-                        göstəriləcək.
-                    </p>
-
-                    <hr>
-                    <h1>XİDMƏTİN MÜDDƏTİ</h1>
-                    <hr>
-                    <form action="#">
-                        <div class="formBody">
-                            <div class="form-check">
-                                <input class="form-check-input" name="premiumChoice" type="radio" checked>
-                                <label class="form-check-label"> 15 gün / 6,00 AZN</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" name="premiumChoice" type="radio">
-                                <label class="form-check-label">5 gün / 2,00 AZN</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" name="premiumChoice" type="radio">
-                                <label class="form-check-label"> 10 gün / 4,00 AZN</label>
-                            </div>
-
-                        </div>
-                        <hr>
-
-
-                        <h1>ÖDƏNİŞ ÜSULU</h1>
-                        <hr>
-                        <div class="formBody">
-                            @if (user != null)
-                            {
-                                <div class="form-check">
-                                    <input class="form-check-input" name="premiumPaymentChoice" type="radio" checked>
-                                    <label class="form-check-label">Hesab Balansı</label>
-                                </div>
-                            }
-                            <div class="form-check">
-                                <input class="form-check-input" name="premiumPaymentChoice" type="radio">
-                                <label class="form-check-label">Bank kartı</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">ÖDƏ</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
     <!-- Premium Service modal End -->
     <!-- Poster Down Box   Start -->
     <section id="posterInfoDownBox">
@@ -337,10 +241,10 @@
                                 Elanın növü:<a href="#"><span>@posterFeature.SubCategory.Name</span></a>
                             </p>
                             <p>
-                                Çatdırılma:<span>Bəli</span>
+                                Çatdırılma:<span>@(posterFeature.IsShipping? "Bəli":"Xeyr")</span>
                             </p>
                             <p>
-                                Yeni:<span>Bəli</span>
+                                Yeni:<span>@(posterFeature.IsNew? "Bəli":"Xeyr")</span>
                             </p>
                         </div>
                     </div>

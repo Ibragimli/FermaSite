@@ -89,6 +89,8 @@ namespace Ferma.Service.Services.Implementations.User
                 SubCategoryId = PosterDto.SubCategoryId,
                 Price = PosterDto.Price,
                 PriceCurrency = PosterDto.PriceCurrency,
+                IsShipping = PosterDto.IsShipping,
+                IsNew = PosterDto.IsNew,
                 ViewCount = 0,
                 WishCount = 0,
                 IsPremium = false,
@@ -171,17 +173,7 @@ namespace Ferma.Service.Services.Implementations.User
 
 
 
-        public string PhoneNumberFilter(string phoneNumber)
-        {
-            string number = "";
-            string[] charsNumber = phoneNumber.Split('_', '-', ' ', '(', ')', ',', '.', '/', '?', '!', '+', '=', '|', '.');
-
-            foreach (var item in charsNumber)
-            {
-                number += item;
-            }
-            return number;
-        }
+       
         public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token, List<string> images)
         {
             var authentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Code == code && x.Token == token && x.PhoneNumber == phoneNumber);
@@ -302,31 +294,6 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber)
-        {
-            var oldAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAllAsync(x => x.IsDisabled == false && x.PhoneNumber == phoneNumber);
-
-            if (oldAuthentication != null)
-            {
-                foreach (var item in oldAuthentication)
-                {
-                    item.IsDisabled = true;
-                }
-            }
-
-            UserAuthentication authentication = new UserAuthentication
-            {
-                Code = code,
-                Token = token,
-                IsDisabled = false,
-                PhoneNumber = phoneNumber,
-                Count = 3,
-            };
-            await _unitOfWork.UserAuthenticationRepository.InsertAsync(authentication);
-            await _unitOfWork.CommitAsync();
-            return authentication;
-        }
-
-
+      
     }
 }

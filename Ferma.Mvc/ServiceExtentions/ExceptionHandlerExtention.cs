@@ -40,6 +40,10 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 404;
                         if (contextFeature.Error is ItemFormatException)
                             code = 400;
+                        if (contextFeature.Error is PaymentValueException)
+                            code = 400;
+                        if (contextFeature.Error is NotFoundException)
+                            code = 404;
 
                     }
 

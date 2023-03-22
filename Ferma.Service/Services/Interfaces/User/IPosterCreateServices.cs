@@ -21,13 +21,11 @@ namespace Ferma.Service.Services.Interfaces.User
         void SaveContext(Poster Poster);
 
         Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token,List<string> images);
-        string PhoneNumberFilter(string phoneNumber);
         PosterCreateDto GetPosterCookie();
         List<string> GetImageFilesCookie();
         Task<AppUser> CreateNewUser(string code, string phoneNumber, string email, string fullname);
         Task CreatePosterUserId(string userId, int posterId, AppUser user);
         Task ChangeAuthenticationStatus(UserAuthentication authentication);
-        Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber);
 
     }
 }

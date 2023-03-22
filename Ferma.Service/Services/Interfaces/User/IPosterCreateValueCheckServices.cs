@@ -8,7 +8,6 @@ namespace Ferma.Service.Services.Interfaces.User
 {
     public interface IPosterCreateValueCheckServices
     {
-        void PhoneNumberValidation(string phoneNumber);
         void SubCategoryValidation(int subCategoryId);
         void CityValidation(int cityId);
         void ImageCheck(List<IFormFile> images);

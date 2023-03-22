@@ -15,6 +15,8 @@ namespace Ferma.Service.Dtos.User
         public decimal Price { get; set; }
         public bool PriceCurrency { get; set; }
         public int CityId { get; set; }
+        public bool IsShipping { get; set; }
+        public bool IsNew { get; set; }
         public string Describe { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

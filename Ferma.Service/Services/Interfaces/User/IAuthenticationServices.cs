@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Ferma.Core.Entites;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Interfaces.User
 {
@@ -8,5 +10,7 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         public string CreateToken();
         public string CodeCreate();
+        public Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber);
+
     }
 }

@@ -2,7 +2,7 @@ body .validation-summary-errors ul li {
     color: #ff0000cf;
     list-style: initial;
     font-size: 16px;
-    margin-left: 20px;
+    margin-left: 30px;
     font-weight: 600;
 }
 

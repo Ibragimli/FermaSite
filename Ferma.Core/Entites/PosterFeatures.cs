@@ -16,6 +16,8 @@ namespace Ferma.Core.Entites
         public int ViewCount { get; set; }
         public int WishCount { get; set; }
         public bool IsVip { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsShipping { get; set; }
         public bool IsPremium { get; set; }
         public bool IsDisabled { get; set; }
         public int SubCategoryId { get; set; }

@@ -12,6 +12,7 @@ namespace Ferma.Core.Entites
         public PosterFeatures PosterFeatures { get; set; }
         public ICollection<PosterUserId> PosterUserIds { get; set; }
         public ICollection<WishItem> WishItems { get; set; }
+        public ICollection<Payment> Payments { get; set; }
         public ICollection<PosterImage> PosterImages { get; set; }
         [NotMapped]
         public List<IFormFile> ImageFiles { get; set; }

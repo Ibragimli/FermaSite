@@ -1,7 +1,9 @@
 ﻿using Ferma.Core.Entites;
 using Ferma.Data.Datacontext;
 using Ferma.Mvc.ViewModels;
+using Ferma.Service.CustomExceptions;
 using Ferma.Service.Services.Interfaces;
+using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,20 +19,28 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly IPhoneNumberServices _numberServices;
+        private readonly IProfileLoginServices _loginServices;
+        private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IEmailServices _emailService;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public ProfileController(DataContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailServices emailService, RoleManager<IdentityRole> roleManager)
+        public ProfileController(DataContext context, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _numberServices = numberServices;
+            _loginServices = loginServices;
+            _authenticationServices = authenticationServices;
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailService = emailService;
-            _roleManager = roleManager;
         }
-        public IActionResult DaxilOl()
+        public async Task<IActionResult> DaxilOl()
         {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            if (user != null && user.IsAdmin == false)
+            {
+                return RedirectToAction("index", "anasehife");
+            }
             return View();
         }
 
@@ -38,90 +48,73 @@ namespace Ferma.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> DaxilOl(string phoneNumber)
         {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            if (user != null && user.IsAdmin == false)
+            {
+                return RedirectToAction("index", "anasehife");
+            }
+
             if (phoneNumber == null)
             {
                 ModelState.AddModelError("PhoneNumber", "Nömrə boş ola bilməz!");
                 return View();
             }
 
-            string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            Random random = new Random();
-            string code = random.Next(100000, 999999).ToString();
             string token = " ";
             string url = " ";
-
-            //AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
-
-
-            string number = "";
-            string[] charsNumber = phoneNumber.Split('_', '-', ' ', '(', ')', ',', '.', '/', '?', '!', '+', '=', '|', '.');
-
-            foreach (var item in charsNumber)
+            try
             {
-                number += item;
-            }
-            var UserExists = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == number);
-            //Hesab olmuyanda
-            if (UserExists == null)
-            {
-                AppUser newUser = new AppUser
-                {
-                    UserName = number,
-                    PhoneNumber = number,
-                    IsAdmin = false,
-                    Balance = 0,
-                };
-                var result = await _userManager.CreateAsync(newUser, code);
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("PhoneNumber", error.Description);
-                    }
-                    return View();
-                }
-                await _userManager.AddToRoleAsync(newUser, "User");
-                //_emailService.Send("elnur204@list.ru", "Təsdiqləmə kodunuz", code); SMS GONDER
-                token = new string(Enumerable.Repeat(chars, 30).Select(s => s[random.Next(s.Length)]).ToArray());
-                _autenticaitonCreate(token, code, number);
-                //url
-                url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
-                return Redirect(url);
-            }
+                _numberServices.PhoneNumberValidation(phoneNumber);
 
-            //Hesab olanda
-            if (!UserExists.IsAdmin)
-            {
-                var tokenResetPassword = await _userManager.GeneratePasswordResetTokenAsync(UserExists);
-
-                if (UserExists == null || !(await _userManager.VerifyUserTokenAsync(UserExists, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", tokenResetPassword)))
+                //phone filter
+                string number = _numberServices.PhoneNumberFilter(phoneNumber);
+                //random code
+                string code = _authenticationServices.CodeCreate();
+                var UserExists = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == number);
+                //Hesab olmuyanda
+                if (UserExists == null)
                 {
-                    return RedirectToAction("notFound");
+                    //user yaratmaq
+                    await _loginServices.UserCreate(number, code);
+
+                    //token yaradilmasi
+                    token = _authenticationServices.CreateToken();
+
+                    //tesdiqleme modelinin yaranmasi
+                    var authentication = await _authenticationServices.CreateAuthentication(token, code, number);
+
+                    //url
+                    url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
+                    return Redirect(url);
                 }
 
-                var result = await _userManager.ResetPasswordAsync(UserExists, tokenResetPassword, code);
-
-                if (!result.Succeeded)
+                //Hesab olanda
+                if (!UserExists.IsAdmin)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                    return View();
+
+                    //token yaradilmasi
+                    token = _authenticationServices.CreateToken();
+
+                    //tesdiqleme modelinin yaranmasi
+                    var authentication = await _authenticationServices.CreateAuthentication(token, code, number);
+                    await _loginServices.UserResetPassword(number, code);
+
+                    //url
+                    url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
+
+                    return Redirect(url);
                 }
-
-                token = new string(Enumerable.Repeat(chars, 30).Select(s => s[random.Next(s.Length)]).ToArray());
-                _autenticaitonCreate(token, code, number);
-
-                //_emailService.Send("elnur204@list.ru", "Təsdiqləmə kodunuz", code); SMS GONDER
-
-                //url
-                url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
-
-                return Redirect(url);
             }
-
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
             return View();
         }
 
@@ -144,38 +137,27 @@ namespace Ferma.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginAuthentication(string code, string phoneNumber, string token)
         {
-            var authentication = _context.UserAuthentications.Where(x => x.IsDisabled == false).FirstOrDefault(x => x.Code == code && x.Token == token);
             var authenticationViewModel = _autenticaitonVM(token, phoneNumber);
-            var existAuthentication = await _context.UserAuthentications.Where(x => x.IsDisabled == false).FirstOrDefaultAsync(x => x.Token == token);
-            if (authentication == null)
+
+            try
             {
-                if (existAuthentication != null)
-                {
-                    if (existAuthentication.Count > 1)
-                        existAuthentication.Count -= 1;
-
-                    else
-                    {
-                        existAuthentication.IsDisabled = true;
-
-                    }
-                    _context.SaveChanges();
-                }
-                ModelState.AddModelError("code", "Kod yanlışdır!");
-
+                var authentication = await _loginServices.LoginAuthentication(code, phoneNumber, token);
+                await _loginServices.UserLogin(phoneNumber, code, authentication);
+            }
+            catch (AuthenticationCodeException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(authenticationViewModel);
+            }
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            catch (Exception)
+            {
                 return View(authenticationViewModel);
             }
 
-            var UserExists = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == phoneNumber && x.IsAdmin == false);
-            if (UserExists == null)
-                return RedirectToAction("notfound");
-
-            var result = await _signInManager.PasswordSignInAsync(UserExists, code, false, false);
-            if (!result.Succeeded)
-                return RedirectToAction("notfound");
-
-            authentication.IsDisabled = true;
-            _context.SaveChanges();
             return RedirectToAction("index", "anasehife");
         }
 
@@ -196,28 +178,5 @@ namespace Ferma.Mvc.Controllers
             return authenticationViewModel;
         }
 
-        private UserAuthentication _autenticaitonCreate(string token, string code, string phoneNumber)
-        {
-            var oldAuthentication = _context.UserAuthentications.Where(x => x.IsDisabled == false && x.PhoneNumber == phoneNumber).ToList();
-            if (oldAuthentication != null)
-            {
-                foreach (var item in oldAuthentication)
-                {
-                    item.IsDisabled = true;
-                }
-            }
-
-            UserAuthentication authentication = new UserAuthentication
-            {
-                Code = code,
-                Token = token,
-                IsDisabled = false,
-                PhoneNumber = phoneNumber,
-                Count = 3,
-            };
-            _context.Add(authentication);
-            _context.SaveChanges();
-            return authentication;
-        }
     }
 }

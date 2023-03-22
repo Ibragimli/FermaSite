@@ -21,6 +21,8 @@ namespace Ferma.Core.IUnitOfWork
         IUserRepository UserRepository { get; }
         IWishItemRepository WishItemRepository { get; }
         IUserAuthenticationRepository UserAuthenticationRepository { get; }
+        IServiceDurationRepository ServiceDurationRepository { get; }
+        IPaymentRepository PaymentRepository { get; }
 
         Task<int> CommitAsync();
 

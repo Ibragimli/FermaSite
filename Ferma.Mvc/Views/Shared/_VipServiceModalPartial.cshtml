@@ -1,0 +1,88 @@
+﻿@model ElanDetailViewModel
+
+
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<AppUser> userManager;
+@{
+    AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
+    int count = 0;
+
+}
+
+<div class="modal fade" id="vipServiceModal" tabindex="-1" aria-labelledby="VipServiceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    <i class="fa-brands fa-sketch"></i>
+                    VIP et
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
+                    göstəriləcək.
+                </p>
+                <div asp-validation-summary="ModelOnly" style="color:red;"></div>
+
+                <hr>
+                <h1>XİDMƏTİN MÜDDƏTİ</h1>
+                <hr>
+
+                @* Vip Form *@
+                <form asp-action="PosterPayment" method="post" enctype="multipart/form-data">
+
+                    <div class="formBody">
+
+                        @foreach (var duration in Model.ServiceDurations.Where(x => x.ServiceType == ServiceType.Vip))
+                        {
+
+
+                            <div class="form-check">
+                                <input asp-for="PaymentCreateDto.DurationServicesId" value="@duration.Id" class="form-check-input" type="radio">
+                                <label class="form-check-label"> @duration.Duration gün / @duration.Amount AZN</label>
+                            </div>
+                            <div class="d-none">  @(count= count + 1)</div>
+                        }
+
+                    </div>
+                    <hr>
+                    <h1>ÖDƏNİŞ ÜSULU</h1>
+                    <hr>
+                    <div class="formBody">
+                        <div class="form-check">
+                            <input asp-for="PaymentCreateDto.Source" value="@Source.BankCard" class="form-check-input" type="radio" checked>
+                            <label class="form-check-label">Bank kartı</label>
+                        </div>
+                        @if (user != null)
+                        {
+                            <div class="form-check">
+                                <input asp-for="PaymentCreateDto.Source" value="@Source.Balance" class="form-check-input" type="radio">
+                                <label class="form-check-label">Hesab Balansı</label>
+                            </div>
+
+
+                            <input type="hidden" asp-for="PaymentCreateDto.AppUserId" value="@user.Id" />
+                        }
+                        <input type="hidden" asp-for="PaymentCreateDto.PosterId" value="@Model.Poster.Id" />
+                        <input type="hidden" asp-for="PaymentCreateDto.ServiceType" value="@ServiceType.Vip" />
+                        <input type="hidden" asp-for="PaymentCreateDto.Services" value="@PaymentService.PosterPayment" />
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">ÖDƏ</button>
+                    </div>
+
+                </form>
+                @* Vip  Form *@
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

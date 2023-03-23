@@ -44,6 +44,10 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 400;
                         if (contextFeature.Error is NotFoundException)
                             code = 404;
+                        if (contextFeature.Error is ItemAlreadyException)
+                            code = 404;
+                        if (contextFeature.Error is ValueAlreadyExpception)
+                            code = 404;
 
                     }
 

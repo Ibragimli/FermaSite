@@ -1,7 +1,9 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Data.Datacontext;
 using Ferma.Mvc.ViewModels;
 using Ferma.Service.CustomExceptions;
+using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Authorization;
@@ -19,20 +21,36 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly IProfileEditServices _profileEditServices;
         private readonly IPhoneNumberServices _numberServices;
         private readonly IProfileLoginServices _loginServices;
         private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public ProfileController(DataContext context, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public ProfileController(DataContext context, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _profileEditServices = profileEditServices;
             _numberServices = numberServices;
             _loginServices = loginServices;
             _authenticationServices = authenticationServices;
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Index()
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            if (user == null)
+                return RedirectToAction("daxilol", "profile");
+
+            var profileVM = await _profileVM(user);
+
+            return View(profileVM);
+        }
+
         public async Task<IActionResult> DaxilOl()
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
@@ -118,8 +136,6 @@ namespace Ferma.Mvc.Controllers
             return View();
         }
 
-
-
         public IActionResult LoginAuthentication(string phoneNumber, string token)
         {
 
@@ -162,12 +178,57 @@ namespace Ferma.Mvc.Controllers
         }
 
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProfileEditDto ProfileEditDto)
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            var profileVM = await _profileVM(user);
+
+            try
+            {
+                await _profileEditServices.CheckValue(ProfileEditDto);
+                await _profileEditServices.Edit(ProfileEditDto);
+            }
+
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+
+            catch (ItemNullException)
+            {
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+            }
+            catch (ValueAlreadyExpception)
+            {
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", profileVM);
+
+            }
+
+            TempData["Success"] = ("Dəyişikliklər uğurlu oldu!");
+            return RedirectToAction("index", "profile");
+        }
+
+
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "anasehife");
         }
+
+
+
+
         private LoginAuthenticationViewModel _autenticaitonVM(string token, string phoneNumber)
         {
             LoginAuthenticationViewModel authenticationViewModel = new LoginAuthenticationViewModel
@@ -176,6 +237,22 @@ namespace Ferma.Mvc.Controllers
                 PhoneNumber = phoneNumber,
             };
             return authenticationViewModel;
+        }
+
+        private async Task<ProfileViewModel> _profileVM(AppUser user)
+        {
+            ProfileViewModel profileVM = new ProfileViewModel
+            {
+                User = user,
+                ActivePosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active).Take(50).ToListAsync(),
+                DeactivePosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.DeActive).Take(50).ToListAsync(),
+                WaitedPosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Waiting).Take(50).ToListAsync(),
+                DisabledPosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Disabled).Take(50).ToListAsync(),
+                PersonalPayments = await _context.Payments.Include(x => x.AppUser).Where(x => !x.IsDelete && x.Service == PaymentService.BalancePayment && x.AppUserId == user.Id).ToListAsync(),
+                PosterPayments = await _context.Payments.Include(x => x.AppUser).Include(x => x.Posters).ThenInclude(x => x.PosterFeatures).Where(x => !x.IsDelete && x.Service == PaymentService.PosterPayment && x.AppUserId == user.Id).ToListAsync(),
+                ProfileEditDto = new ProfileEditDto(),
+            };
+            return profileVM;
         }
 
     }

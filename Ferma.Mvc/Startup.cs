@@ -85,6 +85,7 @@ namespace Ferma.Mvc
             services.AddScoped<IPaymentCreateServices, PaymentCreateServices>();
             services.AddScoped<IProfileLoginServices, ProfileLoginServices>();
             services.AddScoped<IPhoneNumberServices, PhoneNumberServices>();
+            services.AddScoped<IProfileEditServices, ProfileEditServices>();
 
             //services.AddScoped<IUrlHelper>();
 

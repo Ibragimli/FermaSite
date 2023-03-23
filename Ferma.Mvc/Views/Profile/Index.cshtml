@@ -1,0 +1,696 @@
+﻿
+
+@{
+    ViewData["Title"] = "Index";
+    var user = @Model.User;
+    var activePosters = @Model.ActivePosters;
+    var deActivePosters = @Model.DeactivePosters;
+    var waitedPosters = @Model.WaitedPosters;
+    var disabledPosters = @Model.DisabledPosters;
+    int count = 1;
+
+}
+@model ProfileViewModel
+
+<main>
+    <!-- Profile   Start -->
+    <section id="profile">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-12 col-sm-12 profileTitleAccount">
+                    <ul class=" d-flex justify-content-between">
+                        <li>
+                            <h1>
+                                Şəxsi kabinet
+                            </h1>
+                        </li>
+                        <li class="personalBalance-li">
+                            <div class="personalBalanceBox">
+                                <div class="personalBalance">
+                                    <span class="balanceTitle"> Şəxsi hesab</span>
+                                    <span class="balanceMoney">
+                                        @user.Balance AZN
+                                    </span>
+                                </div>
+                                <div class="lineDiv"></div>
+
+                                <div class="personalBalanceButton">
+                                    <button data-bs-toggle="modal" data-bs-target="#PersonalBalanceModal"
+                                            class="btn ">
+                                        Artır
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-10 col-md-12 col-sm-12 profileBody ">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                    aria-selected="true">
+                                <i class="fa-solid fa-folder-open"></i>
+                                Elanlar
+                            </button>
+                            <button class="nav-link" id="nav-personal-account-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-personal-account" type="button" role="tab"
+                                    aria-controls="nav-personal-account" aria-selected="false">
+                                <i class="fa-solid fa-wallet"></i>
+                                Şəxsi hesab
+                            </button>
+                            <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-payment" type="button" role="tab" aria-controls="nav-payment"
+                                    aria-selected="false">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                Ödənişlər
+                            </button>
+                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                                    aria-selected="false">
+                                <i class="fa-solid fa-user"></i>
+                                Profil
+                            </button>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+
+                        <!-- Elanlar start -->
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                             aria-labelledby="nav-home-tab" tabindex="0">
+                            <!-- Elanlar button start -->
+                            <nav>
+                                <div class="nav nav-tabs" id="elan-tab" role="tablist">
+                                    <!-- Active Elan button start -->
+                                    <button class="nav-link active" id="elan-active-tab" data-bs-toggle="tab"
+                                            data-bs-target="#elan-active" type="button" role="tab"
+                                            aria-controls="elan-active" aria-selected="true">
+                                        Aktiv elanlar
+                                        <span>(@activePosters.Count())</span>
+                                    </button>
+                                    <!-- Active Elan button end-->
+                                    <!-- Deactive Elan button start -->
+                                    <button class="nav-link" id="elan-deactive-tab" data-bs-toggle="tab"
+                                            data-bs-target="#elan-deactive" type="button" role="tab"
+                                            aria-controls="elan-deactive" aria-selected="false">
+                                        Deaktiv elanlar
+                                        <span>(@deActivePosters.Count())</span>
+                                    </button>
+                                    <!-- Deactive Elan button end -->
+                                    <!-- Waiting button start -->
+                                    <button class="nav-link" id="elan-waiting-tab" data-bs-toggle="tab"
+                                            data-bs-target="#elan-waiting" type="button" role="tab"
+                                            aria-controls="elan-waiting" aria-selected="false">
+                                        Gözləyənlər
+                                        <span> (@waitedPosters.Count()) </span>
+                                    </button>
+                                    <!-- Waiting button End -->
+                                    <!-- Disabled Elan button start -->
+                                    <button class="nav-link" id="elan-disabled-tab" data-bs-toggle="tab"
+                                            data-bs-target="#elan-disabled" type="button" role="tab"
+                                            aria-controls="elan-disabled" aria-selected="false">
+                                        Dərc olunmamış <span>(@disabledPosters.Count())</span>
+                                    </button>
+                                    <!-- Disabled Elan button End -->
+                                </div>
+                            </nav>
+                            <!-- Elanlar button end -->
+                            <!-- Elanlar body start -->
+                            <div class="tab-content" id="elan-tabContent">
+                                <!-- Active Elan  start -->
+                                <div class="tab-pane fade show active" id="elan-active" role="tabpanel"
+                                     aria-labelledby="elan-active-tab" tabindex="0">
+
+                                    <!-- Elan poster box Start -->
+                                    <div id="elanPosterBox">
+                                        <!-- Elan poster Start -->
+                                        <div class="posterRow row justify-content-center align-items-center ">
+                                            <div class=" col-lg-11 col-md-11 col-sm-12  ">
+                                                <div class="col-12 posterBoxs row ">
+                                                    @if (activePosters.Count() > 0)
+                                                    {
+                                                        @foreach (var poster in activePosters)
+                                                        {
+                                                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                                                <div class="posterBox">
+                                                                    <div class="posterImageBox">
+                                                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                            <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+                                                                        </a>
+                                                                        <div class="posterVipIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-brands fa-sketch"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterQueenIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-solid fa-crown"></i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="posterDetailBox">
+                                                                        <div class="posterPriceBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                                                            </a>
+                                                                        </div>
+
+                                                                        <div class="posterNameBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <h4>
+                                                                                    @poster.PosterFeatures.Name
+
+                                                                                </h4>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterCreatedBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>  @poster.PosterFeatures.City.Name,  @poster.PosterFeatures.CreatedDate</span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="posterActionBox">
+                                                                        <div class="posterEditButtonBox">
+                                                                            <a href="#">
+                                                                                Düzəliş et
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterDisabledButtonBox">
+                                                                            <a href="#">
+                                                                                Deaktiv et
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <h3 style="text-align:center; font-weight:600;">Yeni elanlar yaradın</h3>
+                                                        <div style="display: flex;justify-content: center;">
+                                                            <a asp-controller="elanlar" asp-action="yenielan" style=" background-color: green; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-pack: center; justify-content: center;  -ms-flex-align: center; align-items: center; margin-right: 5px; line-height: 21px; margin-top: 4px; margin-bottom: 4px; border-radius: 5px; border: none; width: 131px; height: 40px; ">
+                                                                <span style="color:whitesmoke;">Yeni Elan</span>
+                                                            </a>
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Elan poster Start -->
+
+                                    </div>
+                                    <!-- Elan poster box End -->
+                                    <!-- Elan empty btn Start -->
+                                    <div class="elanCreatePosterBtn d-none">
+                                        <p>Bu bölmədə elan yoxdur</p>
+                                        <a href="createPoster.html" class="btn">
+                                            <i class="fa-solid fa-circle-plus"></i>
+                                            Elan yarat
+                                        </a>
+                                    </div>
+                                    <!-- Elan empty btn End -->
+
+                                </div>
+                                <!-- Active Elan  end-->
+                                <!-- Deactive Elan start -->
+                                <div class="tab-pane fade" id="elan-deactive" role="tabpanel"
+                                     aria-labelledby="elan-deactive-tab" tabindex="0">
+                                    <!-- Elan poster box Start -->
+                                    <div id="elanPosterBox">
+                                        <!-- Elan poster Start -->
+                                        <div class="posterRow row justify-content-center align-items-center ">
+                                            <div class=" col-lg-11 col-md-11  col-sm-12 ">
+                                                <div class="col-12 posterBoxs row ">
+                                                    @if (deActivePosters.Count() > 0)
+                                                    {
+                                                        @foreach (var poster in deActivePosters)
+                                                        {
+                                                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                                                <div class="posterBox">
+                                                                    <div class="posterImageBox">
+                                                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                            <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+
+                                                                        </a>
+                                                                        <div class="posterVipIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-brands fa-sketch"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterQueenIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-solid fa-crown"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterDeactiveBox">
+
+                                                                            <a href="#">
+                                                                                <span>
+                                                                                    AKTİV DEYİL
+                                                                                </span>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="posterDetailBox">
+                                                                        <div class="posterPriceBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                                                            </a>
+                                                                        </div>
+
+                                                                        <div class="posterNameBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <h4>
+                                                                                    @poster.PosterFeatures.Name
+
+
+                                                                                </h4>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterCreatedBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>  @poster.PosterFeatures.City.Name,  @poster.PosterFeatures.CreatedDate</span>
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="posterActionBox">
+                                                                        <div class="posterRepairButtonBox">
+                                                                            <a href="#">
+                                                                                Bərpa et
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <h3 style="text-align:center; font-weight:600;">Yeni elanlar yaradın</h3>
+                                                        <div style="display: flex;justify-content: center;">
+                                                            <a asp-controller="elanlar" asp-action="yenielan" style=" background-color: green; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-pack: center; justify-content: center;  -ms-flex-align: center; align-items: center; margin-right: 5px; line-height: 21px; margin-top: 4px; margin-bottom: 4px; border-radius: 5px; border: none; width: 131px; height: 40px; ">
+                                                                <span style="color:whitesmoke;">Yeni Elan</span>
+                                                            </a>
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Elan poster Start -->
+
+                                    </div>
+                                    <!-- Elan poster box End -->
+                                </div>
+                                <!-- Deactive Elan end -->
+                                <!-- Waiting  start -->
+                                <div class="tab-pane fade" id="elan-waiting" role="tabpanel"
+                                     aria-labelledby="elan-waiting-tab" tabindex="0">
+                                    <!-- Elan poster box Start -->
+                                    <div id="elanPosterBox">
+                                        <!-- Elan poster Start -->
+                                        <div class="posterRow row justify-content-center align-items-center ">
+                                            <div class=" col-lg-11 col-md-11  col-sm-12 ">
+                                                <div class="col-12 posterBoxs row ">
+                                                    @if (waitedPosters.Count() > 0)
+                                                    {
+                                                        @foreach (var poster in waitedPosters)
+                                                        {
+                                                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                                                <div class="posterBoxHeight posterBox">
+                                                                    <div class="posterImageBox">
+                                                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                            <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+
+                                                                        </a>
+                                                                        <div class="posterVipIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-brands fa-sketch"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterQueenIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-solid fa-crown"></i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="posterDetailBox">
+                                                                        <div class="posterPriceBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                                                            </a>
+                                                                        </div>
+
+                                                                        <div class="posterNameBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <h4>
+                                                                                    @poster.PosterFeatures.Name
+
+
+                                                                                </h4>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterCreatedBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>  @poster.PosterFeatures.City.Name,  @poster.PosterFeatures.CreatedDate</span>
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <h3 style="text-align:center; font-weight:600;">Yeni elanlar yaradın</h3>
+                                                        <div style="display: flex;justify-content: center;">
+                                                            <a asp-controller="elanlar" asp-action="yenielan" style=" background-color: green; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-pack: center; justify-content: center;  -ms-flex-align: center; align-items: center; margin-right: 5px; line-height: 21px; margin-top: 4px; margin-bottom: 4px; border-radius: 5px; border: none; width: 131px; height: 40px; ">
+                                                                <span style="color:whitesmoke;">Yeni Elan</span>
+                                                            </a>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Elan poster Start -->
+
+                                    </div>
+                                    <!-- Elan poster box End -->
+                                </div>
+                                <!-- Waiting  End -->
+                                <!-- Disabled Elan  start -->
+                                <div class="tab-pane fade" id="elan-disabled" role="tabpanel"
+                                     aria-labelledby="elan-disabled-tab" tabindex="0">
+                                    <div id="elanPosterBox">
+                                        <!-- Elan poster Start -->
+                                        <div class="posterRow row justify-content-center align-items-center ">
+                                            <div class=" col-lg-11 col-md-11  col-sm-12 ">
+                                                <div class="col-12 posterBoxs row ">
+                                                    @if (disabledPosters.Count() > 0)
+                                                    {
+                                                        @foreach (var poster in disabledPosters)
+                                                        {
+                                                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                                                <div class="posterBoxHeight posterBox">
+                                                                    <div class="posterImageBox">
+                                                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                            <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+
+                                                                        </a>
+                                                                        <div class="posterVipIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-brands fa-sketch"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterQueenIconBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <i class="fa-solid fa-crown"></i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="posterDetailBox">
+                                                                        <div class="posterPriceBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                                                            </a>
+                                                                        </div>
+
+                                                                        <div class="posterNameBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <h4>
+                                                                                    @poster.PosterFeatures.Name
+
+
+                                                                                </h4>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="posterCreatedBox">
+                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                <span>  @poster.PosterFeatures.City.Name,  @poster.PosterFeatures.CreatedDate</span>
+
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <h3 style="text-align:center; font-weight:600;">Yeni elanlar yaradın</h3>
+                                                        <div style="display: flex;justify-content: center;">
+                                                            <a asp-controller="elanlar" asp-action="yenielan" style=" background-color: green; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-pack: center; justify-content: center;  -ms-flex-align: center; align-items: center; margin-right: 5px; line-height: 21px; margin-top: 4px; margin-bottom: 4px; border-radius: 5px; border: none; width: 131px; height: 40px; ">
+                                                                <span style="color:whitesmoke;">Yeni Elan</span>
+                                                            </a>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Elan poster Start -->
+
+                                    </div>
+                                </div>
+                                <!-- Disabled Elan  End -->
+
+                            </div>
+                            <!-- Elanlar body end -->
+
+                        </div>
+                        <!-- Elanlar End -->
+                        <!-- Personal account start -->
+                        <div class="tab-pane fade" id="nav-personal-account" role="tabpanel"
+                             aria-labelledby="nav-personal-account-tab" tabindex="0">
+                            <h4 style="font-weight: bold; margin-bottom: 15px; ">
+                                Şəxsi hesab üçün əməliyyatlarım
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-left: 20px;" scope="col">#</th>
+                                            <th scope="col">Xidmət</th>
+                                            <th scope="col">Məbləğ</th>
+                                            <th scope="col">Mənbə</th>
+                                            <th scope="col">Tarix</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var pPayments in Model.PersonalPayments)
+                                        {
+                                            <tr>
+                                                <th style="padding-left: 20px;" scope="row">@count</th>
+                                                <td>Şəxsi hesabın artırılması</td>
+                                                <td>
+                                                    @pPayments.Amount
+                                                    <span>AZN</span>
+                                                </td>
+                                                <td>
+                                                    @(pPayments.Source == Source.BankCard ? "Banka Kartı" : " ")
+                                                </td>
+                                                <td>@pPayments.CreatedDate</td>
+                                            </tr>
+                                            <div class="d-none">@(count++)</div>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- Personal account End -->
+                        <!-- Payments start -->
+                        <div class="tab-pane fade" id="nav-payment" role="tabpanel"
+                             aria-labelledby="nav-payment-tab" tabindex="0">
+                            <h4 style="font-weight: bold; margin-bottom: 15px; ">
+                                Elanlarıma olan bütün ödənişlər
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-left: 20px;" scope="col">Elan</th>
+                                            <th scope="col">Elanın adı</th>
+                                            <th scope="col">Xidmət</th>
+                                            <th scope="col">Məbləğ</th>
+                                            <th scope="col">Mənbə</th>
+                                            <th scope="col">Tarix</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var bPaymanent in Model.PosterPayments)
+                                        {
+                                            <tr>
+                                                <th style="padding-left: 20px;" scope="row">#@bPaymanent.Id</th>
+                                                <td>
+                                                    <a href="#">
+                                                        @bPaymanent.Posters.PosterFeatures.Name
+                                                    </a>
+                                                </td>
+                                                <td>@(bPaymanent.ServiceType == ServiceType.Premium?"Premium":"VIP")</td>
+                                                <td>
+                                                    @bPaymanent.Amount
+                                                    <span>AZN</span>
+                                                </td>
+                                                <td>@(bPaymanent.Source==Source.Balance?"Şəxsi Hesab":"Banka Kartı" )</td>
+                                                <td>@(bPaymanent.CreatedDate.ToString("dd-MM-yy"))</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Payments End -->
+                        <!-- Profile start -->
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                             aria-labelledby="nav-profile-tab" tabindex="0">
+                            <form asp-action="edit" method="post">
+                                <div class="formBox">
+                                    <div class=" profileTitleBox mb-3">
+                                        <h3>Profilə düzəliş et</h3>
+                                        <hr>
+                                    </div>
+                                    <div class="mb-3 profileInputBox">
+                                        <label asp-for="ProfileEditDto.Name" class="form-label">Adınız:</label>
+                                        <input asp-for="ProfileEditDto.Name"  type="text" class="form-control">
+                                        <span asp-validation-for="ProfileEditDto.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="profileInputBox mb-3">
+                                        <label asp-for="ProfileEditDto.Email" class="form-label">Email:</label>
+                                        <input asp-for="ProfileEditDto.Email" type="email" class="form-control">
+                                        <span asp-validation-for="ProfileEditDto.Email" class="text-danger"></span>
+                                    </div>
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="profileButtonBox mb-3 text-end ">
+                                        <button type="submit" class="btn btn-warning">Yadda saxla</button>
+                                    </div>
+                                    <input type="hidden" asp-for="ProfileEditDto.UserId" value="@user.Id" />
+                                </div>
+
+                            </form>
+                        </div>
+                        <!-- Profile End -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Profile  End -->
+    <!-- Personal Balance Modal Start -->
+    <div class="modal fade" id="PersonalBalanceModal" tabindex="-1" aria-labelledby="PersonalBalanceModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        <i class="fa-solid fa-wallet"></i>
+                        Şəxsi hesabı artır
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="balansId" action="#">
+                        <hr>
+                        <h1>BALANS ARTIMI</h1>
+                        <hr>
+                        <div class="formBody">
+                            <p>Artırılacaq məbləği daxil edin və ya seçin: </p>
+
+                            <div class="formCheckRadio">
+                                <div class="form-check d-flex">
+                                    <input class="form-check-input moneyDefault" value="1" name="flexRadioDefault"
+                                           type="radio" checked id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1"> 1,00 AZN</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input moneyDefault" value="2" name="flexRadioDefault"
+                                           type="radio" id="flexRadioDefault2 ">
+                                    <label class="form-check-label" for="flexRadioDefault2">3,00 AZN</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input moneyDefault" value="3" name="flexRadioDefault"
+                                           type="radio" id="flexRadioDefault3">
+                                    <label class="form-check-label" for="flexRadioDefault3"> 5,00 AZN</label>
+                                </div>
+                            </div>
+                            <div class="formIput ">
+                                <input placeholder="Məbləğ, AZN" class="form-control customMoney" type="number"
+                                       maxlength="4" min="1" max="9999" id="customMoney">
+                                <label class="form-check-label" for="flexRadioDefault3"> Məbləğ AZN</label>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h1>ÖDƏNİŞ ÜSULU</h1>
+                        <hr>
+
+                        <div class="formBody">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" checked>
+                                <label class="form-check-label">Bank kartı</label>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">ÖDƏ</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Personal Balance Modal End -->
+</main>
+
+@section Scripts{
+
+    <script>
+
+        function maxLengthCheck(object) {
+            if (object.value.length > object.maxLength)
+                object.value = object.value.slice(0, object.maxLength)
+        }
+
+        var radioChecks = document.querySelectorAll(".moneyDefault");
+        var inputMoney = document.getElementById("balansId");
+        var customMoney = document.getElementById("customMoney");
+
+
+        inputMoney.addEventListener("focusin", (event) => {
+            // console.log(event.target.id)
+            if (event.target.id == "customMoney") {
+                for (var i = 0, iLen = radioChecks.length; i < iLen; i++) {
+                    radioChecks[i].checked = false;
+                }
+            }
+        })
+
+        inputMoney.addEventListener("focusin", (event) => {
+            // console.log(event.target.name)
+
+            if (event.target.name == "flexRadioDefault") {
+
+                customMoney.value = " ";
+            }
+        })
+    </script>
+}

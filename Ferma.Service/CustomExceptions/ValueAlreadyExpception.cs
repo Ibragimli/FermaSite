@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Ferma.Service.CustomExceptions
 {
-    public class ImageNullException : Exception
+    public class ValueAlreadyExpception : Exception
     {
-        public ImageNullException(string msg) : base(msg)
+        public ValueAlreadyExpception(string msg) : base(msg)
         {
 
         }

@@ -27,26 +27,28 @@ namespace Ferma.Service.Services.Implementations.User
             if (editDto.Email == null && editDto.Name == null)
                 throw new ItemNullException("Email Null");
 
-            if (user.Email == editDto.Email)
-                throw new ValueAlreadyExpception("");
-            if (user.Name == editDto.Name)
-                throw new ValueAlreadyExpception("");
         }
 
         public async Task Edit(ProfileEditDto editDto)
         {
             var user = await _unitOfWork.UserRepository.GetAsync(x => x.Id == editDto.UserId);
+            bool checkBool = false;
+            if (user.Email != editDto.Email)
+                if (editDto.Email != null)
+                {
+                    user.Email = editDto.Email;
+                    user.NormalizedEmail = editDto.Email.ToUpper();
+                    checkBool = true;
+                }
 
-            if (editDto.Email != null)
-            {
-                user.Email = editDto.Email;
-                user.NormalizedEmail = editDto.Email.ToUpper();
-            }
-            
-            if (editDto.Name != null)
-                user.Name = editDto.Name;
-
-            await _unitOfWork.CommitAsync();
+            if (user.Name != editDto.Name)
+                if (editDto.Name != null)
+                {
+                    user.Name = editDto.Name;
+                    checkBool = true;
+                }
+            if (checkBool)
+                await _unitOfWork.CommitAsync();
         }
     }
 }

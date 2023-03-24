@@ -204,20 +204,20 @@
             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
                 <div class="posterBox">
                     <div class="posterImageBox">
-                        <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                             <img src="~/uploads/poster/@posterAll.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
                         </a>
                         @if (posterAll.PosterFeatures.IsVip)
                         {
         <div class="posterVipIconBox">
-            <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                 <i class="fa-brands fa-sketch"></i>
             </a>
         </div>}
                         @if (posterAll.PosterFeatures.IsPremium)
                         {
         <div class="posterQueenIconBox">
-            <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                 <i class="fa-solid fa-crown"></i>
             </a>
         </div>}
@@ -232,20 +232,20 @@
                     </div>
                     <div class="posterDetailBox">
                         <div class="posterPriceBox">
-                            <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                                 <span>@posterAll.PosterFeatures.Price  @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
                             </a>
                         </div>
 
                         <div class="posterNameBox">
-                            <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                                 <h4>
                                     @posterAll.PosterFeatures.Name
                                 </h4>
                             </a>
                         </div>
                         <div class="posterCreatedBox">
-                            <a asp-action="elan" asp-controller="elanlar"  asp-route-id="@posterAll.Id">
+                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                                 <span> @posterAll.PosterFeatures.City.Name, @posterAll.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
 
 
@@ -285,3 +285,4 @@
     <!-- Last Poster End -->
 
 </main>
+

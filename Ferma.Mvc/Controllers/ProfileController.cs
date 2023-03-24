@@ -21,15 +21,17 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly IPosterEditServices _posterEditServices;
         private readonly IProfileEditServices _profileEditServices;
         private readonly IPhoneNumberServices _numberServices;
         private readonly IProfileLoginServices _loginServices;
         private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public ProfileController(DataContext context, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public ProfileController(DataContext context, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _posterEditServices = posterEditServices;
             _profileEditServices = profileEditServices;
             _numberServices = numberServices;
             _loginServices = loginServices;
@@ -178,9 +180,71 @@ namespace Ferma.Mvc.Controllers
         }
 
 
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            PosterEditViewModel posterEditVM = new PosterEditViewModel
+            {
+                PosterEditDto = new PosterEditDto(),
+                Poster = await _context.Posters.Include(x => x.PosterFeatures)
+                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
+                .Include(x => x.PosterImages).Where(x => x.IsDelete == false && x.PosterFeatures.IsDisabled == false)
+                .FirstOrDefaultAsync(x => x.Id == id),
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList(),
+                Cities = _context.Cities.ToList(),
+            };
+
+            return View(posterEditVM);
+        }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Edit(ProfileEditDto ProfileEditDto)
+        public async Task<IActionResult> Edit(Poster poster)
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            var profileVM = await _profileVM(user);
+
+            try
+            {
+                await _posterEditServices.posterEdit(poster);
+            }
+
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+
+            catch (ItemNullException)
+            {
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+            }
+            catch (ValueAlreadyExpception)
+            {
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", profileVM);
+
+            }
+
+            TempData["Success"] = ("Dəyişikliklər uğurlu oldu!");
+            return RedirectToAction("index", "profile");
+        }
+
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EditUser(ProfileEditDto ProfileEditDto)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
@@ -218,6 +282,35 @@ namespace Ferma.Mvc.Controllers
             return RedirectToAction("index", "profile");
         }
 
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> disabledPoster(int id)
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            var profileVM = await _profileVM(user);
+
+            try
+            {
+                await _posterEditServices.posterDisabled(id);
+            }
+
+            catch (ItemNotFoundException msg)
+            {
+                TempData["Success"] = (msg.Message);
+                return RedirectToAction("index", profileVM);
+            }
+
+            catch (Exception)
+            {
+                return RedirectToAction("index", profileVM);
+            }
+
+            TempData["Success"] = ("Elan deaktiv oldu");
+            return RedirectToAction("index");
+
+        }
 
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Logout()

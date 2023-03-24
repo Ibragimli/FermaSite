@@ -8,7 +8,7 @@ namespace Ferma.Service.HelperService.Interfaces
 {
     public interface IManageImageHelper
     {
-        public void PosterCheck(Poster Image);
+        public void PosterCheck(IFormFile posterImageFile);
         public void ImagesCheck(List<IFormFile> Images);
         public string FileSave(IFormFile Image, string folderName);
         public void DeleteFile(string image, string folderName);

@@ -48,7 +48,8 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 404;
                         if (contextFeature.Error is ValueAlreadyExpception)
                             code = 404;
-
+                        if (contextFeature.Error is ImageCountException)
+                            code = 400;
                     }
 
                     context.Response.StatusCode = code;

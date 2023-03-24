@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+@model PosterEditViewModel
+<main>
+
+    <!-- Create Poster   Start -->
+    <section id="createPoster">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+                    <h1>Elanı redaktə etmək</h1>
+                    <form class="form-control" asp-action="edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" style="color:red;"></div>
+
+                        <!-- Poster Kategoriya Start -->
+                        <div class=" mb-3 posterCategorys">
+                            <label class="  form-label">Kategoriya*</label>
+                            <select asp-for="Poster.PosterFeatures.SubCategoryId" asp class="form-select">
+                                <option disabled selected>Siyahıdan seçin</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <optgroup label="@category.Name"> </optgroup>
+                                    @foreach (var subCategory in Model.SubCategories.Where(x => x.CategoryId == category.Id))
+                                    {
+                                        <option value="@subCategory.Id">@subCategory.Name </option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="Poster.PosterFeatures.SubCategoryId" class="text-danger"></span>
+                        </div>
+                        <!-- Poster Kategoriya End -->
+                        <!-- Poster  Start -->
+                        <div class="mb-3 posterName">
+                            <label asp-for="Poster.PosterFeatures.Name" class="form-label">Elanın adı*</label>
+                            <input asp-for="Poster.PosterFeatures.Name" maxlength="100" type="text" class="form-control">
+                            <span asp-validation-for="Poster.PosterFeatures.Name" class="text-danger"></span>
+                        </div>
+                        <!-- Poster   End -->
+                        <!-- Poster Price  Start -->
+                        <div class="mb-3 posterPriceBox">
+                            <label class="form-label">Qiymət*</label>
+
+                            <div class="posterPrice">
+                                <div>
+                                    <input placeholder="0,00" asp-for="Poster.PosterFeatures.Price" title="" min="0" max="9999999" type="text"
+                                           class="form-control posterPriceInput">
+                                    <span asp-validation-for="Poster.PosterFeatures.Price" class="text-danger"></span>
+                                </div>
+
+                                <div class="posterPriceCurrency">
+                                    <div class="form-check ">
+                                        <input asp-for="Poster.PosterFeatures.PriceCurrency" class="form-check-input" type="radio"
+                                               value="false">
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            AZN, ₼
+                                        </label>
+                                    </div>
+                                    <div class="form-check ">
+                                        <input asp-for="Poster.PosterFeatures.PriceCurrency" class="form-check-input" type="radio"
+                                               value="true">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            USD, $
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Poster.PosterFeatures.PriceCurrency" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Poster Price  End -->
+                        <!-- Poster Shipping and IsNew  Start -->
+
+                        <div class="row">
+                            @* Çatdirilma *@
+                            <div class="col-3 d-flex align-items-center">
+                                <input style="margin-right:4px; margin-top:0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsShipping" placeholder="...." />
+                                <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Çatdırılma</span>
+                                <span asp-validation-for="Poster.PosterFeatures.IsShipping" class="text-danger"></span>
+                            </div>
+                            @* Çatdirilma *@
+
+                            @* Yeni-Kohne *@
+                            <div class="col-3 d-flex align-items-center">
+                                <input style="margin-right: 4px; margin-top: 0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsNew" placeholder="...." />
+                                <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Yeni</span>
+                                <span asp-validation-for="Poster.PosterFeatures.IsNew" class="text-danger"></span>
+                            </div>
+                            @* Yeni-Kohne *@
+                        </div>
+                        <!-- Poster Shipping and IsNew  End -->
+                        <!-- Poster Describe  Start -->
+                        <div class="mb-3 posterDescribe">
+                            <label class="form-label">Məzmun</label>
+                            <textarea asp-for="Poster.PosterFeatures.Describe" class="form-control" maxlength="3000" type="text" cols="10"
+                                      rows="7"></textarea>
+                            <span asp-validation-for="Poster.PosterFeatures.Describe" class="text-danger"></span>
+
+                        </div>
+                        <!-- Poster Describe End -->
+                        <!-- Poster Image  Start -->
+                        <div class="mb-3 posterImages">
+                            <label asp-for="Poster.PosterImageFile" class="form-label">Elanın poster Şəkli*</label>
+                            <input type="hidden" asp-for="Poster.Id" value="@Model.Poster.Id" />
+                            <!-- Şəkil əlavə et -->
+                            <input asp-for="Poster.PosterImageFile" type="file" accept="image/png,  image/jpeg"
+                                   class="form-control">
+                            <div>
+                                <span asp-validation-for="Poster.PosterImageFile" class="text-danger"></span>
+                            </div>
+                            <div id="poster-image-box" class="poster-image-box row">
+                                @foreach (var image in Model.Poster.PosterImages.Where(x => !x.IsDelete && x.IsPoster))
+                                {
+
+                                    @if (Model.Poster.PosterImages.FirstOrDefault(x => !x.IsDelete) != null)
+
+                                    {
+                                        <div class="col-3">
+                                            <div style="position:relative;" class="image-box">
+                                                <input type="hidden" value="@image.Id" />
+                                                <img style="width:200px; height:160px;" src="~/uploads/poster/@image.Image" />
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <!-- Poster Image End -->
+                        <!--  Images  Start -->
+                        <div class="mb-3 posterImages">
+                            <label asp-for="Poster.ImageFiles" class="form-label">Elanın Şəkillər*</label>
+                            <input type="hidden" asp-for="Poster.Id" value="@Model.Poster.Id" />
+                            <!-- Şəkil əlavə et -->
+                            <input asp-for="Poster.ImageFiles" id="imageInput" type="file" accept="image/png,  image/jpeg"
+                                   class="form-control" multiple="">
+                            <div>
+                                @*posterInput*@
+                                @*imageInput*@
+                                <p id="imageErrorMessage" class="fw-bold "></p>
+                                <span asp-validation-for="Poster.ImageFiles" class="text-danger"></span>
+                            </div>
+                            <div id="poster-image-box" class="poster-image-box row">
+                                @foreach (var image in Model.Poster.PosterImages.Where(x => !x.IsDelete && !x.IsPoster))
+                                {
+
+                                    @if (Model.Poster.PosterImages.FirstOrDefault(x => !x.IsDelete) != null)
+
+                                    {
+                                        <div class="col-3">
+                                            <div style="position:relative;" class="image-box">
+                                                <input type="hidden" name="Poster.PosterImagesIds[]" value="@image.Id" />
+                                                <img style="width:200px; height:160px;" src="~/uploads/poster/@image.Image" />
+                                                <i id="${i}" style="   cursor: pointer; color: red; font-size: 20px; position:absolute; top:10px; right:20px;" onclick="removeFile(${i})" class="fa-solid fa-trash deleteImage"></i>
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="row" id="temperoryImages"></div>
+                        </div>
+                        <!--  Images End -->
+                        <!-- Button  Start -->
+                        <div class="mb-3 posterButton text-end">
+                            <button type="submit" class="btn ">Əlavə et</button>
+                        </div>
+
+                        <!-- Button  Start -->
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!--  Create Poster  End -->
+</main>
+
+@section Scripts{
+    <script src="~/assets/js/imagePreview.js"></script>
+    <script src="~/assets/js/PosterEditImage.js"></script>
+}
+
+
+
+
+

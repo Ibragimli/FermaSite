@@ -20,21 +20,21 @@ namespace Ferma.Service.HelperService.Implementations
             _env = env;
             _key = key;
         }
-        public  void PosterCheck(Poster Image)
+        public void PosterCheck(IFormFile PosterImageFile)
         {
-            if (Image.PosterImageFile.ContentType !=  _key.ValueStr("ImageType1") && Image.PosterImageFile.ContentType !=  _key.ValueStr("ImageType2"))
+            if (PosterImageFile.ContentType != _key.ValueStr("ImageType1") && PosterImageFile.ContentType != _key.ValueStr("ImageType2"))
                 throw new ImageFormatException("Poster şekli yalnız (png ve ya jpg) type-ında ola biler");
 
-            if (Image.PosterImageFile.Length >  _key.ValueInt("ImageSize") * 1048576)
+            if (PosterImageFile.Length > _key.ValueInt("ImageSize") * 1048576)
                 throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
         }
-        public  void ImagesCheck(List<IFormFile> Images)
+        public void ImagesCheck(List<IFormFile> Images)
         {
             foreach (var image in Images)
             {
-                if (image.ContentType !=  _key.ValueStr("ImageType1") && image.ContentType !=  _key.ValueStr("ImageType2"))
+                if (image.ContentType != _key.ValueStr("ImageType1") && image.ContentType != _key.ValueStr("ImageType2"))
                     throw new ImageFormatException("Poster şekli yalnız (png ve ya jpeg) type-ında ola biler");
-                if (image.Length >  _key.ValueInt("ImageSize") * 1048576)
+                if (image.Length > _key.ValueInt("ImageSize") * 1048576)
                     throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
             }
         }

@@ -21,6 +21,7 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly IBalanceIncreaseServices _balanceIncreaseServices;
         private readonly IPosterEditServices _posterEditServices;
         private readonly IProfileEditServices _profileEditServices;
         private readonly IPhoneNumberServices _numberServices;
@@ -28,9 +29,10 @@ namespace Ferma.Mvc.Controllers
         private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public ProfileController(DataContext context, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public ProfileController(DataContext context, IBalanceIncreaseServices balanceIncreaseServices, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _balanceIncreaseServices = balanceIncreaseServices;
             _posterEditServices = posterEditServices;
             _profileEditServices = profileEditServices;
             _numberServices = numberServices;
@@ -202,6 +204,8 @@ namespace Ferma.Mvc.Controllers
             return View(posterEditVM);
         }
 
+
+        [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Edit(Poster poster)
@@ -220,21 +224,42 @@ namespace Ferma.Mvc.Controllers
                 return RedirectToAction("index", "notfound");
             }
 
-            catch (ItemNullException)
+            catch (ItemNullException msg)
             {
+                ModelState.AddModelError("", msg.Message);
                 TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
                 return RedirectToAction("index", profileVM);
             }
-            catch (ValueAlreadyExpception)
+            catch (ImageNullException msg)
             {
+                ModelState.AddModelError("", msg.Message);
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+            }
+            catch (ImageFormatException msg)
+            {
+                ModelState.AddModelError("", msg.Message);
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+            }
+
+            catch (ImageCountException msg)
+            {
+                ModelState.AddModelError("", msg.Message);
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
+                return RedirectToAction("index", profileVM);
+            }
+            catch (ValueAlreadyExpception msg)
+            {
+                ModelState.AddModelError("", msg.Message);
                 TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
                 return RedirectToAction("index", profileVM);
 
             }
             catch (Exception)
             {
+                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
                 return RedirectToAction("index", profileVM);
-
             }
 
             TempData["Success"] = ("Dəyişikliklər uğurlu oldu!");
@@ -242,6 +267,7 @@ namespace Ferma.Mvc.Controllers
         }
 
 
+        [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> EditUser(ProfileEditDto ProfileEditDto)
@@ -282,10 +308,10 @@ namespace Ferma.Mvc.Controllers
             return RedirectToAction("index", "profile");
         }
 
-
+        [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> disabledPoster(int id)
+        public async Task<IActionResult> DisabledPoster(int id)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
@@ -298,7 +324,7 @@ namespace Ferma.Mvc.Controllers
 
             catch (ItemNotFoundException msg)
             {
-                TempData["Success"] = (msg.Message);
+                TempData["Error"] = (msg.Message);
                 return RedirectToAction("index", profileVM);
             }
 
@@ -317,6 +343,40 @@ namespace Ferma.Mvc.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "anasehife");
+        }
+
+
+        [Authorize(Roles = "User")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> BalanceIncrease(BalanceDto balanceDto)
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            var profileVM = await _profileVM(user);
+
+            try
+            {
+                await _balanceIncreaseServices.CheckBalanceIncrease(balanceDto);
+                await _balanceIncreaseServices.BalanceIncrease(balanceDto);
+            }
+
+            catch (UserNotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            catch (PaymentValueException msg)
+            {
+                TempData["Error"] = (msg.Message);
+                return RedirectToAction("index", profileVM);
+            }
+
+            catch (Exception )
+            {
+                return RedirectToAction("index", profileVM);
+            }
+
+            return RedirectToAction("index","profile");
         }
 
 

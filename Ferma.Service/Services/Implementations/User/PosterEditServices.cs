@@ -44,7 +44,7 @@ namespace Ferma.Service.Services.Implementations.User
 
         public async Task posterEdit(Poster poster)
         {
-            bool checkBool = true;
+            bool checkBool = false;
             if (poster == null)
                 throw new ItemNotFoundException("Elan tapılmadı");
 

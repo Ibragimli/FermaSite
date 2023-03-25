@@ -178,7 +178,7 @@
                                                                             </a>
                                                                         </div>
                                                                         <div class="posterDisabledButtonBox">
-                                                                            <a asp-controller="profile" asp-action="disabledPoster"  asp-route-id="@poster.Id" class="disabled-btn">
+                                                                            <a asp-controller="profile" asp-action="disabledPoster" asp-route-id="@poster.Id" class="disabled-btn">
                                                                                 Deaktiv et
                                                                             </a>
                                                                         </div>
@@ -607,35 +607,33 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="balansId" action="#">
+                    <form asp-action="balanceIncrease" method="post" id="balansId">
                         <hr>
                         <h1>BALANS ARTIMI</h1>
                         <hr>
                         <div class="formBody">
                             <p>Artırılacaq məbləği daxil edin və ya seçin: </p>
-
                             <div class="formCheckRadio">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-check d-flex">
-                                    <input class="form-check-input moneyDefault" value="1" name="flexRadioDefault"
-                                           type="radio" checked id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1"> 1,00 AZN</label>
+                                    <input asp-for="BalanceDto.Balance" class="form-check-input moneyDefault" value="1" type="radio" checked>
+                                    <label class="form-check-label" asp-for="BalanceDto.Balance"> 1,00 AZN</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input moneyDefault" value="2" name="flexRadioDefault"
-                                           type="radio" id="flexRadioDefault2 ">
-                                    <label class="form-check-label" for="flexRadioDefault2">3,00 AZN</label>
+                                    <input asp-for="BalanceDto.Balance" class="form-check-input moneyDefault" value="3" type="radio">
+                                    <label asp-for="BalanceDto.Balance" class="form-check-label" for="flexRadioDefault2">3,00 AZN</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input moneyDefault" value="3" name="flexRadioDefault"
-                                           type="radio" id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3"> 5,00 AZN</label>
+                                    <input asp-for="BalanceDto.Balance" class="form-check-input moneyDefault" value="5" type="radio">
+                                    <label asp-for="BalanceDto.Balance" class="form-check-label" for="flexRadioDefault3"> 5,00 AZN</label>
                                 </div>
                             </div>
                             <div class="formIput ">
-                                <input placeholder="Məbləğ, AZN" class="form-control customMoney" type="number"
-                                       maxlength="4" min="1" max="9999" id="customMoney">
-                                <label class="form-check-label" for="flexRadioDefault3"> Məbləğ AZN</label>
+                                <input asp-for="BalanceDto.Balance" placeholder="Məbləğ, AZN" class="form-control customMoney" type="number"
+                                       maxlength="4" min="1" max="999" id="customMoney">
+                                <label asp-for="BalanceDto.Balance" class="form-check-label"> Məbləğ AZN</label>
                             </div>
+                            <input type="hidden" value="@user.Id" asp-for="BalanceDto.AppUserId" />
                         </div>
 
                         <hr>
@@ -644,13 +642,12 @@
 
                         <div class="formBody">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" checked>
-                                <label class="form-check-label">Bank kartı</label>
+                                <input asp-for="BalanceDto.Source" value="@Source.BankCard" class="form-check-input" type="radio" checked>
+                                <label asp-for="BalanceDto.Source" class="form-check-label">Bank kartı</label>
                             </div>
-
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">ÖDƏ</button>
+                            <button type="submit" class="btn btn-primary">ÖDƏ</button>
                         </div>
                     </form>
                 </div>

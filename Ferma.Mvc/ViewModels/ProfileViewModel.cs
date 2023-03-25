@@ -17,5 +17,6 @@ namespace Ferma.Mvc.ViewModels
         public List<Poster> DisabledPosters { get; set; }
         public List<Payment> PersonalPayments { get; set; }
         public List<Payment> PosterPayments { get; set; }
+        public BalanceDto BalanceDto { get; set; }
     }
 }

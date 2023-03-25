@@ -50,6 +50,9 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 404;
                         if (contextFeature.Error is ImageCountException)
                             code = 400;
+                        if (contextFeature.Error is UserNotFoundException)
+                            code = 404;
+                        
                     }
 
                     context.Response.StatusCode = code;

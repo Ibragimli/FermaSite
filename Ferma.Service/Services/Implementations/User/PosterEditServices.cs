@@ -37,11 +37,6 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
         }
 
-
-
-
-
-
         public async Task posterEdit(Poster poster)
         {
             bool checkBool = false;

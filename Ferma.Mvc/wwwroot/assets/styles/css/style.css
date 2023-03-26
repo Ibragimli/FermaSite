@@ -2548,7 +2548,6 @@ footer #footerCopyright {
 
 #searchPage .container .emptySearchRow .emptySearchBox {
     margin: 16px 0px;
-    background-color: whitesmoke;
     height: 51vh;
     display: -webkit-box;
     display: -ms-flexbox;

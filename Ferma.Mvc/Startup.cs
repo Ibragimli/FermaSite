@@ -88,7 +88,10 @@ namespace Ferma.Mvc
             services.AddScoped<IProfileEditServices, ProfileEditServices>();
             services.AddScoped<IPosterEditServices, PosterEditServices>();
             services.AddScoped<IBalanceIncreaseServices, BalanceIncreaseServices>();
-            
+            services.AddScoped<IPosterWishlistAddServices, PosterWishlistAddServices>();
+            services.AddScoped<IPosterWishlistDeleteServices, PosterWishlistDeleteServices>();
+            services.AddScoped<IPosterSearchServices, PosterSearchServices>();
+
 
             //services.AddScoped<IUrlHelper>();
 

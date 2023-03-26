@@ -1,4 +1,7 @@
-﻿using Ferma.Mvc.ViewModels;
+﻿using Ferma.Core.Entites;
+using Ferma.Mvc.ViewModels;
+using Ferma.Service.Helper;
+using Ferma.Service.Services.Implementations.User;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,11 +19,13 @@ namespace Ferma.Mvc.Controllers
         {
             _anaSehifeIndexServices = anaSehifeIndexServices;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
+            var poster = _anaSehifeIndexServices.GetPostersAsync();
+
             AnaSehifeViewModel anaSehifeVM = new AnaSehifeViewModel
             {
-                Posters = _anaSehifeIndexServices.GetPostersAsync()
+                PagenatedItems = PagenetedList<Poster>.Create(poster, page, 20),
             };
             return View(anaSehifeVM);
         }

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Ferma.Mvc.ViewModels
 {
-    public class AnaSehifeViewModel
+    public class SearchViewModel
     {
-        public PagenetedList<Poster> PagenatedItems { get; set; }
-
+        public PagenetedList<Poster> PagenetedItemsPreVip { get; set; }
+        public PagenetedList<Poster> PagenetedItemsAll { get; set; }
     }
 }

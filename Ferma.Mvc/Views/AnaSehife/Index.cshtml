@@ -198,7 +198,7 @@
                         </div>
                     </div>
                     <div class="col-12 posterBoxs row  ">
-                        @foreach (var posterAll in Model.Posters)
+                        @foreach (var posterAll in Model.PagenatedItems)
                         {
 
             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
@@ -224,7 +224,7 @@
 
                         <div class="posterWishIconBox">
 
-                            <a asp-action="addwish" asp-controller="poster" asp-route-id="@posterAll.Id">
+                            <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterAll.Id" class="addWish">
                                 <i class="wishIcon fa-solid fa-heart"></i>
                                 <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
                             </a>
@@ -262,20 +262,26 @@
                 <div class="col-lg-10 col-md-11 col-sm-12">
                     <nav aria-label="...">
                         <ul class="pagination">
-                            <li class="page-item disabled">
-                                <span class="page-link">Əvvəl</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active">
-                                <span class="page-link">
-                                    2
-                                    <span class="sr-only">(current)</span>
-                                </span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Sonra</a>
-                            </li>
+                            @if (Model.PagenatedItems.HasPrev)
+                            {
+
+                <li class="page-item">
+                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItems.PageIndex-1)" class="page-link" aria-label="Previous">
+                        <span style=" color: whitesmoke;" aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>}
+                            @for (int i = 1; i <= Model.PagenatedItems.TotalPages; i++)
+                            {
+                <li aria-current="page" class="page-item" @(Model.PagenatedItems.PageIndex == i ? "active" : "" )>
+                    <a asp-action="index" asp-controller="anasehife" asp-route-page="@i" class="page-link">@i</a>
+                </li>}
+                            @if (Model.PagenatedItems.HasNext)
+                            {
+                <li class="page-item">
+                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItems.PageIndex+1)" class="page-link" aria-label="Next">
+                        <span style=" color: whitesmoke;" aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>}
                         </ul>
                     </nav>
                 </div>

@@ -15,11 +15,16 @@ namespace Ferma.Service.Services.Implementations.User
 
         public LayoutServices(DataContext context)
         {
-
+            _context = context;
         }
         public async Task<List<Setting>> GetSettingsAsync()
         {
             return await _context.Settings.ToListAsync();
         }
+        public async Task<List<City>> GetAllCitiesSearch()
+        {
+            return await _context.Cities.ToListAsync();
+        }
+
     }
 }

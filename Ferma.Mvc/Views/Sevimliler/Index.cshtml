@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WishListViewModel
+@using Microsoft.AspNetCore.Identity
+<main>
+
+    <!-- Wishlist Poster Start -->
+    <section id="wishlistPoster" class="posters">
+        <div class="container">
+            <div class="posterRow row justify-content-center ">
+                <div class="col-lg-10 col-md-11 col-sm-12">
+                    <div class="col-12 posterTitleBoxCol">
+                        <div class="posterTitleBox">
+                            <h3>Sevimlilər</h3>
+                        </div>
+                    </div>
+                    <div class="col-12 posterBoxs row  ">
+                        @if (Model.WishlistItems.Count <= 0)
+                        {
+                            <div style="border:1px dotted #32CD32;padding: 60px;" class="col-12">
+
+                                <h1 style=" text-align: center; color: #32CD32; ">Sevimlilərinizə yeni məhsullar əlavə edin</h1>
+                            </div>}
+                        else
+                        {
+                            @foreach (var poster in Model.WishlistItems)
+                            {
+                                <div class="posterCol col-lg-3 col-md-4 col-6 ">
+                                    <div class="posterBox">
+                                        <div class="posterImageBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                <img src="~/uploads/poster/@poster.Poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+
+                                            </a>
+                                            @if (poster.Poster.PosterFeatures.IsVip)
+                                            {
+                                        <div class="posterVipIconBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                <i class="fa-brands fa-sketch"></i>
+                                            </a>
+                                        </div>}
+                                            @if (poster.Poster.PosterFeatures.IsPremium)
+                                            {
+                                        <div class="posterQueenIconBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                <i class="fa-solid fa-crown"></i>
+                                            </a>
+                                        </div>}
+                                            <div class="posterWishIconBox">
+                                                <a class="deleteWish" asp-action="DeleteWish" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                    <i class="wishIcon fa-solid fa-heart"></i>
+                                                    <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                                          f     </a>
+                                            </div>
+                                        </div>
+                                        <div class="posterDetailBox">
+                                            <div class="posterPriceBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                    <span>@poster.Poster.PosterFeatures.Price  @(!poster.Poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+
+                                                </a>
+                                            </div>
+
+                                            <div class="posterNameBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                    <h4>
+                                                        @poster.Poster.PosterFeatures.Name
+                                                    </h4>
+                                                </a>
+                                            </div>
+                                            <div class="posterCreatedBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                    <span> @poster.Poster.PosterFeatures.City.Name, @poster.Poster.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+            @if (Model.WishlistItems.Count > 0)
+            {
+                <div class="row navRow  justify-content-center ">
+                    <div class="col-lg-10 col-md-11 col-sm-12 d-flex justify-content-end">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <span class="page-link">Əvvəl</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        2
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Sonra</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>}
+
+        </div>
+    </section>
+    <!-- Wishlist Poster End -->
+
+</main>
+

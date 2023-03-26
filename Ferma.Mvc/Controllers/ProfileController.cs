@@ -309,8 +309,7 @@ namespace Ferma.Mvc.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
+      
         public async Task<IActionResult> DisabledPoster(int id)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;

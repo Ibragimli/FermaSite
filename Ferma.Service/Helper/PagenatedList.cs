@@ -29,5 +29,21 @@ namespace Ferma.Service.Helper
             var items = query.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
             return new PagenetedList<T>(items, query.Count(), pageindex, pagesize);
         }
+        public static PagenetedList<T> CreateRandom(IQueryable<T> query, int pageindex, int pagesize)
+        {
+            var items = new List<T>();
+            if (query.Count() > pagesize)
+            {
+                var rand = new Random();
+                var index = rand.Next(0, pagesize);
+                items = query.Skip(index).Take(pagesize).ToList();
+            }
+            else
+            {
+                 items = query.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
+            }
+
+            return new PagenetedList<T>(items, query.Count(), pageindex, pagesize);
+        }
     }
 }

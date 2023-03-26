@@ -22,6 +22,9 @@ namespace Ferma.Mvc.Controllers
     public class ElanlarController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IPosterSearchServices _searchServices;
+        private readonly IPosterWishlistAddServices _posterWishlistAddServices;
+        private readonly IPosterWishlistDeleteServices _posterWishlistDeleteServices;
         private readonly IPhoneNumberServices _numberServices;
         private readonly IPaymentCreateServices _paymentCreateServices;
         private readonly IElanDetailIndexServices _elanDetailIndexServices;
@@ -32,9 +35,12 @@ namespace Ferma.Mvc.Controllers
         private readonly IPosterCreateServices _createServices;
         private readonly DataContext _context;
 
-        public ElanlarController(UserManager<AppUser> userManager, IPhoneNumberServices numberServices, IPaymentCreateServices paymentCreateServices, IElanDetailIndexServices elanDetailIndexServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
+        public ElanlarController(UserManager<AppUser> userManager, IPosterSearchServices searchServices, IPosterWishlistAddServices posterWishlistAddServices, IPosterWishlistDeleteServices posterWishlistDeleteServices, IPhoneNumberServices numberServices, IPaymentCreateServices paymentCreateServices, IElanDetailIndexServices elanDetailIndexServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
         {
             _userManager = userManager;
+            _searchServices = searchServices;
+            _posterWishlistAddServices = posterWishlistAddServices;
+            _posterWishlistDeleteServices = posterWishlistDeleteServices;
             _numberServices = numberServices;
             _paymentCreateServices = paymentCreateServices;
             _elanDetailIndexServices = elanDetailIndexServices;
@@ -58,6 +64,26 @@ namespace Ferma.Mvc.Controllers
 
             return View(elanDetail);
         }
+
+        public IActionResult Axtaris(SearchDto searchDto)
+        {
+            
+            var posterAll = _searchServices.SearchPosterAll(searchDto);
+            var posterVip = _searchServices.SearchPosterVip(searchDto);
+
+            ViewBag.CategoryId = searchDto.CategoryId;
+            ViewBag.SubCategoryId = searchDto.SubCategoryId;
+            ViewBag.CityId = searchDto.CityId;
+            ViewBag.PosterName = searchDto.PosterName;
+            ViewBag.PageIndex = searchDto.Page;
+            SearchViewModel searchViewModel = new SearchViewModel
+            {
+                PagenetedItemsPreVip = PagenetedList<Poster>.CreateRandom(posterVip, searchDto.Page, 8),
+                PagenetedItemsAll = PagenetedList<Poster>.Create(posterAll, searchDto.Page, 16),
+            };
+            return View(searchViewModel);
+        }
+
 
 
         [ValidateAntiForgeryToken]
@@ -95,7 +121,7 @@ namespace Ferma.Mvc.Controllers
             return View("Elan", elanDetail);
 
         }
-       
+
 
         public IActionResult ConfirmPayment()
         {
@@ -305,6 +331,51 @@ namespace Ferma.Mvc.Controllers
         }
 
 
+        //Wishlisht
+        public async Task<IActionResult> AddWishList(int id)
+        {
+            WishViewModel wishData = null;
+            try
+            {
+                await _posterWishlistAddServices.IsPoster(id);
+                var user = await _posterWishlistAddServices.IsAuthenticated();
+                if (user != null && user.IsAdmin == false) await _posterWishlistAddServices.UserAddWish(id, user);
+                else _posterWishlistAddServices.CookieAddWish(id);
+            }
+            catch (ItemNotFoundException ex)
+            {
+                TempData["Success"] = ex.Message;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+
+            TempData["Success"] = "poster add wishlist";
+            return Ok(wishData);
+        }
+
+        public async Task<IActionResult> DeleteWish(int id)
+        {
+            List<WishItemDto> wishItems = null;
+            try
+            {
+                await _posterWishlistDeleteServices.IsPoster(id);
+                var user = await _posterWishlistAddServices.IsAuthenticated();
+                if (user != null && user.IsAdmin == false) await _posterWishlistDeleteServices.UserDeleteWish(id, user);
+                else wishItems = _posterWishlistDeleteServices.CookieDeleteWish(id, wishItems);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+            HttpContext.Response.Cookies.Append("wishItemList", JsonConvert.SerializeObject(wishItems));
+            return Ok(wishItems);
+        }
+
         private PosterCreateViewModels _posterVM()
         {
             PosterCreateViewModels posterCreateView = new PosterCreateViewModels
@@ -316,7 +387,6 @@ namespace Ferma.Mvc.Controllers
             };
             return posterCreateView;
         }
-
         private ElanDetailViewModel _posterDetailVM(int id)
         {
             var poster = _context.Posters.Include(x => x.PosterFeatures)

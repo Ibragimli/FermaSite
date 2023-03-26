@@ -6,6 +6,7 @@
     AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
 
     //List<Setting> settings = await services.GetSettingsAsync();
+    List<City> cities = await services.GetAllCitiesSearch();
 }
 
 <!DOCTYPE html>
@@ -65,7 +66,7 @@
                                 </a>
                             </li>
                             <li class="headWishBtn ">
-                                <a href="wishlist.html">
+                                <a asp-action="index" asp-controller="sevimliler">
                                     <i class="fa-solid fa-heart"></i>
                                 </a>
                             </li>
@@ -109,41 +110,22 @@
             <div class="casket">
                 <div class="row">
                     <div class="col-lg-11 col-md-10 headSearch">
-                        <form action="#">
+                        <form asp-action="axtaris" asp-controller="elanlar">
                             <div class="col-1 d-flex justify-content-end">
-                                <a href="">
+                                <a>
                                     <i class=" fa-solid fa-magnifying-glass"></i>
                                 </a>
                             </div>
                             <div class="col-lg-6 col-7 ">
-                                <input placeholder="Axtarış" type="text" class="form-control">
+                                <input placeholder="Axtarış" type="text" name="posterName" class="form-control">
                             </div>
                             <div class="col-lg-2 media800">
-                                <select class="form-select">
+                                <select name="cityId" class="form-select">
                                     <option selected disabled>Şəhər</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
-                                    <option value="3">Three</option>
+                                    @foreach (var city in cities)
+                                    {
+                                        <option value="@city.Id">@city.Name</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-1">
@@ -178,7 +160,7 @@
                     </a>
                 </li>
                 <li class="tabBar-li tabBar-li-contact">
-                    <a class="tabBar-link" href="wishlist.html">
+                    <a class="tabBar-link" asp-action="index" asp-controller="sevimliler">
                         <i class=" tabBar-icon fa-solid fa-heart"></i>
                         <span class="tabBar-text">Sevimlilər</span>
                     </a>
@@ -238,7 +220,7 @@
                                     </a>
                                 </p>
                                 <p>
-                                    <a href="wishlist.html">Sevimlilər</a>
+                                    <a asp-action="index" asp-controller="sevimliler">Sevimlilər</a>
                                 </p>
 
 
@@ -300,12 +282,12 @@
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
- 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
             integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="~/assets/js/Wishlist.js"></script>
     <script>
         toastr.options = {
             "closeButton": false,

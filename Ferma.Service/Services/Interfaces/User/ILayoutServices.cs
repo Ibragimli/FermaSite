@@ -9,5 +9,7 @@ namespace Ferma.Service.Services.Interfaces.User
     public interface ILayoutServices
     {
         public Task<List<Setting>> GetSettingsAsync();
+        public Task<List<City>> GetAllCitiesSearch();
+
     }
 }

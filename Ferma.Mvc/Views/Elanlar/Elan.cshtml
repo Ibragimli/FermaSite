@@ -32,14 +32,14 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a asp-action="axtaris" asp-controller="elanlar" asp-route-categoryId="@posterFeature.SubCategory.Category.Id">
                                     <span>
                                         @posterFeature.SubCategory.Category.Name
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a asp-action="axtaris" asp-controller="elanlar" asp-route-subCategoryId="@posterFeature.SubCategoryId">
                                     <span>
                                         @posterFeature.SubCategory.Name
 
@@ -229,16 +229,19 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 posterFeaturesBox">
                         <div class="posterFeatures">
                             <p>
-                                Şəhər:<span>@posterFeature.City.Name</span>
+                                Şəhər:
+                                <a asp-action="axtaris" asp-controller="elanlar" asp-route-cityId="@posterFeature.City.Id">
+                                    <span>@posterFeature.City.Name</span>
+                                </a>
                             </p>
 
 
                             <p>
                                 Elanın kategorisi:
-                                <a href="#"><span>@posterFeature.SubCategory.Category.Name</span></a>
+                                <a asp-action="axtaris" asp-controller="elanlar" asp-route-categoryId="@posterFeature.SubCategory.Category.Id"><span>@posterFeature.SubCategory.Category.Name</span></a>
                             </p>
                             <p>
-                                Elanın növü:<a href="#"><span>@posterFeature.SubCategory.Name</span></a>
+                                Elanın növü:<a asp-action="axtaris" asp-controller="elanlar" asp-route-subCategoryId="@posterFeature.SubCategoryId"><span>@posterFeature.SubCategory.Name</span></a>
                             </p>
                             <p>
                                 Çatdırılma:<span>@(posterFeature.IsShipping? "Bəli":"Xeyr")</span>

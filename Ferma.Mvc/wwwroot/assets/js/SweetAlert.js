@@ -1,8 +1,8 @@
 ﻿$(function () {
-    $(document).on("click", ".disabled-btn", function (e) {
+    $(document).on("click", ".disabled-btn",  function (e) {
         e.preventDefault();
         let url = $(this).attr("href");
-        Swal.fire({
+         Swal.fire({
             title: 'Elanı deaktiv etmək istəyirsinizmi?',
             text: "Elan deaktiv olduqdan sonra reklam xidmətidə deaktiv olacaq!",
             icon: 'question'    ,
@@ -22,6 +22,10 @@
                         }
                         else {
                             alert("xeta bas verdi")
+                            console.log(response.status)
+                            console.log(response.statusText)
+                            console.log(response.body)
+                            console.log(response)
                         }
                     })
             }

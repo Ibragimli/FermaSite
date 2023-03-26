@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewData["Title"] = "Axtarış";
+}
+@model SearchViewModel
+<!-- Bread Crumb  Start -->
+<section class="secDisplay" id="breadCrumbs">
+    <div class="casket">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-9 col-sm-9 col-9 ">
+                <div class="breadCrumbBox">
+                    <ul>
+                        <li>
+                            <a asp-action="index" asp-controller="anasehife">
+                                <span>
+                                    Ana Səhifə
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span>
+                                    Axtarış
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--  Bread Crumb End -->
+<!-- VipPoster Start -->
+<section id="posters">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-11 col-sm-12">
+                @if (Model.PagenetedItemsPreVip.Count() > 0)
+                {
+                    <div class="col-12 posterTitleBoxCol">
+                        <div class="posterTitleBox">
+                            <h3>Vip Elanlar</h3>
+                        </div>
+                    </div>
+                }
+
+                <div class="col-12 posterBoxs row  ">
+                    @if (Model.PagenetedItemsPreVip.Count() > 0)
+                    {
+                        @foreach (var posterVip in Model.PagenetedItemsPreVip)
+                        {
+                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                <div class="posterBox">
+
+                                    <div class="posterImageBox">
+                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                            <img src="~/uploads/poster/@posterVip.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+                                        </a>
+                                        @if (posterVip.PosterFeatures.IsVip)
+                                        {
+                                            <div class="posterVipIconBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                                    <i class="fa-brands fa-sketch"></i>
+                                                </a>
+                                            </div>}
+                                        @if (posterVip.PosterFeatures.IsPremium)
+                                        {
+                                            <div class="posterQueenIconBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                                    <i class="fa-solid fa-crown"></i>
+                                                </a>
+                                            </div>}
+
+                                        <div class="posterWishIconBox">
+                                            <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterVip.Id" class="addWish">
+                                                <i class="wishIcon fa-solid fa-heart"></i>
+                                                <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="posterDetailBox">
+                                        <div class="posterPriceBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                                <span>@posterVip.PosterFeatures.Price  @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="posterNameBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                                <h4>
+                                                    @posterVip.PosterFeatures.Name
+                                                </h4>
+                                            </a>
+                                        </div>
+                                        <div class="posterCreatedBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                                                <span> @posterVip.PosterFeatures.City.Name, @posterVip.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- VipPoster End -->
+<!-- Last Poster Start -->
+<section id="posters" class="posters">
+    <div class="container">
+        <div class="posterRow row justify-content-center ">
+            <div class="col-lg-10 col-md-11 col-sm-12">
+                <div class="col-12 posterTitleBoxCol">
+                    <div class="posterTitleBox">
+                        <h3>Son Elanlar</h3>
+                    </div>
+                </div>
+                <div class="col-12 posterBoxs row  ">
+                    @if (Model.PagenetedItemsAll.Count() > 0)
+                    {
+                        @foreach (var posterAll in Model.PagenetedItemsAll)
+                        {
+                            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+                                <div class="posterBox">
+
+                                    <div class="posterImageBox">
+                                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                            <img src="~/uploads/poster/@posterAll.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+                                        </a>
+                                        @if (posterAll.PosterFeatures.IsVip)
+                                        {
+                                            <div class="posterVipIconBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                                    <i class="fa-brands fa-sketch"></i>
+                                                </a>
+                                            </div>}
+                                        @if (posterAll.PosterFeatures.IsPremium)
+                                        {
+                                            <div class="posterQueenIconBox">
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                                    <i class="fa-solid fa-crown"></i>
+                                                </a>
+                                            </div>}
+
+                                        <div class="posterWishIconBox">
+                                            <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterAll.Id" class="addWish">
+                                                <i class="wishIcon fa-solid fa-heart"></i>
+                                                <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="posterDetailBox">
+                                        <div class="posterPriceBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                                <span>@posterAll.PosterFeatures.Price  @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="posterNameBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                                <h4>
+                                                    @posterAll.PosterFeatures.Name
+                                                </h4>
+                                            </a>
+                                        </div>
+                                        <div class="posterCreatedBox">
+                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                                                <span> @posterAll.PosterFeatures.City.Name, @posterAll.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <!-- Search page title   Start -->
+                        <section id="searchPage">
+                            <div class="container">
+
+                                <div class="emptySearchRow row justify-content-center">
+                                    <div  class="emptySearchBox col-lg-10 col-md-12 col-sm-12 ">
+                                        <p>Sorğuya uyğun heç bir nəticə tapılmadı</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Search page title   End -->
+                    }
+                </div>
+            </div>
+        </div>
+        @if (Model.PagenetedItemsAll.Count() > 0)
+        {
+            <div class="row navRow  justify-content-center ">
+                <div class="col-lg-10 col-md-11 col-sm-12">
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            @if (Model.PagenetedItemsAll.HasPrev)
+                            {
+
+                                <li class="page-item">
+                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PagenetedItemsAll.PageIndex-1)" asp-route-categoryId="@ViewBag.CategoryId"
+                                       asp-route-subCategoryId="@ViewBag.SubCategoryId"
+                                       asp-route-cityId="@ViewBag.CityId"
+                                       asp-route-posterNameId="@ViewBag.PosterName" class="page-link" aria-label="Previous">
+                                        <span style=" color: whitesmoke;" aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            }
+                            @for (int i = 1; i <= Model.PagenetedItemsAll.TotalPages; i++)
+                            {
+                                <li aria-current="page" class="page-item" @(Model.PagenetedItemsAll.PageIndex == i ? "active" : "" )>
+                                    <a asp-action="axtaris" asp-controller="elanlar" asp-route-page="@i" asp-route-categoryId="@ViewBag.CategoryId"
+                                       asp-route-subCategoryId="@ViewBag.SubCategoryId"
+                                       asp-route-cityId="@ViewBag.CityId"
+                                       asp-route-posterNameId="@ViewBag.PosterName" class="page-link">@i</a>
+                                </li>
+                            }
+                            @if (Model.PagenetedItemsAll.HasNext)
+                            {
+                                <li class="page-item">
+                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PagenetedItemsAll.PageIndex+1)"
+                                       asp-route-categoryId="@ViewBag.CategoryId"
+                                       asp-route-subCategoryId="@ViewBag.SubCategoryId"
+                                       asp-route-cityId="@ViewBag.CityId"
+                                       asp-route-posterNameId="@ViewBag.PosterName"
+                                       class="page-link" aria-label="Next">
+                                        <span style=" color: whitesmoke;" aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<!-- Last Poster End -->

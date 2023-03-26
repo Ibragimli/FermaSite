@@ -18,9 +18,9 @@ namespace Ferma.Service.Services.Implementations.User
         {
             _unitOfWork = unitOfWork;
         }
-        public List<Poster> GetPostersAsync()
+        public IQueryable<Poster> GetPostersAsync()
         {
-            var posters = _unitOfWork.PosterRepository.asQueryablePoster().ToList();
+            var posters = _unitOfWork.PosterRepository.asQueryablePoster();
             return posters;
         }
     }

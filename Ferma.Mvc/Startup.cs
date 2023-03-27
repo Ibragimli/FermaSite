@@ -91,6 +91,7 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterWishlistAddServices, PosterWishlistAddServices>();
             services.AddScoped<IPosterWishlistDeleteServices, PosterWishlistDeleteServices>();
             services.AddScoped<IPosterSearchServices, PosterSearchServices>();
+            services.AddScoped<IContactUsServices, ContactUsServices>();
 
 
             //services.AddScoped<IUrlHelper>();

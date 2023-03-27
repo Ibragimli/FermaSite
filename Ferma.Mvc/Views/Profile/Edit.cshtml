@@ -15,10 +15,11 @@
                 <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
                     <h1>Elanı redaktə etmək</h1>
                     <form class="form-control" asp-action="edit" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" style="color:red;"></div>
 
                         <!-- Poster Kategoriya Start -->
                         <div class=" mb-3 posterCategorys">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" style="color:red;"></div>
+
                             <label class="  form-label">Kategoriya*</label>
                             <select asp-for="Poster.PosterFeatures.SubCategoryId" asp class="form-select">
                                 <option disabled selected>Siyahıdan seçin</option>

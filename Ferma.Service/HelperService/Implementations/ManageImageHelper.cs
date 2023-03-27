@@ -30,8 +30,12 @@ namespace Ferma.Service.HelperService.Implementations
         }
         public void ImagesCheck(List<IFormFile> Images)
         {
+            if (Images.Count > 8)
+                throw new ImageCountException("Maksimum 8 şəkil əlavə edə bilərsiniz");
+
             foreach (var image in Images)
             {
+                
                 if (image.ContentType != _key.ValueStr("ImageType1") && image.ContentType != _key.ValueStr("ImageType2"))
                     throw new ImageFormatException("Poster şekli yalnız (png ve ya jpeg) type-ında ola biler");
                 if (image.Length > _key.ValueInt("ImageSize") * 1048576)

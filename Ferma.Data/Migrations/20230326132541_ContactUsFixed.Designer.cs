@@ -4,14 +4,16 @@ using Ferma.Data.Datacontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ferma.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230326132541_ContactUsFixed")]
+    partial class ContactUsFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,7 +167,7 @@ namespace Ferma.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Duration")
+                    b.Property<int>("Duration")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDelete")
@@ -174,7 +176,7 @@ namespace Ferma.Data.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PosterId")
+                    b.Property<int>("PosterId")
                         .HasColumnType("int");
 
                     b.Property<int>("Service")
@@ -752,7 +754,9 @@ namespace Ferma.Data.Migrations
 
                     b.HasOne("Ferma.Core.Entites.Poster", "Posters")
                         .WithMany("Payments")
-                        .HasForeignKey("PosterId");
+                        .HasForeignKey("PosterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ferma.Core.Entites.Poster", b =>

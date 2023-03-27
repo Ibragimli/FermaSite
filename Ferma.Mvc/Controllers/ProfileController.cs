@@ -105,7 +105,6 @@ namespace Ferma.Mvc.Controllers
 
                     //tesdiqleme modelinin yaranmasi
                     var authentication = await _authenticationServices.CreateAuthentication(token, code, number);
-
                     //url
                     url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
                     return Redirect(url);
@@ -114,7 +113,6 @@ namespace Ferma.Mvc.Controllers
                 //Hesab olanda
                 if (!UserExists.IsAdmin)
                 {
-
                     //token yaradilmasi
                     token = _authenticationServices.CreateToken();
 
@@ -186,20 +184,7 @@ namespace Ferma.Mvc.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int id)
         {
-            PosterEditViewModel posterEditVM = new PosterEditViewModel
-            {
-                PosterEditDto = new PosterEditDto(),
-                Poster = await _context.Posters.Include(x => x.PosterFeatures)
-                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
-                .Include(x => x.PosterImages).Where(x => x.IsDelete == false && x.PosterFeatures.IsDisabled == false)
-                .FirstOrDefaultAsync(x => x.Id == id),
-                Categories = _context.Categories.ToList(),
-                SubCategories = _context.SubCategories.ToList(),
-                Cities = _context.Cities.ToList(),
-            };
+            var posterEditVM = await _editVM(id);
 
             return View(posterEditVM);
         }
@@ -213,6 +198,7 @@ namespace Ferma.Mvc.Controllers
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
             var profileVM = await _profileVM(user);
+            var editVM = await _editVM(poster.Id);
 
             try
             {
@@ -227,34 +213,37 @@ namespace Ferma.Mvc.Controllers
             catch (ItemNullException msg)
             {
                 ModelState.AddModelError("", msg.Message);
-                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
-                return RedirectToAction("index", profileVM);
+                TempData["Error"] = (msg.Message);
+
+                return RedirectToAction("edit", editVM);
             }
             catch (ImageNullException msg)
             {
-                ModelState.AddModelError("", msg.Message);
-                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
-                return RedirectToAction("index", profileVM);
+                ModelState.AddModelError("ImageFiles", msg.Message);
+                TempData["Error"] = (msg.Message);
+
+                return RedirectToAction("edit", editVM);
             }
             catch (ImageFormatException msg)
             {
-                ModelState.AddModelError("", msg.Message);
-                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
-                return RedirectToAction("index", profileVM);
+                ModelState.AddModelError("ImageFiles", msg.Message);
+                TempData["Error"] = (msg.Message);
+
+                return RedirectToAction("edit", editVM);
             }
 
             catch (ImageCountException msg)
             {
-                ModelState.AddModelError("", msg.Message);
-                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
-                return RedirectToAction("index", profileVM);
+                ModelState.AddModelError("ImageFiles", msg.Message);
+                TempData["Error"] = (msg.Message);
+                return RedirectToAction("edit", editVM);
             }
             catch (ValueAlreadyExpception msg)
             {
                 ModelState.AddModelError("", msg.Message);
-                TempData["Error"] = ("Dəyişikliklər uğursuz oldu!");
-                return RedirectToAction("index", profileVM);
+                TempData["Error"] = (msg.Message);
 
+                return RedirectToAction("edit", editVM);
             }
             catch (Exception)
             {
@@ -309,7 +298,7 @@ namespace Ferma.Mvc.Controllers
         }
 
         [Authorize(Roles = "User")]
-      
+
         public async Task<IActionResult> DisabledPoster(int id)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
@@ -370,12 +359,12 @@ namespace Ferma.Mvc.Controllers
                 return RedirectToAction("index", profileVM);
             }
 
-            catch (Exception )
+            catch (Exception)
             {
                 return RedirectToAction("index", profileVM);
             }
 
-            return RedirectToAction("index","profile");
+            return RedirectToAction("index", "profile");
         }
 
 
@@ -405,6 +394,25 @@ namespace Ferma.Mvc.Controllers
                 ProfileEditDto = new ProfileEditDto(),
             };
             return profileVM;
+
+        }
+        private async Task<PosterEditViewModel> _editVM(int id)
+        {
+            PosterEditViewModel posterEditVM = new PosterEditViewModel
+            {
+                PosterEditDto = new PosterEditDto(),
+                Poster = await _context.Posters.Include(x => x.PosterFeatures)
+                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
+                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
+                .Include(x => x.PosterImages).Where(x => x.IsDelete == false && x.PosterFeatures.IsDisabled == false)
+                .FirstOrDefaultAsync(x => x.Id == id),
+                Categories = _context.Categories.ToList(),
+                SubCategories = _context.SubCategories.ToList(),
+                Cities = _context.Cities.ToList(),
+            };
+            return posterEditVM;
         }
 
     }

@@ -18,10 +18,19 @@ namespace Ferma.Service.Services.Implementations.User
         {
             _unitOfWork = unitOfWork;
         }
+
+        public async Task<List<Category>> GetAllCategoryAsync()
+        {
+            var categories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
+            return categories.ToList();
+        }
+
         public IQueryable<Poster> GetPostersAsync()
         {
             var posters = _unitOfWork.PosterRepository.asQueryablePoster();
             return posters;
         }
+
+
     }
 }

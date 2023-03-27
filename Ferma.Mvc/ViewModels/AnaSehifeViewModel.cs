@@ -9,7 +9,9 @@ namespace Ferma.Mvc.ViewModels
 {
     public class AnaSehifeViewModel
     {
-        public PagenetedList<Poster> PagenatedItems { get; set; }
+        public PagenetedList<Poster> PagenatedItemsAll { get; set; }
+        public PagenetedList<Poster> PagenatedItemsVip { get; set; }
+        public List<Category> Categories { get; set; }
 
     }
 }

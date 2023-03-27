@@ -57,7 +57,18 @@
                     </div>
                     <!-- Head Logo End -->
                     <!-- Head Login Start -->
+
                     <div class="col-6  d-flex justify-content-end align-items-center ">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown button
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
                         <ul class="headCreateLogin me-2">
                             <li class="headCreateBtn media800">
                                 <a asp-controller="elanlar" asp-action="yenielan" class="btn">
@@ -72,10 +83,12 @@
                             </li>
                             @if (user != null && user.IsAdmin == false)
                             {
+
                                 <li class="headUser">
+
                                     <a asp-action="index" asp-controller="profile">
                                         <i class="fa-solid fa-circle-user"></i>
-                                        <span>Elnur</span>
+                                        <span>@(user.Name.Length>7?(user.Name.Substring(0,7)):(user.Name))</span>
                                     </a>
 
                                 </li>
@@ -148,7 +161,7 @@
                     </a>
                 </li>
                 <li class="tabBar-li tabBar-li-rules">
-                    <a class="tabBar-link" href="userTerms.html">
+                    <a class="tabBar-link" asp-action="index" asp-controller="istifadecisertleri">
                         <i class=" tabBar-icon  fa-solid fa-question"></i>
                         <span class="tabBar-text">Qaydalar</span>
                     </a>
@@ -214,7 +227,7 @@
                                     İnformasiya
                                 </h5>
                                 <p>
-                                    <a href="userTerms.html">
+                                    <a asp-action="index" asp-controller="istifadecisertleri">
                                         İstifadə
                                         qaydaları
                                     </a>
@@ -225,7 +238,7 @@
 
 
                                 <p>
-                                    <a href="contact.html">Əlaqə</a>
+                                    <a asp-action="index" asp-controller="bizimleelaqe">Əlaqə</a>
                                 </p>
 
 
@@ -283,9 +296,7 @@
             crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-            integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js" integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/assets/js/Wishlist.js"></script>
     <script>

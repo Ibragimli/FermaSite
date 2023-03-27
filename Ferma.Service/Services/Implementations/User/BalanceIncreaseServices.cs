@@ -23,6 +23,15 @@ namespace Ferma.Service.Services.Implementations.User
         {
             AppUser user = await _unitOfWork.UserRepository.GetAsync(x => x.Id == balanceDto.AppUserId);
             user.Balance += balanceDto.Balance;
+
+            Payment payment = new Payment
+            {
+                Amount = balanceDto.Balance,
+                AppUserId = balanceDto.AppUserId,
+                Service = PaymentService.BalancePayment,
+                Source = Source.BankCard,
+            };
+            await _unitOfWork.PaymentRepository.InsertAsync(payment);
             await _unitOfWork.CommitAsync();
         }
 

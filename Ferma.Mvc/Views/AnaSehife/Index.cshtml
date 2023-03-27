@@ -12,107 +12,19 @@
                         <h3>Kateqoriyalar</h3>
                     </div>
                     <div class="owl-carousel ">
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Alətlər">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-fish-fins"></i>
-                                    </div>
-                                    <h3>Balıqlar</h3>
-                                </a>
-                            </div>
+                        @foreach (var category in Model.Categories)
+                        {
+            <div id="carouselBox">
+                <div class="item">
+                    <a asp-action="axtaris" asp-controller="elanlar" asp-route-categoryId="@category.Id" title="Alətlər">
+                        <div class="iconBox">
+                            <i class="fa-solid fa-fish-fins"></i>
                         </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-tractor"></i>
-                                    </div>
-                                    <h3>Texnika və Avadanlıq</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Alətlər">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-dog"></i>
-                                    </div>
-                                    <h3>Ev Heyvanları</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-cow"></i>
-                                    </div>
-                                    <h3>İribuynuzlu</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Alətlər">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-wheat-awn"></i>
-                                    </div>
-                                    <h3>Ot-Yem</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-cart-shopping"></i>
+                        <h3>@category.Name</h3>
+                    </a>
+                </div>
+            </div>}
 
-                                    </div>
-                                    <h3>Topdan ət alış/satış</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Alətlər">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                                    </div>
-                                    <h3>İş elanları</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-prescription-bottle-medical"></i>
-                                    </div>
-                                    <h3>Ekoloji təmiz qida</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-egg"></i>
-                                    </div>
-                                    <h3>Inkubator</h3>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="carouselBox">
-                            <div class="item">
-                                <a href="#" title="Traktor">
-                                    <div class="iconBox">
-                                        <i class="fa-solid fa-tree"></i>
-                                    </div>
-                                    <h3>Ağaclar və güllər</h3>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -120,72 +32,81 @@
     </section>
     <!-- Catagory Slider End -->
     <!-- VipPoster Start -->
-
-    <section id="posters">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-md-11 col-sm-12">
-                    <div class="col-12 posterTitleBoxCol">
-                        <div class="posterTitleBox">
-                            <h3>Vip Elanlar</h3>
-                        </div>
+    @if (Model.PagenatedItemsVip.Count() > 0)
+    {
+<section id="posters">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-11 col-sm-12">
+                <div class="col-12 posterTitleBoxCol">
+                    <div class="posterTitleBox">
+                        <h3>Vip Elanlar</h3>
                     </div>
-                    <div class="col-12 posterBoxs row  ">
-                        <!--<div class="posterColBox col-lg-3 col-md-4 col-6 ">
-                            <div class="posterBox">
+                </div>
+                <div class="col-12 posterBoxs row  ">
+                    @foreach (var posterVip in Model.PagenatedItemsVip)
+                    {
 
-                                <div class="posterImageBox">
-                                    <a href="detail.html">
-                                        <img src="~/assets/Images/inek1.jpg" alt="">
-                                    </a>
-                                    <div class="posterVipIconBox">
-                                        <a href="detail.html">
-                                            <i class="fa-brands fa-sketch"></i>
-                                        </a>
-                                    </div>
-                                    <div class="posterQueenIconBox">
-                                        <a href="detail.html">
-                                            <i class="fa-solid fa-crown"></i>
-                                        </a>
-                                    </div>
-                                    <div class="posterWishIconBox">
-                                        <a href="#">
-                                            <i class="wishIcon fa-solid fa-heart"></i>-->
+    <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+        <div class="posterBox">
+            <div class="posterImageBox">
+                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                    <img src="~/uploads/poster/@posterVip.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+                </a>
+                @if (posterVip.PosterFeatures.IsVip)
+                {
+<div class="posterVipIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+        <i class="fa-brands fa-sketch"></i>
+    </a>
+</div>}
+                @if (posterVip.PosterFeatures.IsPremium)
+                {
+<div class="posterQueenIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+        <i class="fa-solid fa-crown"></i>
+    </a>
+</div>}
+
+                <div class="posterWishIconBox">
+
+                    <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterVip.Id" class="addWish">
+                        <i class="wishIcon fa-solid fa-heart"></i>
                         <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
-                        <!--</a>
-                                    </div>
-                                </div>
-                                <div class="posterDetailBox">
-                                    <div class="posterPriceBox">
-                                        <a href="detail.html">
-                                            <span>250 AZN</span>
-                                        </a>
-                                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="posterDetailBox">
+                <div class="posterPriceBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <span>@posterVip.PosterFeatures.Price  @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                    </a>
+                </div>
 
-                                    <div class="posterNameBox">
-                                        <a href="detail.html">
-                                            <h4>
-                                                Inek satılır
-                                                Inek satılır
-                                                Inek satılır
-                                                Inek satılır
-                                            </h4>
-                                        </a>
-                                    </div>
-                                    <div class="posterCreatedBox">
-                                        <a href="detail.html">
-                                            <span> Bakı, 16 fevral 2023</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+                <div class="posterNameBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <h4>
+                            @posterVip.PosterFeatures.Name
+                        </h4>
+                    </a>
+                </div>
+                <div class="posterCreatedBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <span> @posterVip.PosterFeatures.City.Name, @posterVip.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
 
-                    </div>
+
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>}
+
     <!-- VipPoster End -->
     <!-- Last Poster Start -->
     <section id="posters" class="posters">
@@ -198,7 +119,7 @@
                         </div>
                     </div>
                     <div class="col-12 posterBoxs row  ">
-                        @foreach (var posterAll in Model.PagenatedItems)
+                        @foreach (var posterAll in Model.PagenatedItemsAll)
                         {
 
             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
@@ -262,23 +183,23 @@
                 <div class="col-lg-10 col-md-11 col-sm-12">
                     <nav aria-label="...">
                         <ul class="pagination">
-                            @if (Model.PagenatedItems.HasPrev)
+                            @if (Model.PagenatedItemsAll.HasPrev)
                             {
 
                 <li class="page-item">
-                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItems.PageIndex-1)" class="page-link" aria-label="Previous">
+                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex-1)" class="page-link" aria-label="Previous">
                         <span style=" color: whitesmoke;" aria-hidden="true">&laquo;</span>
                     </a>
                 </li>}
-                            @for (int i = 1; i <= Model.PagenatedItems.TotalPages; i++)
+                            @for (int i = 1; i <= Model.PagenatedItemsAll.TotalPages; i++)
                             {
-                <li aria-current="page" class="page-item" @(Model.PagenatedItems.PageIndex == i ? "active" : "" )>
+                <li aria-current="page" class="page-item" @(Model.PagenatedItemsAll.PageIndex == i ? "active" : "" )>
                     <a asp-action="index" asp-controller="anasehife" asp-route-page="@i" class="page-link">@i</a>
                 </li>}
-                            @if (Model.PagenatedItems.HasNext)
+                            @if (Model.PagenatedItemsAll.HasNext)
                             {
                 <li class="page-item">
-                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItems.PageIndex+1)" class="page-link" aria-label="Next">
+                    <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex+1)" class="page-link" aria-label="Next">
                         <span style=" color: whitesmoke;" aria-hidden="true">&raquo;</span>
                     </a>
                 </li>}
@@ -292,3 +213,8 @@
 
 </main>
 
+@section Scripts{
+    <script src="~/assets/js/owl.carousel.js"></script>
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    <script src="~/assets/js/owlCarouselSetting.js"></script>
+}

@@ -2,6 +2,7 @@
 using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.CustomExceptions;
+using Ferma.Service.HelperService.Implementations;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +53,7 @@ namespace Ferma.Service.Services.Implementations.User
             if (poster.ImageFiles != null)
                 _manageImageHelper.ImagesCheck(poster.ImageFiles);
 
-         
+
             if (poster.PosterFeatures.SubCategoryId != 0 && oldPoster.PosterFeatures.SubCategoryId != poster.PosterFeatures.SubCategoryId)
             {
                 oldPoster.PosterFeatures.SubCategoryId = poster.PosterFeatures.SubCategoryId;
@@ -63,13 +64,11 @@ namespace Ferma.Service.Services.Implementations.User
                 oldPoster.PosterFeatures.Name = poster.PosterFeatures.Name;
                 checkBool = true;
             }
-
             if (poster.PosterFeatures.Describe != null && oldPoster.PosterFeatures.Describe != poster.PosterFeatures.Describe)
             {
                 oldPoster.PosterFeatures.Describe = poster.PosterFeatures.Describe;
                 checkBool = true;
             }
-
             if (poster.PosterFeatures.Price != 0 && oldPoster.PosterFeatures.Price != poster.PosterFeatures.Price)
             {
                 oldPoster.PosterFeatures.Price = poster.PosterFeatures.Price;
@@ -90,19 +89,21 @@ namespace Ferma.Service.Services.Implementations.User
                 oldPoster.PosterFeatures.IsNew = poster.PosterFeatures.IsNew;
                 checkBool = true;
             }
-
-            DeleteImages(poster, oldPoster);
-            await CreateImageFormFile(poster.ImageFiles, poster.Id);
-            PosterImageChange(poster, oldPoster);
+            int deleteCount = DeleteImages(poster, oldPoster);
+            if (deleteCount > 0)
+                checkBool = true;
+            if (PosterImageChange(poster, oldPoster) == 1)
+                checkBool = true;
+            if (await CreateImageFormFile(poster.ImageFiles, poster.Id, deleteCount) == 1)
+                checkBool = true;
 
             if (checkBool)
                 await _unitOfWork.CommitAsync();
 
 
         }
-        private void PosterImageChange(Poster poster, Poster posterExist)
+        private int PosterImageChange(Poster poster, Poster posterExist)
         {
-
             if (poster.PosterImageFile != null)
             {
                 var posterImageFile = poster.PosterImageFile;
@@ -115,12 +116,15 @@ namespace Ferma.Service.Services.Implementations.User
                 _manageImageHelper.DeleteFile(posterImage.Image, "poster");
                 posterImage.Image = filename;
                 posterImage.IsPoster = true;
+                return 1;
             }
+            return 0;
+
         }
 
-        private void DeleteImages(Poster poster, Poster posterExist)
+        private int DeleteImages(Poster poster, Poster posterExist)
         {
-
+            int i = 0;
             var posterImages = posterExist.PosterImages;
             if (poster.PosterImagesIds != null)
             {
@@ -128,9 +132,10 @@ namespace Ferma.Service.Services.Implementations.User
                 {
                     _manageImageHelper.DeleteFile(item.Image, "poster");
                     posterExist.PosterImages.Remove(item);
+                    i++;
                 }
                 posterImages.ToList().RemoveAll(x => !poster.PosterImagesIds.Contains(x.Id));
-
+                return i;
             }
             else
             {
@@ -140,26 +145,45 @@ namespace Ferma.Service.Services.Implementations.User
                     {
                         _manageImageHelper.DeleteFile(item.Image, "poster");
                         posterExist.PosterImages.Remove(item);
+                        i++;
                     }
+                    return i;
                 }
+
                 else throw new ImageCountException("Axırıncı şəkil silinə bilməz!");
+
             }
         }
-        private async Task CreateImageFormFile(List<IFormFile> imageFiles, int posterId)
+        private async Task<int> CreateImageFormFile(List<IFormFile> imageFiles, int posterId, int deleteCount)
         {
-            if (imageFiles != null)
-                foreach (var image in imageFiles)
+            int countImage = await _unitOfWork.PosterImageRepository.GetTotalCountAsync(x => x.PosterId == posterId && !x.IsPoster);
+            int i = 0;
+            
+            if (countImage < 9)
+            {
+                if (imageFiles != null)
                 {
-
-                    PosterImage Posterimage = new PosterImage
+                    i = 8 - countImage - deleteCount;
+                    if (i == 0)
+                        throw new ImageCountException("Maksimum 8 şəkil əlavə edə bilərsiniz!");
+                    foreach (var image in imageFiles)
                     {
-                        IsPoster = false,
-                        PosterId = posterId,
-                        Image = _manageImageHelper.FileSave(image, "poster"),
-                    };
-                    await _unitOfWork.PosterImageRepository.InsertAsync(Posterimage);
+                        if (i != 0)
+                        {
+                            PosterImage Posterimage = new PosterImage
+                            {
+                                IsPoster = false,
+                                PosterId = posterId,
+                                Image = _manageImageHelper.FileSave(image, "poster"),
+                            };
+                            await _unitOfWork.PosterImageRepository.InsertAsync(Posterimage);
+                            i--;
+                        }
+                    }
+                    return 1;
                 }
+            }
+            return 0;
         }
-
     }
 }

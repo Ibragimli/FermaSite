@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "Bizimlə Əlaqə";
+}
+@model ContactUsDto
+
+<main>
+    <!-- Bread Crumb  Start -->
+    <section class="secDisplay" id="breadCrumbs">
+        <div class="casket">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-9 col-sm-9 col-9 ">
+                    <div class="breadCrumbBox">
+                        <ul>
+                            <li>
+                                <a asp-action="index" asp-controller="anasehife">
+                                    <span>
+                                        Ana Səhifə
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="index" asp-controller="bizimleelaqe">
+                                    <span>
+                                        Bizimlə əlaqə
+                                    </span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  Bread Crumb End -->
+    <!-- ContactUs   Start -->
+    <section id="contact">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="contactTitle col-lg-10 col-md-12 col-sm-12 ">
+                    <h1>Bizimlə əlaqə</h1>
+                </div>
+                <div class="row contactBody col-lg-10 col-md-12 col-sm-12">
+                    <div class="contactForm col-lg-7 col-md-9 col-sm-9 col-12">
+                        <form asp-action="contactus" asp-controller="bizimleelaqe" method="post">
+                            <div class="control-group mb-3">
+                                <input oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
+                                       asp-for="FullName" type="text" class="form-control" placeholder="Adı"
+                                       required="required" />
+                                <span asp-validation-for="FullName" class="help-block text-danger"></span>
+                            </div>
+                            <div class="control-group mb-3">
+                                <input oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
+                                       asp-for="Email" type="email" required="required" class="form-control"
+                                       placeholder="Email" />
+                                <span asp-validation-for="Email" class="help-block text-danger"></span>
+                            </div>
+                            <div class="control-group mb-3">
+                                <input oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
+                                       asp-for="Subject" type="text" class="form-control" placeholder="Mövzu"
+                                       required="required" />
+                                <span asp-validation-for="Subject" class="help-block text-danger"></span>
+                            </div>
+                            <div class="control-group mb-3">
+                                <textarea oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
+                                          asp-for="Message" class="form-control" rows="8" placeholder="Mesaj"
+                                          required="required"></textarea>
+                                <span asp-validation-for="Message" class="help-block text-danger"></span>
+                            </div>
+                            <div class="contactButton">
+                                <button class="btn  py-2 px-4" type="submit">Göndər </button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <div class="contactImage col-lg-6 col-md-8 col-sm-6 ">
+                        <div class="imageBox">
+                            <img src="../assets/Images/inek1.jpg" alt="">
+
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  ContactUs  End -->
+
+
+</main>

@@ -8,6 +8,7 @@
     var waitedPosters = @Model.WaitedPosters;
     var disabledPosters = @Model.DisabledPosters;
     int count = 1;
+    DateTime now = DateTime.UtcNow;
 
 }
 @model ProfileViewModel
@@ -137,16 +138,23 @@
                                                                         <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
                                                                             <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
                                                                         </a>
-                                                                        <div class="posterVipIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-brands fa-sketch"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="posterQueenIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-solid fa-crown"></i>
-                                                                            </a>
-                                                                        </div>
+                                                                        @if (poster.PosterFeatures.ExpirationDateVip > now)
+                                                                        {
+                                                                            <div class="posterVipIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-brands fa-sketch"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+                                                                        @if (poster.PosterFeatures.ExpirationDatePremium > now)
+                                                                        {
+                                                                            <div class="posterQueenIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-solid fa-crown"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
 
                                                                     </div>
                                                                     <div class="posterDetailBox">
@@ -237,16 +245,24 @@
                                                                             <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
 
                                                                         </a>
-                                                                        <div class="posterVipIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-brands fa-sketch"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="posterQueenIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-solid fa-crown"></i>
-                                                                            </a>
-                                                                        </div>
+                                                                        @if (poster.PosterFeatures.ExpirationDateVip > now)
+                                                                        {
+                                                                            <div class="posterVipIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-brands fa-sketch"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
+                                                                        @if (poster.PosterFeatures.ExpirationDatePremium > now)
+                                                                        {
+                                                                            <div class="posterQueenIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-solid fa-crown"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
                                                                         <div class="posterDeactiveBox">
 
                                                                             <a href="#">
@@ -281,13 +297,16 @@
                                                                             </a>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="posterActionBox">
-                                                                        <div class="posterRepairButtonBox">
-                                                                            <a href="#">
-                                                                                Bərpa et
-                                                                            </a>
+                                                                    @if (poster.PosterFeatures.ExpirationEndDate > now)
+                                                                    {
+                                                                        <div class="posterActionBox">
+                                                                            <div class="posterRepairButtonBox">
+                                                                                <a asp-controller="profile" asp-action="activePoster" asp-route-id="@poster.Id" class="disabled-btn">
+                                                                                    Bərpa et
+                                                                                </a>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         }
@@ -331,16 +350,23 @@
                                                                             <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
 
                                                                         </a>
-                                                                        <div class="posterVipIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-brands fa-sketch"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="posterQueenIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-solid fa-crown"></i>
-                                                                            </a>
-                                                                        </div>
+                                                                        @if (poster.PosterFeatures.ExpirationDateVip > now)
+                                                                        {
+                                                                            <div class="posterVipIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-brands fa-sketch"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
+                                                                        @if (poster.PosterFeatures.ExpirationDatePremium > now)
+                                                                        {<div class="posterQueenIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-solid fa-crown"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
 
                                                                     </div>
                                                                     <div class="posterDetailBox">
@@ -408,16 +434,23 @@
                                                                             <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
 
                                                                         </a>
-                                                                        <div class="posterVipIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-brands fa-sketch"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="posterQueenIconBox">
-                                                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <i class="fa-solid fa-crown"></i>
-                                                                            </a>
-                                                                        </div>
+                                                                        @if (poster.PosterFeatures.ExpirationDateVip > now)
+                                                                        {
+                                                                            <div class="posterVipIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-brands fa-sketch"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
+                                                                        @if (poster.PosterFeatures.ExpirationDatePremium > now)
+                                                                        {<div class="posterQueenIconBox">
+                                                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                                                    <i class="fa-solid fa-crown"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+
 
                                                                     </div>
                                                                     <div class="posterDetailBox">

@@ -1,5 +1,6 @@
 ﻿
-@{ ViewData["Title"] = "AnaSəhifə"; }
+@{ ViewData["Title"] = "AnaSəhifə";
+    DateTime now = DateTime.UtcNow; }
 @model AnaSehifeViewModel
 <main>
 
@@ -31,8 +32,8 @@
         </div>
     </section>
     <!-- Catagory Slider End -->
-    <!-- VipPoster Start -->
-    @if (Model.PagenatedItemsVip.Count() > 0)
+    <!-- PremiumPoster Start -->
+    @if (Model.PagenatedItemsPremium.Count() > 0)
     {
 <section id="posters">
     <div class="container">
@@ -40,11 +41,11 @@
             <div class="col-lg-10 col-md-11 col-sm-12">
                 <div class="col-12 posterTitleBoxCol">
                     <div class="posterTitleBox">
-                        <h3>Vip Elanlar</h3>
+                        <h3>Premium Elanlar</h3>
                     </div>
                 </div>
                 <div class="col-12 posterBoxs row  ">
-                    @foreach (var posterVip in Model.PagenatedItemsVip)
+                    @foreach (var posterVip in Model.PagenatedItemsPremium)
                     {
 
     <div class="posterColBox col-lg-3 col-md-4 col-6 ">
@@ -53,14 +54,14 @@
                 <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
                     <img src="~/uploads/poster/@posterVip.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
                 </a>
-                @if (posterVip.PosterFeatures.IsVip)
+                @if (posterVip.PosterFeatures.ExpirationDateVip > now)
                 {
 <div class="posterVipIconBox">
     <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
         <i class="fa-brands fa-sketch"></i>
     </a>
 </div>}
-                @if (posterVip.PosterFeatures.IsPremium)
+                @if (posterVip.PosterFeatures.ExpirationDatePremium > now)
                 {
 <div class="posterQueenIconBox">
     <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
@@ -106,7 +107,82 @@
         </div>
     </div>
 </section>}
+    <!-- PremiumPoster End -->
+    <!-- VipPoster Start -->
+    @if (Model.PagenatedItemsVip.Count() > 0)
+    {
+<section id="posters">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-11 col-sm-12">
+                <div class="col-12 posterTitleBoxCol">
+                    <div class="posterTitleBox">
+                        <h3>Vip Elanlar</h3>
+                    </div>
+                </div>
+                <div class="col-12 posterBoxs row  ">
+                    @foreach (var posterVip in Model.PagenatedItemsVip)
+                    {
 
+    <div class="posterColBox col-lg-3 col-md-4 col-6 ">
+        <div class="posterBox">
+            <div class="posterImageBox">
+                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                    <img src="~/uploads/poster/@posterVip.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
+                </a>
+                @if (posterVip.PosterFeatures.ExpirationDateVip > now)
+                {
+<div class="posterVipIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+        <i class="fa-brands fa-sketch"></i>
+    </a>
+</div>}
+                @if (posterVip.PosterFeatures.ExpirationDatePremium > now)
+                {
+<div class="posterQueenIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+        <i class="fa-solid fa-crown"></i>
+    </a>
+</div>}
+
+                <div class="posterWishIconBox">
+
+                    <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterVip.Id" class="addWish">
+                        <i class="wishIcon fa-solid fa-heart"></i>
+                        <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                    </a>
+                </div>
+            </div>
+            <div class="posterDetailBox">
+                <div class="posterPriceBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <span>@posterVip.PosterFeatures.Price  @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                    </a>
+                </div>
+
+                <div class="posterNameBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <h4>
+                            @posterVip.PosterFeatures.Name
+                        </h4>
+                    </a>
+                </div>
+                <div class="posterCreatedBox">
+                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
+                        <span> @posterVip.PosterFeatures.City.Name, @posterVip.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+
+
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>}
     <!-- VipPoster End -->
     <!-- Last Poster Start -->
     <section id="posters" class="posters">
@@ -119,62 +195,76 @@
                         </div>
                     </div>
                     <div class="col-12 posterBoxs row  ">
-                        @foreach (var posterAll in Model.PagenatedItemsAll)
+                        @if (Model.PagenatedItemsAll.Count() > 0)
                         {
+            @foreach (var posterAll in Model.PagenatedItemsAll)
+            {
 
-            <div class="posterColBox col-lg-3 col-md-4 col-6 ">
-                <div class="posterBox">
-                    <div class="posterImageBox">
-                        <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                            <img src="~/uploads/poster/@posterAll.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
-                        </a>
-                        @if (posterAll.PosterFeatures.IsVip)
-                        {
-        <div class="posterVipIconBox">
+<div class="posterColBox col-lg-3 col-md-4 col-6 ">
+    <div class="posterBox">
+        <div class="posterImageBox">
             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                <i class="fa-brands fa-sketch"></i>
+                <img src="~/uploads/poster/@posterAll.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
             </a>
-        </div>}
-                        @if (posterAll.PosterFeatures.IsPremium)
-                        {
-        <div class="posterQueenIconBox">
-            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                <i class="fa-solid fa-crown"></i>
-            </a>
-        </div>}
+            @if (posterAll.PosterFeatures.ExpirationDateVip >now)
+            {
+<div class="posterVipIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+        <i class="fa-brands fa-sketch"></i>
+    </a>
+</div>}
+            @if (posterAll.PosterFeatures.ExpirationDatePremium >now)
+            {
+<div class="posterQueenIconBox">
+    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+        <i class="fa-solid fa-crown"></i>
+    </a>
+</div>}
 
-                        <div class="posterWishIconBox">
+            <div class="posterWishIconBox">
 
-                            <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterAll.Id" class="addWish">
-                                <i class="wishIcon fa-solid fa-heart"></i>
-                                <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
-                            </a>
-                        </div>
-                    </div>
-                    <div class="posterDetailBox">
-                        <div class="posterPriceBox">
-                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                                <span>@posterAll.PosterFeatures.Price  @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
-                            </a>
-                        </div>
+                <a asp-action="addwishlist" asp-controller="elanlar" asp-route-id="@posterAll.Id" class="addWish">
+                    <i class="wishIcon fa-solid fa-heart"></i>
+                    <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                </a>
+            </div>
+        </div>
+        <div class="posterDetailBox">
+            <div class="posterPriceBox">
+                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                    <span>@posterAll.PosterFeatures.Price  @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                </a>
+            </div>
 
-                        <div class="posterNameBox">
-                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                                <h4>
-                                    @posterAll.PosterFeatures.Name
-                                </h4>
-                            </a>
-                        </div>
-                        <div class="posterCreatedBox">
-                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                                <span> @posterAll.PosterFeatures.City.Name, @posterAll.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+            <div class="posterNameBox">
+                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                    <h4>
+                        @posterAll.PosterFeatures.Name
+                    </h4>
+                </a>
+            </div>
+            <div class="posterCreatedBox">
+                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
+                    <span> @posterAll.PosterFeatures.City.Name, @posterAll.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
 
 
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>}}
+        else
+        {
+<div style="border:1px dotted #32CD32;  height: 200px;display: flex;align-items: center;justify-content: center;" class="col-12">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+
+        <h1 style=" text-align: center; color: #32CD32; ">Yeni elanlar yarat</h1>
+        <a style=" background-color: green; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-right: 5px; line-height: 21px; margin-top: 4px; margin-bottom: 4px; border-radius: 5px; border: none; width: 180px; height: 44px; " asp-controller="elanlar" asp-action="yenielan" class="btn">
+            <i style="color:white; margin-right:5px; font-size:22px;" class="fa-regular fa-square-plus"></i>
+            <span style="color:white; font-size:24px;">Elan yarat</span>
+        </a>
+    </div>
+</div>}
 
                     </div>
                 </div>
@@ -190,19 +280,22 @@
                     <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex-1)" class="page-link" aria-label="Previous">
                         <span style=" color: whitesmoke;" aria-hidden="true">&laquo;</span>
                     </a>
-                </li>}
+                </li>
+}
                             @for (int i = 1; i <= Model.PagenatedItemsAll.TotalPages; i++)
                             {
                 <li aria-current="page" class="page-item" @(Model.PagenatedItemsAll.PageIndex == i ? "active" : "" )>
                     <a asp-action="index" asp-controller="anasehife" asp-route-page="@i" class="page-link">@i</a>
-                </li>}
+                </li>
+}
                             @if (Model.PagenatedItemsAll.HasNext)
                             {
                 <li class="page-item">
                     <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex+1)" class="page-link" aria-label="Next">
                         <span style=" color: whitesmoke;" aria-hidden="true">&raquo;</span>
                     </a>
-                </li>}
+                </li>
+}
                         </ul>
                     </nav>
                 </div>

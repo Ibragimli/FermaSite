@@ -52,7 +52,9 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 400;
                         if (contextFeature.Error is UserNotFoundException)
                             code = 404;
-                        
+                        if (contextFeature.Error is ExpirationDateException)
+                            code = 400;
+
                     }
 
                     context.Response.StatusCode = code;

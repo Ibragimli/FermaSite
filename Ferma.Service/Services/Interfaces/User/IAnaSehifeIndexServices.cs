@@ -10,6 +10,10 @@ namespace Ferma.Service.Services.Interfaces.User
     public interface IAnaSehifeIndexServices
     {
         public IQueryable<Poster> GetPostersAsync();
+        public IQueryable<Poster> GetVipPosterAsync();
+        public IQueryable<Poster> GetPremiumPosterAsync();
+        public IQueryable<Poster> GetPrePosterAsync();
+        
         public Task<List<Category>> GetAllCategoryAsync();
 
     }

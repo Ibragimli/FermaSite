@@ -30,11 +30,31 @@ namespace Ferma.Service.Services.Implementations.User
             if (id != 0)
                 poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id);
 
+            var time = new DateTime(0001, 01, 01, 8, 36, 44);
+
             if (poster == null)
                 throw new ItemNotFoundException("Elan tapılmadı");
             poster.PosterFeatures.PosterStatus = PosterStatus.DeActive;
             poster.PosterFeatures.IsPremium = false;
             poster.PosterFeatures.IsVip = false;
+            poster.PosterFeatures.ExpirationDatePremium = time;
+            poster.PosterFeatures.ExpirationDateVip = time;
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task posterActive(int id)
+        {
+            Poster poster = new Poster();
+            DateTime now = DateTime.UtcNow;
+            if (id != 0)
+                poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id);
+
+            if (poster == null)
+                throw new ItemNotFoundException("Elan tapılmadı");
+            if (poster.PosterFeatures.ExpirationEndDate < now)
+                throw new ExpirationDateException("Elanın müddəti bitmişdir");
+
+            poster.PosterFeatures.PosterStatus = PosterStatus.Active;
+            poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(30);
             await _unitOfWork.CommitAsync();
         }
 
@@ -158,7 +178,7 @@ namespace Ferma.Service.Services.Implementations.User
         {
             int countImage = await _unitOfWork.PosterImageRepository.GetTotalCountAsync(x => x.PosterId == posterId && !x.IsPoster);
             int i = 0;
-            
+
             if (countImage < 9)
             {
                 if (imageFiles != null)

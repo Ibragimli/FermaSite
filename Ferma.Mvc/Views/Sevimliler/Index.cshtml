@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    DateTime now = DateTime.UtcNow;
 }
 @model WishListViewModel
 @using Microsoft.AspNetCore.Identity
@@ -19,7 +20,7 @@
                     <div class="col-12 posterBoxs row  ">
                         @if (Model.WishlistItems.Count <= 0)
                         {
-                            <div style="border:1px dotted #32CD32;padding: 60px;" class="col-12">
+                            <div style="border:1px dotted #32CD32;  height: 228px;display: flex;align-items: center;justify-content: center;" class="col-12">
 
                                 <h1 style=" text-align: center; color: #32CD32; ">Sevimlilərinizə yeni məhsullar əlavə edin</h1>
                             </div>}
@@ -34,27 +35,28 @@
                                                 <img src="~/uploads/poster/@poster.Poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
 
                                             </a>
-                                            @if (poster.Poster.PosterFeatures.IsVip)
+                                            @if (poster.Poster.PosterFeatures.ExpirationDateVip > now)
                                             {
-                                        <div class="posterVipIconBox">
-                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
-                                                <i class="fa-brands fa-sketch"></i>
-                                            </a>
-                                        </div>}
-                                            @if (poster.Poster.PosterFeatures.IsPremium)
+                                                <div class="posterVipIconBox">
+                                                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                        <i class="fa-brands fa-sketch"></i>
+                                                    </a>
+                                                </div>}
+                                            @if (poster.Poster.PosterFeatures.ExpirationDatePremium > now)
                                             {
-                                        <div class="posterQueenIconBox">
-                                            <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
-                                                <i class="fa-solid fa-crown"></i>
-                                            </a>
-                                        </div>}
+                                                <div class="posterQueenIconBox">
+                                                    <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
+                                                        <i class="fa-solid fa-crown"></i>
+                                                    </a>
+                                                </div>}
                                             <div class="posterWishIconBox">
                                                 <a class="deleteWish" asp-action="DeleteWish" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
-                                                    <i class="wishIcon fa-solid fa-heart"></i>
-                                                    <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
-                                          f     </a>
+                                                    @*<i class="wishIcon fa-solid fa-heart"></i>*@
+                                                    <i class="wishIconActive fa-solid fa-heart"></i>
+                                                </a>
                                             </div>
                                         </div>
+
                                         <div class="posterDetailBox">
                                             <div class="posterPriceBox">
                                                 <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">

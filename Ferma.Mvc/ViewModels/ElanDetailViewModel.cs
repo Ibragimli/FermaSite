@@ -14,7 +14,7 @@ namespace Ferma.Mvc.ViewModels
         public List<Poster> SimilarPosters { get; set; }
         public PosterUserId User { get; set; }
         public PaymentCreateDto PaymentCreateDto { get; set; }
-      
         public List<ServiceDuration> ServiceDurations { get; set; }
+        public int WishCount { get; set; }
     }
 }

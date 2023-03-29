@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\plugins\" />
+    <Folder Include="wwwroot\uploads\poster\" />
   </ItemGroup>
 
 </Project>

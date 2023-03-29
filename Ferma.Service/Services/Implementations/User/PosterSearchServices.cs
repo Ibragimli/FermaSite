@@ -49,9 +49,28 @@ namespace Ferma.Service.Services.Implementations.User
 
             if (searchDto.PosterName != null)
                 poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.Name, $"%{searchDto.PosterName}%"));
+            var now = DateTime.UtcNow;
+            poster = poster.Where(x => x.PosterFeatures.ExpirationDateVip > now);
+            return poster;
+        }
+        public IQueryable<Poster> SearchPosterPremium(SearchDto searchDto)
+        {
+            var poster = _unitOfWork.PosterRepository.asQueryablePoster();
+            if (searchDto.CategoryId != null)
+                poster = poster.Where(x => x.PosterFeatures.SubCategory.CategoryId == searchDto.CategoryId);
 
-            poster.Where(x => x.PosterFeatures.IsPremium);
-            poster.Where(x => x.PosterFeatures.IsVip);
+            if (searchDto.SubCategoryId != null)
+                poster = poster.Where(x => x.PosterFeatures.SubCategoryId == searchDto.SubCategoryId);
+
+            if (searchDto.CityId != null)
+                poster = poster.Where(x => x.PosterFeatures.CityId == searchDto.CityId);
+
+            if (searchDto.PosterName != null)
+                poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.Name, $"%{searchDto.PosterName}%"));
+
+            var now = DateTime.UtcNow;
+            poster = poster.Where(x => x.PosterFeatures.ExpirationDatePremium > now);
+
             return poster;
         }
     }

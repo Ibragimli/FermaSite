@@ -30,7 +30,24 @@ namespace Ferma.Service.Services.Implementations.User
             var posters = _unitOfWork.PosterRepository.asQueryablePoster();
             return posters;
         }
-
+        public IQueryable<Poster> GetVipPosterAsync()
+        {
+            var now = DateTime.Now;
+            var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDateVip > now);
+            return posters;
+        }
+        public IQueryable<Poster> GetPremiumPosterAsync()
+        {
+            var now = DateTime.Now;
+            var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDatePremium > now);
+            return posters;
+        }
+        public IQueryable<Poster> GetPrePosterAsync()
+        {
+            var now = DateTime.Now;
+            var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDatePremium > now || x.PosterFeatures.ExpirationDatePremium > now);
+            return posters;
+        }
 
     }
 }

@@ -7,6 +7,7 @@
     AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
     int count = 0;
 
+    DateTime now = DateTime.UtcNow;
 }
 <div class="modal fade" id="PremiumServiceModal" tabindex="-1" aria-labelledby="PremiumServiceModalLabel"
      aria-hidden="true">
@@ -23,10 +24,15 @@
 
             <div class="modal-body">
                 <p>
-                    Elanınız ana səhifədəki və axtarış nəticələrindəki VIP bölməsində təsadüfi qaydada
+                    Elanınız ana səhifədəki və axtarış nəticələrindəki Premium bölməsində təsadüfi qaydada
                     göstəriləcək.
                 </p>
-
+                @if (Model.Poster.PosterFeatures.ExpirationDatePremium > now)
+                {
+                    <p>
+                        Elanınız hal hazırda premiumdur. 
+                    </p>
+                }
                 <hr>
                 <h1>XİDMƏTİN MÜDDƏTİ</h1>
                 <hr />
@@ -40,9 +46,9 @@
                             <div class="form-check">
                                 <input asp-for="PaymentCreateDto.DurationServicesId" value="@duration.Id" class="form-check-input" type="radio">
                                 <label class="form-check-label">@duration.Duration gün / @duration.Amount AZN</label>
+                                <input type="hidden" asp-for="PaymentCreateDto.PosterStatus" value="@Model.Poster.PosterFeatures.PosterStatus" />
                             </div>
                             <div class="d-none">  @(count= count + 1)</div>
-
                         }
                     </div>
                     <hr>
@@ -60,6 +66,7 @@
                             <div class="form-check">
                                 <input asp-for="PaymentCreateDto.Source" value="@Source.Balance" class="form-check-input" type="radio">
                                 <label class="form-check-label">Hesab Balansı</label>
+
                             </div>
                             <input type="hidden" asp-for="PaymentCreateDto.AppUserId" value="@user.Id" />
 

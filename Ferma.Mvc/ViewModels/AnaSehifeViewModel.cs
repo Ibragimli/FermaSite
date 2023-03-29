@@ -11,6 +11,7 @@ namespace Ferma.Mvc.ViewModels
     {
         public PagenetedList<Poster> PagenatedItemsAll { get; set; }
         public PagenetedList<Poster> PagenatedItemsVip { get; set; }
+        public PagenetedList<Poster> PagenatedItemsPremium { get; set; }
         public List<Category> Categories { get; set; }
 
     }

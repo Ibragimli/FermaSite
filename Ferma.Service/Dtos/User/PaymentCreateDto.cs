@@ -14,6 +14,7 @@ namespace Ferma.Service.Dtos.User
         public int DurationServicesId { get; set; }
         public string AppUserId { get; set; }
         public int PosterId { get; set; }
+        public PosterStatus PosterStatus { get; set; }
     }
     public class PaymentCreateDtoValidator : AbstractValidator<PaymentCreateDto>
     {

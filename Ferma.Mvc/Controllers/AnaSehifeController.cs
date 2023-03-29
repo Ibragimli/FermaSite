@@ -21,13 +21,16 @@ namespace Ferma.Mvc.Controllers
         }
         public async Task<IActionResult> Index(int page = 1)
         {
-            var poster = _anaSehifeIndexServices.GetPostersAsync();
+            var posterAll = _anaSehifeIndexServices.GetPostersAsync();
+            var posterVip = _anaSehifeIndexServices.GetVipPosterAsync();
+            var posterServices = _anaSehifeIndexServices.GetPrePosterAsync();
             var categories = await _anaSehifeIndexServices.GetAllCategoryAsync();
 
             AnaSehifeViewModel anaSehifeVM = new AnaSehifeViewModel
             {
-                PagenatedItemsAll = PagenetedList<Poster>.Create(poster, page, 20),
-                PagenatedItemsVip = PagenetedList<Poster>.CreateRandom(poster, page, 20),
+                PagenatedItemsAll = PagenetedList<Poster>.Create(posterAll, page, 20),
+                PagenatedItemsVip = PagenetedList<Poster>.CreateRandom(posterVip, page, 20),
+                PagenatedItemsPremium = PagenetedList<Poster>.CreateRandom(posterServices, page, 20),
                 Categories = categories,
             };
             return View(anaSehifeVM);

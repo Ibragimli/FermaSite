@@ -81,7 +81,6 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
             services.AddScoped<IAuthenticationServices, AuthenticationServices>();
             services.AddScoped<IPosterCreateValueCheckServices, PosterCreateValueCheckServices>();
-            services.AddScoped<IElanDetailIndexServices, ElanDetailIndexServices>();
             services.AddScoped<IPaymentCreateServices, PaymentCreateServices>();
             services.AddScoped<IProfileLoginServices, ProfileLoginServices>();
             services.AddScoped<IPhoneNumberServices, PhoneNumberServices>();
@@ -92,6 +91,8 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterWishlistDeleteServices, PosterWishlistDeleteServices>();
             services.AddScoped<IPosterSearchServices, PosterSearchServices>();
             services.AddScoped<IContactUsServices, ContactUsServices>();
+            services.AddScoped<IUserPostersServices, UserPostersServices>();
+            services.AddScoped<IPosterDetailIndexServices, PosterDetailIndexServices>();
 
 
             //services.AddScoped<IUrlHelper>();

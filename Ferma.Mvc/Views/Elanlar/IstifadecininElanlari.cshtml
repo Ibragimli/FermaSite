@@ -1,9 +1,10 @@
 ﻿
 @{
-    ViewData["Title"] = "Axtarış";
-    DateTime now = DateTime.UtcNow;
+    ViewData["Title"] = "IstifadecininElanlari";
+    DateTime now = DateTime.Now;
 }
-@model SearchViewModel
+
+@model IstifadeciElanViewModel
 <!-- Bread Crumb  Start -->
 <section class="secDisplay" id="breadCrumbs">
     <div class="casket">
@@ -21,7 +22,7 @@
                         <li>
                             <a>
                                 <span>
-                                    Axtarış
+                                    İstifadəçinin elanları
                                 </span>
                             </a>
                         </li>
@@ -37,7 +38,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10 col-md-11 col-sm-12">
-                @if (Model.PagenetedItemsPremium.Count() > 0)
+                @if (Model.PosterPremium.Count() > 0)
                 {
                     <div class="col-12 posterTitleBoxCol">
                         <div class="posterTitleBox">
@@ -47,9 +48,9 @@
                 }
 
                 <div class="col-12 posterBoxs row  ">
-                    @if (Model.PagenetedItemsPremium.Count() > 0)
+                    @if (Model.PosterPremium.Count() > 0)
                     {
-                        @foreach (var posterVip in Model.PagenetedItemsPremium)
+                        @foreach (var posterVip in Model.PosterPremium)
                         {
                             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
                                 <div class="posterBox">
@@ -97,6 +98,8 @@
                                         <div class="posterCreatedBox">
                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
                                                 <span> @posterVip.PosterFeatures.City.Name, @posterVip.PosterFeatures.CreatedDate.ToString("dd MMM yyyy") </span>
+
+
                                             </a>
                                         </div>
                                     </div>
@@ -117,7 +120,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10 col-md-11 col-sm-12">
-                @if (Model.PagenetedItemsVip.Count() > 0)
+                @if (Model.PosterVip.Count() > 0)
                 {
                     <div class="col-12 posterTitleBoxCol">
                         <div class="posterTitleBox">
@@ -127,9 +130,9 @@
                 }
 
                 <div class="col-12 posterBoxs row  ">
-                    @if (Model.PagenetedItemsVip.Count() > 0)
+                    @if (Model.PosterVip.Count() > 0)
                     {
-                        @foreach (var posterVip in Model.PagenetedItemsVip)
+                        @foreach (var posterVip in Model.PosterVip)
                         {
                             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
                                 <div class="posterBox">
@@ -205,9 +208,9 @@
                     </div>
                 </div>
                 <div class="col-12 posterBoxs row  ">
-                    @if (Model.PagenetedItemsAll.Count() > 0)
+                    @if (Model.PosterAll.Count() > 0)
                     {
-                        @foreach (var posterAll in Model.PagenetedItemsAll)
+                        @foreach (var posterAll in Model.PosterAll)
                         {
                             <div class="posterColBox col-lg-3 col-md-4 col-6 ">
                                 <div class="posterBox">
@@ -282,17 +285,17 @@
                 </div>
             </div>
         </div>
-        @if (Model.PagenetedItemsAll.Count() > 0)
+        @if (Model.PosterAll.Count() > 0)
         {
             <div class="row navRow  justify-content-center ">
                 <div class="col-lg-10 col-md-11 col-sm-12">
                     <nav aria-label="...">
                         <ul class="pagination">
-                            @if (Model.PagenetedItemsAll.HasPrev)
+                            @if (Model.PosterAll.HasPrev)
                             {
 
                                 <li class="page-item">
-                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PagenetedItemsAll.PageIndex-1)" asp-route-categoryId="@ViewBag.CategoryId"
+                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PosterAll.PageIndex-1)" asp-route-categoryId="@ViewBag.CategoryId"
                                        asp-route-subCategoryId="@ViewBag.SubCategoryId"
                                        asp-route-cityId="@ViewBag.CityId"
                                        asp-route-posterNameId="@ViewBag.PosterName" class="page-link" aria-label="Previous">
@@ -300,19 +303,19 @@
                                     </a>
                                 </li>
                             }
-                            @for (int i = 1; i <= Model.PagenetedItemsAll.TotalPages; i++)
+                            @for (int i = 1; i <= Model.PosterAll.TotalPages; i++)
                             {
-                                <li aria-current="page" class="page-item" @(Model.PagenetedItemsAll.PageIndex == i ? "active" : "" )>
+                                <li aria-current="page" class="page-item" @(Model.PosterAll.PageIndex == i ? "active" : "" )>
                                     <a asp-action="axtaris" asp-controller="elanlar" asp-route-page="@i" asp-route-categoryId="@ViewBag.CategoryId"
                                        asp-route-subCategoryId="@ViewBag.SubCategoryId"
                                        asp-route-cityId="@ViewBag.CityId"
                                        asp-route-posterNameId="@ViewBag.PosterName" class="page-link">@i</a>
                                 </li>
                             }
-                            @if (Model.PagenetedItemsAll.HasNext)
+                            @if (Model.PosterAll.HasNext)
                             {
                                 <li class="page-item">
-                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PagenetedItemsAll.PageIndex+1)"
+                                    <a style=" background: #32cd32; " asp-action="axtaris" asp-controller="elanlar" asp-route-page="@(Model.PosterAll.PageIndex+1)"
                                        asp-route-categoryId="@ViewBag.CategoryId"
                                        asp-route-subCategoryId="@ViewBag.SubCategoryId"
                                        asp-route-cityId="@ViewBag.CityId"

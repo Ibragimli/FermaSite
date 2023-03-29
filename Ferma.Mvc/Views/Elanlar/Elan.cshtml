@@ -7,6 +7,7 @@
     var posterFeature = Model.Poster.PosterFeatures;
     AppUser user = User.Identity.IsAuthenticated ? userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin) : null;
     int count = 0;
+    DateTime now = DateTime.UtcNow;
 
 }
 
@@ -156,60 +157,79 @@
                     </div>
 
                 </div>
+                @if (posterFeature.PosterStatus == PosterStatus.Active)
+                {
+                    <div class="posterService col-lg-8 col-md-10 col-sm-12">
+                        <div class="col-lg-12 colInfo">
+                            <div class="detailServiceBox row">
+                                <div class="col-lg-5 col-md-6 col-sm-8 detailServiceButton">
 
-                <div class="posterService col-lg-8 col-md-10 col-sm-12">
-                    <div class="col-lg-12 colInfo">
-                        <div class="detailServiceBox row">
-                            <div class="col-lg-5 col-md-6 col-sm-8 detailServiceButton">
+                                    @if (posterFeature.ExpirationDateVip < now)
+                                    {
+                                        <button data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
+                                            <i class="fa-brands fa-sketch"></i>
+                                            <span>
+                                                <span class="serviceWord me-1">Elanı VIP et </span>
+                                                @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Vip).FirstOrDefault(x => x.Id == 1).Amount AZN-dən
+                                            </span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
+                                            <i style="color:whitesmoke;" class="fa-brands fa-sketch"></i>
+                                            <span>
+                                                <span style="color:white;" class="serviceWord"> VIP Elan </span>
 
-                                @if (!posterFeature.IsVip)
-                                {
-                                    <button data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
-                                        <i class="fa-brands fa-sketch"></i>
-                                        <span>
-                                            <span class="serviceWord me-1">Elanı VIP et </span>
-                                            @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Vip).FirstOrDefault(x => x.Id == 1).Amount AZN-dən
-                                        </span>
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#vipServiceModal" class="btn">
-                                        <i style="color:whitesmoke;" class="fa-brands fa-sketch"></i>
-                                        <span>
-                                            <span style="color:white;" class="serviceWord"> VIP Elan </span>
+                                            </span>
+                                        </button>
+                                    }
 
-                                        </span>
-                                    </button>
-                                }
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-8  detailServiceButton">
-                                @if (!posterFeature.IsPremium)
-                                {
-                                    <button data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
-                                            class="preButton btn ">
-                                        <i class="fa-solid fa-crown"></i>
-                                        <span>
-                                            <span class="serviceWord">Elanı Premium et</span>
-                                            @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Premium).FirstOrDefault(x => x.Id == 4)?.Amount AZN-dən
-                                        </span>
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
-                                            class="preButton btn ">
-                                        <i style="color:whitesmoke;" class="fa-solid fa-crown"></i>
-                                        <span>
-                                            <span style="color:white;" class="serviceWord">Elanı Premium et</span>
-                                        </span>
-                                    </button>
-                                }
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-8  detailServiceButton">
+                                    @if (posterFeature.ExpirationDatePremium < now)
+                                    {
+                                        <button data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
+                                                class="preButton btn ">
+                                            <i class="fa-solid fa-crown"></i>
+                                            <span>
+                                                <span class="serviceWord">Elanı Premium et</span>
+                                                @Model.ServiceDurations.Where(x => !x.IsDelete && x.ServiceType == ServiceType.Premium).FirstOrDefault(x => x.Id == 4)?.Amount AZN-dən
+                                            </span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button style="background-color:green" data-bs-toggle="modal" data-bs-target="#PremiumServiceModal"
+                                                class="preButton btn ">
+                                            <i style="color:whitesmoke;" class="fa-solid fa-crown"></i>
+                                            <span>
+                                                <span style="color:white;" class="serviceWord">Elanı Premium et</span>
+                                            </span>
+                                        </button>
+                                    }
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+                @if (posterFeature.PosterStatus == PosterStatus.Waiting)
+                {
+                    <div class="posterStatusInfoBox" style=" background: #32CD32; display: flex; justify-content: center; align-items: center; padding: 20px 0px; ">
+                        <h2 style=" color: whitesmoke; font-weight: 500; margin-bottom:0px; text-align:center; ">
+                            Elan əlavə olunub və moderatör tərəfindən yoxlanışı gözləyir.
+                        </h2>
+                    </div>
+                }
+                @if (posterFeature.PosterStatus == PosterStatus.Disabled)
+                {
+                    <div class="posterStatusInfoBox" style=" background: #ff0000c2; display: flex; justify-content: center; align-items: center; padding: 20px 0px; ">
+                        <h2 style=" color: whitesmoke; font-weight: 500; margin-bottom:0px; text-align:center; ">
+                            Elan yoxlamadan keçmədi və dərc olunmuyacaq.
+                        </h2>
+                    </div>
+                }
             </div>
         </div>
     </section>
@@ -264,7 +284,7 @@
                             </p>
                             <p>
                                 Seçilmişlərdə:
-                                <span>@posterFeature.WishCount</span>
+                                <span>@Model.WishCount</span>
                             </p>
                             <p>
                                 Yeniləndi:
@@ -276,7 +296,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 posterAuthor">
                         <div class="posterAuthorLink">
                             <span class="authorName">@Model.User.AppUser.Name</span>
-                            <a href="#" class="authorPosters">İstifadəçinin bütün elanları</a>
+                            <a asp-action="IstifadecininElanlari" asp-controller="elanlar" asp-route-phoneNumber="@posterFeature.PhoneNumber" class="authorPosters">İstifadəçinin bütün elanları</a>
                         </div>
                         <div class="authorNumbersBox">
                             <div class="authorNumbers">

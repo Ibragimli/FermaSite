@@ -9,6 +9,8 @@ namespace Ferma.Service.Services.Interfaces.User
     public interface IPosterEditServices
     {
         public Task posterDisabled(int id);
+        public Task posterActive(int id);
+        
         public Task posterEdit(Poster poster );
     }
 }

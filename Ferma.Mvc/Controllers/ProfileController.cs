@@ -327,6 +327,37 @@ namespace Ferma.Mvc.Controllers
         }
 
         [Authorize(Roles = "User")]
+        public async Task<IActionResult> ActivePoster(int id)
+        {
+            AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+            var profileVM = await _profileVM(user);
+
+            try
+            {
+                await _posterEditServices.posterActive(id);
+            }
+
+            catch (ItemNotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            catch (ExpirationDateException msg)
+            {
+                TempData["Error"] = (msg.Message);
+                return RedirectToAction("index", profileVM);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", profileVM);
+            }
+
+            TempData["Success"] = ("Elan aktiv oldu");
+            return RedirectToAction("index");
+
+        }
+
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

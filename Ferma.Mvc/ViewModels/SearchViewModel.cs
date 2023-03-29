@@ -9,7 +9,8 @@ namespace Ferma.Mvc.ViewModels
 {
     public class SearchViewModel
     {
-        public PagenetedList<Poster> PagenetedItemsPreVip { get; set; }
+        public PagenetedList<Poster> PagenetedItemsVip { get; set; }
+        public PagenetedList<Poster> PagenetedItemsPremium { get; set; }
         public PagenetedList<Poster> PagenetedItemsAll { get; set; }
     }
 }

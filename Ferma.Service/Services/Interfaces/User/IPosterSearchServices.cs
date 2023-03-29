@@ -11,5 +11,6 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         public IQueryable<Poster> SearchPosterAll(SearchDto searchDto);
         public IQueryable<Poster> SearchPosterVip(SearchDto searchDto);
+        public IQueryable<Poster> SearchPosterPremium(SearchDto searchDto);
     }
 }

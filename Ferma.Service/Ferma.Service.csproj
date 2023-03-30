@@ -16,10 +16,4 @@
     <ProjectReference Include="..\Ferma.Data\Ferma.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\Area\" />
-    <Folder Include="Services\Implementations\Area\" />
-    <Folder Include="Services\Interfaces\Area\" />
-  </ItemGroup>
-
 </Project>

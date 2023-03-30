@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    DateTime now = DateTime.UtcNow;
+
+}
+@model PosterIndexViewModel
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Models /</span> Index</h4>
+
+
+        <!-- Bordered Table -->
+        <div class="card">
+            <div class="card-body">
+                @* Pagination *@
+                <div class="row">
+                    <div class="d-flex align-items-center col-5">
+                        <form asp-action="index" asp-controller="Model" asp-route-page="@ViewBag.Page" class="d-flex">
+                            <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center col-5" style="display:flex; justify-content:flex-end;">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                @if (Model.Posters.HasPrev)
+                                {
+
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="Model" asp-route-page="@(Model.Posters.PageIndex-1)" class="page-link" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.Posters.TotalPages; i++)
+                                {
+                                    <li aria-current="page" class="page-item" @(Model.Posters.PageIndex == i ? "active" : "" )>
+                                        <a asp-action="index" asp-controller="Model" asp-route-page="@i" class="page-link">@i</a>
+                                    </li>
+                                }
+                                @if (Model.Posters.HasNext)
+                                {
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="Model" asp-route-page="@(Model.Posters.PageIndex+1)" class="page-link" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <br />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <br />
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Şəkil</th>
+                                <th>Elanın adı</th>
+                                <th>Kategoriyası</th>
+                                <th>İstifadəçinin nömrəsi</th>
+                                <th>Statusu</th>
+                                <th>Servis Statusu</th>
+
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var poster in Model.Posters)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" width="100" height="100" />
+                                    </td>
+                                    <td class="text-center">@poster.PosterFeatures.Name</td>
+                                    <td class="text-center">@poster.PosterFeatures.SubCategory.Category.Name</td>
+                                    <td class="text-center">@poster.PosterFeatures.PhoneNumber</td>
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Active?"bg-success":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Waiting?"bg-warning":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Disabled?"bg-danger":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.DeActive?"bg-SECONDARY":"")
+
+                                              ">
+
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Active?"Aktiv":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Waiting?"Gözləmədə":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.Disabled?"Müddəti bitmiş":"")
+                                            @(poster.PosterFeatures.PosterStatus == PosterStatus.DeActive?"DeAktiv":"")
+                                        </span>
+
+                                    </td>
+                                    <td class="text-center " >
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            @if (poster.PosterFeatures.ExpirationDateVip > now)
+                                            {
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                    <i style="color: orangered; font-size:22px;" class="fa-brands fa-sketch"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <i style="color: red; font-size: 22px; " class="fa-regular fa-circle-xmark"></i>
+                                            }
+                                            @if (poster.PosterFeatures.ExpirationDatePremium > now)
+                                            {
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
+                                                    <i style="color: #FF9F2B; font-size: 22px; margin-left: 6px;" class="fa-solid fa-crown"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <i style="color:red; font-size:22px; margin-left:6px;" class="fa-regular fa-circle-xmark"></i>
+                                            }
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-sm-around">
+                                            @*  <a asp-route-id="@poster.Id" asp-action="edit" asp-controller="poster"><i style="font-size: 26px !important;" class="bx bx-edit-alt me-1"></i> </a>*@
+                                            <a asp-route-id="@poster.Id" asp-action="detail" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-info-circle me-1"></i> </a>
+                                            <a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-trash me-1"></i> </a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!--/ Bordered Table -->
+    </div>
+    <!-- / Content -->
+</div>
+
+@section Scripts{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}

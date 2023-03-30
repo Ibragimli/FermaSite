@@ -26,21 +26,16 @@ namespace Ferma.Service.Services.Implementations.User
             return token;
         }
 
-        public string ComputeSha256Hash(string rawData)
+        public string encryptSha256(string randomString)
         {
-            using (SHA256 sha256Hash = SHA256.Create())
+            var crypt = new System.Security.Cryptography.SHA256Managed();
+            var hash = new System.Text.StringBuilder();
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(randomString));
+            foreach (byte theByte in crypto)
             {
-                // ComputeHash - returns byte array  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string   
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+                hash.Append(theByte.ToString("x2"));
             }
+            return hash.ToString();
         }
         public string CodeCreate()
         {
@@ -73,5 +68,7 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
             return authentication;
         }
+
+       
     }
 }

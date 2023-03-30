@@ -10,7 +10,8 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         public string CreateToken();
         public string CodeCreate();
-        public string ComputeSha256Hash(string rawData);
+        public string encryptSha256(string randomString);
+
 
         public Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber);
 

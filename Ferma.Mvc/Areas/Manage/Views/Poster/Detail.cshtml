@@ -1,0 +1,269 @@
+﻿@model AdminPosterEditViewModel
+@{
+    DateTime now = DateTime.UtcNow;
+}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Elan /</span> Edit View</h4>
+
+
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin Poster  Edit Start -->
+                <section style="margin-top: 10px;" id="createPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+                                <h1>Elanı redaktə etmək</h1>
+
+                                <form class="form-control" asp-action="edit" method="post" enctype="multipart/form-data">
+                                    <div class="d-flex justify-content-around">
+                                        <!-- Poster Service Status  Start -->
+                                        <div class="mb-3 mt-2 ">
+                                            @if (Model.Poster.PosterFeatures.ExpirationDateVip > now)
+                                            {
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@Model.Poster.Id">
+                                                    <i style="color: orangered; font-size:22px;" class="fa-brands fa-sketch"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <i style="color: red; font-size: 22px; " class="fa-regular fa-circle-xmark"></i>
+                                            }
+                                            @if (Model.Poster.PosterFeatures.ExpirationDatePremium > now)
+                                            {
+                                                <a asp-action="elan" asp-controller="elanlar" asp-route-id="@Model.Poster.Id">
+                                                    <i style="color: #FF9F2B; font-size: 22px; margin-left: 6px;" class="fa-solid fa-crown"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <i style="color:red; font-size:22px; margin-left:6px;" class="fa-regular fa-circle-xmark"></i>
+                                            }
+
+                                        </div>
+                                        <!-- Poster Service Status   End -->
+                                        <!-- Poster  Status  Start -->
+                                        <div class="mb-3 posterDescribe">
+                                            <label class="form-label">Elan Statusu - </label>
+                                            <span class="badge rounded-pill
+                                            @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Active?"bg-success":"")
+                                            @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting?"bg-warning":"")
+                                            @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Disabled?"bg-danger":"")
+                                            @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.DeActive?"bg-SECONDARY":"")
+
+                                              ">
+
+                                                @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Active?"Aktiv":"")
+                                                @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting?"Gözləmədə":"")
+                                                @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Disabled?"Müddəti bitmiş":"")
+                                                @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.DeActive?"DeAktiv":"")
+                                            </span>
+                                        </div>
+                                        <!-- Poster  Status  End -->
+                                    </div>
+                                    <hr />
+                                    <!-- Poster Kategoriya Start -->
+                                    <div class=" mb-3 posterCategorys">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger" style="color:red;"></div>
+
+                                        <label class="  form-label">Kategoriya*</label>
+                                        <select asp-for="Poster.PosterFeatures.SubCategoryId" asp class="form-select">
+                                            <option disabled selected>Siyahıdan seçin</option>
+                                            @foreach (var category in Model.Categories)
+                                            {
+                                                <optgroup label="@category.Name"> </optgroup>
+                                                @foreach (var subCategory in Model.SubCategories.Where(x => x.CategoryId == category.Id))
+                                                {
+                                                    <option value="@subCategory.Id">@subCategory.Name </option>
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-validation-for="Poster.PosterFeatures.SubCategoryId" class="text-danger"></span>
+                                    </div>
+                                    <!-- Poster Kategoriya End -->
+                                    <!-- Poster Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="Poster.PosterFeatures.Name" class="form-label">Elanın adı*</label>
+                                        <input asp-for="Poster.PosterFeatures.Name" maxlength="100" type="text" class="form-control">
+                                        <span asp-validation-for="Poster.PosterFeatures.Name" class="text-danger"></span>
+                                    </div>
+                                    <!-- Poster Name   End -->
+                                    <!-- Poster Describe  Start -->
+                                    <div class="mb-3 posterDescribe">
+                                        <label class="form-label">Məzmun</label>
+                                        <textarea asp-for="Poster.PosterFeatures.Describe" class="form-control" maxlength="3000" type="text" cols="10"
+                                                  rows="7"></textarea>
+                                        <span asp-validation-for="Poster.PosterFeatures.Describe" class="text-danger"></span>
+                                    </div>
+                                    <!-- Poster Describe End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="poster" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 ms-2">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="disabled" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-danger">Ləğv etmək</a>
+                                        </div>
+                                        @if (Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting)
+                                        {
+                                            <div class="col mb-1 ms-2">
+                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="accept" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-success">Qəbul etmək</a>
+                                            </div>
+                                        }
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Düzənləmək</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                    <hr />
+                                    <!-- Poster City Start -->
+                                    <div class="mb-3 posterCitys">
+                                        <label class="form-label">Şəhər</label>
+                                        <select disabled asp-for="Poster.PosterFeatures.CityId" class="form-select">
+                                            @foreach (var city in Model.Cities)
+                                            {
+                                                <option selected="selected" value="@city.Id">@city.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- Poster City End -->
+                                    <!-- Poster Price  Start -->
+                                    <div class="mb-3 posterPriceBox ">
+                                        <label class="form-label">Qiymət*</label>
+
+                                        <div class="posterPrice">
+                                            <div>
+                                                <input disabled placeholder="0,00" asp-for="Poster.PosterFeatures.Price" title="" min="0" max="9999999" type="text"
+                                                       class="form-control posterPriceInput">
+                                            </div>
+
+                                            <div class="posterPriceCurrency d-flex mt-3">
+                                                <div class="form-check  me-3">
+                                                    <input disabled asp-for="Poster.PosterFeatures.PriceCurrency" class="form-check-input" type="radio"
+                                                           value="false">
+                                                    <label class="form-check-label" for="exampleRadios1">
+                                                        AZN, ₼
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ">
+                                                    <input disabled asp-for="Poster.PosterFeatures.PriceCurrency" class="form-check-input" type="radio"
+                                                           value="true">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                                                        USD, $
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- Poster Price  End -->
+                                    <!-- Poster Shipping and IsNew  Start -->
+                                    <div class="row mb-3">
+                                        @* Çatdirilma *@
+                                        <div class="col-lg-4 col-md-4 col-sm-5 d-flex align-items-center">
+                                            <input disabled style="margin-right:4px; margin-top:0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsShipping" placeholder="...." />
+                                            <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Çatdırılma</span>
+                                        </div>
+                                        @* Çatdirilma *@
+
+                                        @* Yeni-Kohne *@
+                                        <div class="col-lg-4 col-md-4 col-sm-5 d-flex align-items-center">
+                                            <input disabled style="margin-right: 4px; margin-top: 0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsNew" placeholder="...." />
+                                            <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Yeni</span>
+                                        </div>
+                                        @* Yeni-Kohne *@
+                                    </div>
+                                    <!-- Poster Shipping and IsNew  End -->
+                                    <!-- Poster Image  Start -->
+                                    <div class="mb-3 posterImages">
+                                        <label asp-for="Poster.PosterImageFile" class="form-label">Elanın poster Şəkli*</label>
+
+                                        <div>
+                                            <span asp-validation-for="Poster.PosterImageFile" class="text-danger"></span>
+                                        </div>
+                                        <div id="poster-image-box" class="poster-image-box row">
+                                            @foreach (var image in Model.Poster.PosterImages.Where(x => !x.IsDelete && x.IsPoster))
+                                            {
+
+                                                @if (Model.Poster.PosterImages.FirstOrDefault(x => !x.IsDelete) != null)
+
+                                                {
+                                                    <div class="col-lg-3 col-md-4 col-sm-5">
+                                                        <div style="position:relative;" class="image-box">
+                                                            <img style="width:200px; height:160px;" src="~/uploads/poster/@image.Image" />
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <!-- Poster Image End -->
+                                    <!--  Images  Start -->
+                                    <div class="mb-3 posterImages">
+                                        <label asp-for="Poster.ImageFiles" class="form-label">Elanın Şəkillər*</label>
+                                        <!-- Şəkil əlavə et -->
+                                        <div id="poster-image-box" class="poster-image-box row" style="--bs-gutter-x:0rem;">
+                                            @if (Model.Poster.PosterImages.Any(x => !x.IsDelete && !x.IsPoster))
+                                            {
+                                                @foreach (var image in Model.Poster.PosterImages.Where(x => !x.IsDelete && !x.IsPoster))
+                                                {
+                                                    @if (Model.Poster.PosterImages.FirstOrDefault(x => !x.IsDelete) != null)
+
+                                                    {
+                                                        <div class="col-lg-3 col-md-4 col-sm-5 mb-2">
+                                                            <div style="position:relative;" class="image-box">
+                                                                <img style="width:175px; height:160px;" src="~/uploads/poster/@image.Image" />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p style="color:red;">*Şəkil hissəsi boşdur</p>
+                                            }
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <!--  Images End -->
+                                    <!-- Poster username  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="AppUser.Name" class="form-label">İstifadəçinin adı</label>
+                                        <input disabled asp-for="AppUser.Name" maxlength="100" type="text" class="form-control">
+                                    </div>
+                                    <!-- Poster username   End -->
+                                    <!-- Poster user phonenumber  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="AppUser.PhoneNumber" class="form-label">İstifadəçinin nömrəsi</label>
+                                        <input disabled asp-for="AppUser.PhoneNumber" maxlength="100" type="text" class="form-control">
+                                    </div>
+                                    <!-- Poster user phonenumber   End -->
+                                    <!-- Poster user phoneemail  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="AppUser.Email" class="form-label">İstifadəçinin nömrəsi</label>
+                                        <input disabled asp-for="AppUser.Email" maxlength="100" type="text" class="form-control">
+                                    </div>
+                                    <!-- Poster user phoneemail   End -->
+
+
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin Poster  Edit  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+@section Scripts{
+}

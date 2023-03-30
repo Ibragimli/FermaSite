@@ -162,14 +162,19 @@ namespace Ferma.Mvc.Controllers
                 var authentication = await _loginServices.LoginAuthentication(code, phoneNumber, token);
                 await _loginServices.UserLogin(phoneNumber, code, authentication);
             }
-            catch (AuthenticationCodeException ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View(authenticationViewModel);
-            }
             catch (NotFoundException)
             {
                 return RedirectToAction("index", "notfound");
+            }
+            catch (ExpirationDateException ex)
+            {
+                ModelState.AddModelError("Code", ex.Message);
+                return View(authenticationViewModel);
+            }
+            catch (AuthenticationCodeException ex)
+            {
+                ModelState.AddModelError("Code", ex.Message);
+                return View(authenticationViewModel);
             }
             catch (Exception)
             {

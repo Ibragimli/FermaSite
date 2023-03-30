@@ -29,19 +29,27 @@ namespace Ferma.Service.Services.Implementations.User
 
         public async Task<UserAuthentication> LoginAuthentication(string code, string phoneNumber, string token)
         {
+            var now = DateTime.UtcNow.AddHours(4).TimeOfDay;
             var authentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Code == code && x.Token == token);
             var existAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Token == token);
+            if (existAuthentication == null)
+                throw new ExpirationDateException("Kodun müddəti bitmişdir! Təkrar giriş edin");
+            if (existAuthentication.ExpirationDate.TimeOfDay < now)
+            {
+                existAuthentication.IsDisabled = true;
+                await _unitOfWork.CommitAsync();
+                throw new ExpirationDateException("Kodun müddəti bitmişdir! Təkrar giriş edin");
+            }
+
             if (authentication == null)
             {
                 if (existAuthentication != null)
                 {
                     if (existAuthentication.Count > 1)
                         existAuthentication.Count -= 1;
-
                     else
                     {
                         existAuthentication.IsDisabled = true;
-
                     }
                     await _unitOfWork.CommitAsync();
                 }
@@ -73,6 +81,10 @@ namespace Ferma.Service.Services.Implementations.User
 
         public async Task UserLogin(string phoneNumber, string code, UserAuthentication authentication)
         {
+            var now = DateTime.UtcNow.AddHours(4).TimeOfDay;
+            if (authentication.ExpirationDate.TimeOfDay < now)
+                throw new ExpirationDateException("Kodun müddəti bitmişdir! Təkrar giriş edin");
+
             var UserExists = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == phoneNumber && x.IsAdmin == false);
             if (UserExists == null)
                 throw new NotFoundException("NotFound");

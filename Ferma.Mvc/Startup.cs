@@ -9,8 +9,10 @@ using Ferma.Service.Dtos.User;
 using Ferma.Service.HelperService.Implementations;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Implementations;
+using Ferma.Service.Services.Implementations.Area;
 using Ferma.Service.Services.Implementations.User;
 using Ferma.Service.Services.Interfaces;
+using Ferma.Service.Services.Interfaces.Area;
 using Ferma.Service.Services.Interfaces.User;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -93,6 +95,9 @@ namespace Ferma.Mvc
             services.AddScoped<IContactUsServices, ContactUsServices>();
             services.AddScoped<IUserPostersServices, UserPostersServices>();
             services.AddScoped<IPosterDetailIndexServices, PosterDetailIndexServices>();
+            services.AddScoped<IAdminLoginServices, AdminLoginServices>();
+            services.AddScoped<IAdminPosterEditServices, AdminPosterEditServices>();
+            services.AddScoped<IAdminPosterIndexServices, AdminPosterIndexServices>();
 
 
             //services.AddScoped<IUrlHelper>();

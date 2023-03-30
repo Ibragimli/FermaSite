@@ -173,11 +173,30 @@ namespace Ferma.Service.Services.Implementations.User
 
 
 
-       
+
         public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token, List<string> images)
         {
+            var now = DateTime.UtcNow.AddHours(4).TimeOfDay;
+
             var authentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Code == code && x.Token == token && x.PhoneNumber == phoneNumber);
             var existAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAsync(x => x.IsDisabled == false && x.Token == token);
+            if (existAuthentication == null)
+                throw new ExpirationDateException("Kodun müddəti bitmişdir! Təkrar giriş edin");
+
+            if (existAuthentication.ExpirationDate.TimeOfDay < now)
+            {
+                foreach (var image in images)
+                {
+                    _manageImageHelper.DeleteFile(image, "poster");
+                }
+                existAuthentication.IsDisabled = true;
+                _contextAccessor.HttpContext.Response.Cookies.Delete("posterVM");
+                _contextAccessor.HttpContext.Response.Cookies.Delete("posterImageFiles");
+                await _unitOfWork.CommitAsync();
+                throw new ExpirationDateException("Kodun müddəti bitmişdir! Təkrar giriş edin");
+
+            }
+
             //Kod dogrulugunun yoxlanilmasi, təkrar yoxlama limiti
             if (authentication == null)
             {
@@ -294,6 +313,6 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
         }
 
-      
+
     }
 }

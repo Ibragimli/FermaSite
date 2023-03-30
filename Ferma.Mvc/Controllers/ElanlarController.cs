@@ -381,10 +381,25 @@ namespace Ferma.Mvc.Controllers
                 await _createServices.ChangeAuthenticationStatus(authentication);
 
             }
-            catch (Exception ex)
+            catch (ExpirationDateException ex)
+            {
+                ModelState.AddModelError("Code", ex.Message);
+                return View(authenticationViewModel);
+            }
+            catch (AuthenticationCodeException ex)
+            {
+                ModelState.AddModelError("Code", ex.Message);
+                return View(authenticationViewModel);
+            }
+            catch (CookieNotActiveException ex)
+            {
+                ModelState.AddModelError("Code", ex.Message);
+                return View(authenticationViewModel);
+            }
+            catch (Exception)
             {
 
-                ModelState.AddModelError("code", ex.Message);
+                ModelState.AddModelError("code", "Error");
                 //TempData["Error"] = ("Proses uğursuz oldu!");
                 return View(authenticationViewModel);
             }

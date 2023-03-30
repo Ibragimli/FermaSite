@@ -152,7 +152,7 @@
                                     @if (Model.Poster.PosterImages.FirstOrDefault(x => !x.IsDelete) != null)
 
                                     {
-                                        <div class="col-3">
+                                        <div class="col-lg-3 col-md-4 col-sm-5">
                                             <div style="position:relative;" class="image-box">
                                                 <input type="hidden" name="Poster.PosterImagesIds[]" value="@image.Id" />
                                                 <img style="width:200px; height:160px;" src="~/uploads/poster/@image.Image" />

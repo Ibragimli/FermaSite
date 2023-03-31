@@ -96,8 +96,10 @@ namespace Ferma.Mvc
             services.AddScoped<IUserPostersServices, UserPostersServices>();
             services.AddScoped<IPosterDetailIndexServices, PosterDetailIndexServices>();
             services.AddScoped<IAdminLoginServices, AdminLoginServices>();
-            services.AddScoped<IAdminPosterEditServices, AdminPosterEditServices>();
+            services.AddScoped<IAdminPosterDetailIndexServices, AdminPosterDetailIndexServices>();
             services.AddScoped<IAdminPosterIndexServices, AdminPosterIndexServices>();
+            services.AddScoped<IAdminPosterEditServices, AdminPosterEditServices>();
+            
 
 
             //services.AddScoped<IUrlHelper>();

@@ -34,6 +34,9 @@ namespace Ferma.Service.Services.Implementations.User
 
             if (poster == null)
                 throw new ItemNotFoundException("Elan tapılmadı");
+            if (poster.PosterFeatures.PosterStatus != PosterStatus.Active)
+                throw new ItemFormatException("Xəta baş verdi");
+
             poster.PosterFeatures.PosterStatus = PosterStatus.DeActive;
             poster.PosterFeatures.IsPremium = false;
             poster.PosterFeatures.IsVip = false;
@@ -52,6 +55,8 @@ namespace Ferma.Service.Services.Implementations.User
                 throw new ItemNotFoundException("Elan tapılmadı");
             if (poster.PosterFeatures.ExpirationEndDate < now)
                 throw new ExpirationDateException("Elanın müddəti bitmişdir");
+            if (poster.PosterFeatures.PosterStatus != PosterStatus.DeActive)
+                throw new ItemFormatException("Xəta baş verdi");
 
             poster.PosterFeatures.PosterStatus = PosterStatus.Active;
             poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(30);
@@ -116,9 +121,13 @@ namespace Ferma.Service.Services.Implementations.User
                 checkBool = true;
             if (await CreateImageFormFile(poster.ImageFiles, poster.Id, deleteCount) == 1)
                 checkBool = true;
-
+           
             if (checkBool)
+            {
+                oldPoster.ModifiedDate = DateTime.UtcNow.AddHours(4);
+                oldPoster.PosterFeatures.PosterStatus = PosterStatus.Waiting;
                 await _unitOfWork.CommitAsync();
+            }
 
 
         }

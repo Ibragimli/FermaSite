@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Service.Dtos.Area;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,11 +9,10 @@ namespace Ferma.Service.Services.Interfaces.Area
 {
     public interface IAdminPosterEditServices
     {
-        public Task<Poster> GetPoster(int id);
-        public Task<List<SubCategory>> GetSubCategories();
-        public Task<List<Category>> GetCategories();
-        public Task<List<City>> GetAllCity();
-        public Task<PosterUserId> GetAppUser(int posterId);
+        public void CheckPostEdit(Poster poster);
+        public Task EditPoster(Poster poster);
+        public Task PosterActive(int id);
+        public Task PosterDisabled(int id);
 
     }
 }

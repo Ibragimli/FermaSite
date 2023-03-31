@@ -222,6 +222,13 @@ namespace Ferma.Mvc.Controllers
 
                 return RedirectToAction("edit", editVM);
             }
+            catch (ItemFormatException msg)
+            {
+                ModelState.AddModelError("", msg.Message);
+                TempData["Error"] = (msg.Message);
+
+                return RedirectToAction("edit", editVM);
+            }
             catch (ImageNullException msg)
             {
                 ModelState.AddModelError("ImageFiles", msg.Message);

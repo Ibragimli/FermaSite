@@ -1,10 +1,11 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.CustomExceptions;
+using Ferma.Service.Dtos.Area;
 using Ferma.Service.Services.Interfaces.Area;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,42 +19,65 @@ namespace Ferma.Service.Services.Implementations.Area
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Poster> GetPoster(int id)
+        public void CheckPostEdit(Poster poster)
         {
-            var poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id, "PosterFeatures.SubCategory", "PosterFeatures.SubCategory.Category", "PosterFeatures.City", "PosterImages");
+            if (poster.Id == 0)
+                throw new NotFoundException("Error");
+            if (poster.PosterFeatures.SubCategoryId == 0)
+                throw new ItemNullException("Kategoriya hissəsi boş ola bilməz");
+            if (poster.PosterFeatures.Name == null)
+                throw new ItemNullException("Elanın ad hissəsi boş ola bilməz");
+            if (poster.PosterFeatures.Describe == null)
+                throw new ItemNullException("Təsvir hissəsi boş ola bilməz");
+            if (poster.PosterFeatures.Name.Length > 100)
+                throw new ItemNullException("Elanın ad hissəsinin uzunluğu  maksimum 100  ola bilər");
+            if (poster.PosterFeatures.Describe.Length > 3000)
+                throw new ItemNullException("Elanın ad hissəsinin uzunluğu  maksimum 3000  ola bilər");
+
+        }
+
+        public async Task EditPoster(Poster poster)
+        {
+            var oldPoster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == poster.Id, "PosterFeatures");
+            if (oldPoster == null)
+                throw new NotFoundException("Error");
+
+            oldPoster.PosterFeatures.Name = poster.PosterFeatures.Name;
+            oldPoster.PosterFeatures.Describe = poster.PosterFeatures.Describe;
+            oldPoster.PosterFeatures.SubCategoryId = poster.PosterFeatures.SubCategoryId;
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task PosterDisabled(int id)
+        {
+            Poster poster = new Poster();
+            if (id != 0)
+                poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id);
+
+            var time = new DateTime(0001, 01, 01, 8, 36, 44);
+
             if (poster == null)
-                throw new NotFoundException("Error");
-            return poster;
+                throw new ItemNotFoundException("Elan tapılmadı");
+            poster.PosterFeatures.PosterStatus = PosterStatus.Disabled;
+            poster.PosterFeatures.IsPremium = false;
+            poster.PosterFeatures.IsVip = false;
+            poster.PosterFeatures.ExpirationDatePremium = time;
+            poster.PosterFeatures.ExpirationDateVip = time;
+            await _unitOfWork.CommitAsync();
+        }
+        public async Task PosterActive(int id)
+        {
+            Poster poster = new Poster();
+            DateTime now = DateTime.UtcNow;
+            if (id != 0)
+                poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id);
+
+            if (poster == null)
+                throw new ItemNotFoundException("Elan tapılmadı");
+
+            poster.PosterFeatures.PosterStatus = PosterStatus.Active;
+            poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(30);
+            await _unitOfWork.CommitAsync();
         }
 
-        public async Task<List<SubCategory>> GetSubCategories()
-        {
-            var subCategories = await _unitOfWork.SubCategoryRepository.GetAllAsync(x => !x.IsDelete);
-            if (subCategories == null)
-                throw new NotFoundException("Error");
-            return subCategories.ToList();
-        }
-        public async Task<List<Category>> GetCategories()
-        {
-            var subCategories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
-            if (subCategories == null)
-                throw new NotFoundException("Error");
-            return subCategories.ToList();
-        }
-        public async Task<PosterUserId> GetAppUser(int posterId)
-        {
-            var user = await _unitOfWork.PosterUserIdRepository.GetAsync(x => !x.IsDelete && x.PosterId == posterId,"AppUser");
-            if (user == null)
-                throw new NotFoundException("Error");
-            return user;
-        }
-
-        public async Task<List<City>> GetAllCity()
-        {
-            var cities = await _unitOfWork.CityRepository.GetAllAsync(x => !x.IsDelete);
-            if (cities == null)
-                throw new NotFoundException("Error");
-            return cities.ToList();
-        }
     }
 }

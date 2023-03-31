@@ -7,8 +7,6 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Elan /</span> Edit View</h4>
-
-
         <div class="card">
             <div class="card-body">
                 <!-- Admin Poster  Edit Start -->
@@ -18,7 +16,7 @@
                             <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
                                 <h1>Elanı redaktə etmək</h1>
 
-                                <form class="form-control" asp-action="edit" method="post" enctype="multipart/form-data">
+                                <form class="form-control" asp-action="edit" asp-controller="poster" method="post" enctype="multipart/form-data">
                                     <div class="d-flex justify-content-around">
                                         <!-- Poster Service Status  Start -->
                                         <div class="mb-3 mt-2 ">
@@ -46,7 +44,7 @@
                                         </div>
                                         <!-- Poster Service Status   End -->
                                         <!-- Poster  Status  Start -->
-                                        <div class="mb-3 posterDescribe">
+                                        <div class="mb-3 mt-2 posterDescribe">
                                             <label class="form-label">Elan Statusu - </label>
                                             <span class="badge rounded-pill
                                             @(Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Active?"bg-success":"")
@@ -65,12 +63,12 @@
                                         <!-- Poster  Status  End -->
                                     </div>
                                     <hr />
+                                    <input type="hidden" asp-for="Poster.Id" value="@Model.Poster.Id" />
                                     <!-- Poster Kategoriya Start -->
                                     <div class=" mb-3 posterCategorys">
                                         <div asp-validation-summary="ModelOnly" class="text-danger" style="color:red;"></div>
-
                                         <label class="  form-label">Kategoriya*</label>
-                                        <select asp-for="Poster.PosterFeatures.SubCategoryId" asp class="form-select">
+                                        <select asp-for="Poster.PosterFeatures.SubCategoryId " class="form-select">
                                             <option disabled selected>Siyahıdan seçin</option>
                                             @foreach (var category in Model.Categories)
                                             {
@@ -104,13 +102,16 @@
                                         <div class="col mb-1">
                                             <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="poster" class="btn  btn-dark">Geri dön</a>
                                         </div>
-                                        <div class="col mb-1 ms-2">
-                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="disabled" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-danger">Ləğv etmək</a>
-                                        </div>
-                                        @if (Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting)
+                                        @if (Model.Poster.PosterFeatures.PosterStatus != PosterStatus.Disabled)
                                         {
                                             <div class="col mb-1 ms-2">
-                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="accept" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-success">Qəbul etmək</a>
+                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posterdisabled" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-danger disabled-btn">Ləğv etmək</a>
+                                            </div>
+                                        }
+                                        @if (Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting || Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Disabled)
+                                        {
+                                            <div class="col mb-1 ms-2">
+                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posteraccept" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-success disabled-btn">Qəbul etmək</a>
                                             </div>
                                         }
                                         <div class="col mb-1 posterButton ms-2 ">
@@ -118,7 +119,11 @@
                                         </div>
                                     </div>
                                     <!-- Button  Start -->
-                                    <hr />
+                                </form>
+
+                                <hr />
+                                @*disabled inputs*@
+                                <div style=" display: block; width: 100%; padding: 0.4375rem 0.875rem; font-size: 0.9375rem; font-weight: 400; line-height: 1.53; color: #697a8d; background-color: #fff; background-clip: padding-box; border: 1px solid #d9dee3; -webkit-appearance: none; -moz-appearance: none;  border-radius: 0.375rem; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; ">
                                     <!-- Poster City Start -->
                                     <div class="mb-3 posterCitys">
                                         <label class="form-label">Şəhər</label>
@@ -230,27 +235,28 @@
                                     </div>
                                     <hr />
                                     <!--  Images End -->
-                                    <!-- Poster username  Start -->
+                                    <!-- Poster Username  Start -->
                                     <div class="mb-3 posterName">
                                         <label asp-for="AppUser.Name" class="form-label">İstifadəçinin adı</label>
                                         <input disabled asp-for="AppUser.Name" maxlength="100" type="text" class="form-control">
                                     </div>
-                                    <!-- Poster username   End -->
-                                    <!-- Poster user phonenumber  Start -->
+                                    <!-- Poster Username   End -->
+                                    <!-- Poster User PhoneNumber  Start -->
                                     <div class="mb-3 posterName">
                                         <label asp-for="AppUser.PhoneNumber" class="form-label">İstifadəçinin nömrəsi</label>
                                         <input disabled asp-for="AppUser.PhoneNumber" maxlength="100" type="text" class="form-control">
                                     </div>
-                                    <!-- Poster user phonenumber   End -->
-                                    <!-- Poster user phoneemail  Start -->
+                                    <!-- Poster User PhoneNumber   End -->
+                                    <!-- Poster User Email  Start -->
                                     <div class="mb-3 posterName">
                                         <label asp-for="AppUser.Email" class="form-label">İstifadəçinin nömrəsi</label>
                                         <input disabled asp-for="AppUser.Email" maxlength="100" type="text" class="form-control">
                                     </div>
-                                    <!-- Poster user phoneemail   End -->
+                                    <!-- Poster User Email   End -->
 
+                                </div>
+                                @*disabled inputs*@
 
-                                </form>
                             </div>
 
                         </div>
@@ -265,5 +271,11 @@
 </div>
 
 
+
 @section Scripts{
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/assets/js/SweetAlert.js"></script>
 }

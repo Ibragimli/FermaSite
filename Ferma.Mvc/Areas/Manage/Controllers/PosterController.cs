@@ -27,13 +27,30 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             _adminPosterDetailServices = adminPosterDetailServices;
             _adminPosterEditServices = adminPosterEditServices;
         }
-        public IActionResult Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, string name = null, string phoneNumber = null, int subCategoryId = 0)
         {
-            var poster = _posterIndexServices.GetPoster();
-            PosterIndexViewModel posterVM = new PosterIndexViewModel
+            PosterIndexViewModel posterVM = new PosterIndexViewModel();
+            try
             {
-                Posters = PagenetedList<Poster>.Create(poster, page, 10)
-            };
+                var poster = _posterIndexServices.GetPoster(name, phoneNumber, subCategoryId);
+                posterVM = new PosterIndexViewModel
+                {
+                    Posters = PagenetedList<Poster>.Create(poster, page, 10),
+                    Categories = await _adminPosterDetailServices.GetCategories(),
+                    SubCategories = await _adminPosterDetailServices.GetSubCategories(),
+                };
+            }
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            ViewBag.SubCategoryId = subCategoryId;
+            ViewBag.PhoneNumber = phoneNumber;
+            ViewBag.Name = name;
             return View(posterVM);
         }
         public async Task<IActionResult> Detail(int id)

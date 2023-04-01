@@ -99,7 +99,12 @@ namespace Ferma.Mvc
             services.AddScoped<IAdminPosterDetailIndexServices, AdminPosterDetailIndexServices>();
             services.AddScoped<IAdminPosterIndexServices, AdminPosterIndexServices>();
             services.AddScoped<IAdminPosterEditServices, AdminPosterEditServices>();
-            
+            services.AddScoped<IBalancePaymentIndexServices, BalancePaymentIndexServices>();
+            services.AddScoped<IPosterPaymentIndexServices, PosterPaymentIndexServices>();
+            services.AddScoped<IAdminCategoryServices, AdminCategoryServices>();
+            services.AddScoped<IAdminSubCategoryServices, AdminSubCategoryServices>();
+            services.AddScoped<IAdminCityServices, AdminCityServices>();
+            services.AddScoped<IAdminServiceDurationServices, AdminServiceDurationServices>();
 
 
             //services.AddScoped<IUrlHelper>();

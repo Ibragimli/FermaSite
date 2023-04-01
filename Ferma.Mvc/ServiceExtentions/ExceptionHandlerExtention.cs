@@ -54,6 +54,8 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 404;
                         if (contextFeature.Error is ExpirationDateException)
                             code = 400;
+                        if (contextFeature.Error is ItemUseException)
+                            code = 500;
 
                     }
 

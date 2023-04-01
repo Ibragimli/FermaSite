@@ -1,0 +1,85 @@
+﻿@model ServiceDurationViewModel
+@{
+    DateTime now = DateTime.UtcNow;
+}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Servis ayarları /</span> Yaratmaq</h4>
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin ServiceDuration  Create Start -->
+                <section style="margin-top: 10px;" id="createPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+                                <h1>Elanı redaktə etmək</h1>
+
+                                <form class="form-control" asp-action="create" asp-controller="ServiceDuration" method="post">
+                                    <!-- ServiceDuration duration  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="ServiceDuration.Duration" class="form-label">Müddət*</label>
+                                        <input asp-for="ServiceDuration.Duration" type="number" class="form-control">
+                                        <span asp-validation-for="ServiceDuration.Duration" class="text-danger"></span>
+                                    </div>
+                                    <!-- ServiceDuration duration   End -->
+                                    <!-- ServiceDuration Amount  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="ServiceDuration.Amount" class="form-label">Müddət*</label>
+                                        <input asp-for="ServiceDuration.Amount" type="number" class="form-control">
+                                        <span asp-validation-for="ServiceDuration.Amount" class="text-danger"></span>
+                                    </div>
+                                    <!-- ServiceDuration Amount   End -->
+                                    <!-- ServiceDuration Service   Start -->
+                                    <div class="mb-3 posterName">
+                                        <div class="posterPriceCurrency">
+                                            <div class="form-check ">
+                                                <input asp-for="ServiceDuration.ServiceType" class="form-check-input" type="radio"
+                                                       value="@ServiceType.Vip">
+                                                <label class="form-check-label">
+                                                    VIP
+                                                </label>
+                                            </div>
+                                            <div class="form-check ">
+                                                <input asp-for="ServiceDuration.ServiceType" class="form-check-input" type="radio"
+                                                       value="@ServiceType.Premium">
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                    Premium
+                                                </label>
+                                            </div>
+                                            <span asp-validation-for="ServiceDuration.ServiceType" class="text-danger"></span>
+                                        </div>
+                                    </div>>
+
+                                    <!-- ServiceDuration Service   End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="ServiceDuration" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Yaratmaq</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin ServiceDuration  Create  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+
+@section Scripts{
+
+}

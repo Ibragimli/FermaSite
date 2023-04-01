@@ -1,0 +1,84 @@
+﻿@model Category
+@{
+    DateTime now = DateTime.UtcNow;
+}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Elan /</span> Edit View</h4>
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin Category  Edit Start -->
+                <section style="margin-top: 10px;" id="createPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+                                <h1>Elanı redaktə etmək</h1>
+
+                                <form class="form-control" asp-action="edit" asp-controller="category" method="post" enctype="multipart/form-data">
+
+                                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+                                    <!-- Category Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="Name" class="form-label">Elanın adı*</label>
+                                        <input asp-for="Name" maxlength="50" type="text" class="form-control">
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <!-- Category Name   End -->
+                                    <!-- Category Image  Start -->
+                                    <div class="mb-3 posterImages">
+                                        <label asp-for="CategoryImageFile" class="form-label">Elanın poster Şəkli*</label>
+                                        <p id="imageCategoryErrorMessage" class="fw-bold "></p>
+
+                                        <div>
+                                            <input id="imageInputCategory" asp-for="CategoryImageFile" type="file" accept="image/png,  image/jpeg"
+                                                   class="form-control">
+                                            <span asp-validation-for="Image" class="text-danger"></span>
+                                        </div>
+                                        <div id="poster-image-box" class="poster-image-box row">
+                                            @if (Model.Image != null)
+                                            {
+                                                <div class="col-lg-3 col-md-4 col-sm-5">
+                                                    <div style="position:relative;" class="image-box">
+                                                        <img style="width:200px; height:160px;" src="~/uploads/category/@Model.Image" />
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="row" id="tempImage"></div>
+
+                                    </div>
+                                    <!-- Category Image End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="category" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Düzənləmək</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin Category  Edit  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+
+@section Scripts{
+    @*<script src="~/assets/js/CategoryImage.js"></script>*@
+
+}

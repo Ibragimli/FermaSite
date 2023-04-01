@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    DateTime now = DateTime.UtcNow;
+
+}
+@model CityViewModel
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Şəhərlər </span></h4>
+        <!-- Bordered Table -->
+        <div class="card">
+            <div class="card-body">
+                @* Pagination *@
+                <div class="row">
+                    <form asp-action="index" asp-controller="city" asp-route-page="@ViewBag.Page" class="row d-flex">
+                        <div class="d-flex align-items-center col-lg-3 col-md-4 col-sm-6 mb-2">
+                            <input name="name" class="form-control me-2" type="search" placeholder="Kategoriya" aria-label="Kategoriya">
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                            <button class="btn btn-outline-primary" type="submit">Axtarış</button>
+                        </div>
+                    </form>
+                    <div class="d-flex align-items-center col-9 mt-2" style="display:flex; justify-content:flex-end;">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                @if (Model.Cities.HasPrev)
+                                {
+
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="city" asp-route-page="@(Model.Cities.PageIndex-1)" asp-route-name="@(ViewBag.CityName)" class="page-link" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.Cities.TotalPages; i++)
+                                {
+                                    <li aria-current="page" class="page-item" @(Model.Cities.PageIndex == i ? "active" : "" )>
+                                        <a asp-action="index" asp-controller="city" asp-route-page="@i" asp-route-name="@(ViewBag.CityName)" class="page-link">@i</a>
+                                    </li>
+                                }
+                                @if (Model.Cities.HasNext)
+                                {
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="city" asp-route-page="@(Model.Cities.PageIndex+1)" asp-route-name="@(ViewBag.CityName)" class="page-link" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center col-3">
+                        <a style="font-size: 30px;" asp-action="create" asp-controller="city"> <i class="fa-solid fa-plus"></i> </a>
+                    </div>
+                </div>
+                <br />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <br />
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Şəhər adı</th>
+                                <th>Son dəyişiklik tarixi</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var city in Model.Cities)
+                            {
+                                <tr>
+                                    <td class="text-center">@city.Name </td>
+                                    <td class="text-center">@city.ModifiedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td class="text-center">
+                                        <a asp-route-id="@city.Id" asp-action="edit" asp-controller="city"><i style="font-size:26px !important;" class="bx bx-edit me-1"></i> </a>
+                                        <a class="delete-btn" asp-controller="city" asp-action="Delete" asp-route-id="@city.Id"><i style="font-size:26px !important; color:red;" class="bx bx-trash me-1 "></i> </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--/ Bordered Table -->
+    </div>
+    <!-- / Content -->
+</div>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/assets/js/SweetAlertItem.js"></script>
+}

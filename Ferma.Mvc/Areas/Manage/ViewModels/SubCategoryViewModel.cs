@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Ferma.Mvc.Areas.Manage.ViewModels
 {
-    public class PosterIndexViewModel
+    public class SubCategoryViewModel
     {
-        public PagenetedList<Poster> Posters { get; set; }
+        public PagenetedList<SubCategory> SubCategories { get; set; }
         public List<Category> Categories { get; set; }
-        public List<SubCategory> SubCategories { get; set; }
+        public SubCategory SubCategory { get; set; }
     }
 }

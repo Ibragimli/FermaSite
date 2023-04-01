@@ -1,10 +1,14 @@
 ﻿using Ferma.Core.Entites;
 using Ferma.Core.IUnitOfWork;
+using Ferma.Service.CustomExceptions;
+using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces.Area;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Implementations.Area
 {
@@ -16,11 +20,34 @@ namespace Ferma.Service.Services.Implementations.Area
         {
             _unitOfWork = unitOfWork;
         }
-        public IQueryable<Poster> GetPoster()
+        public IQueryable<Poster> GetPoster(string name, string phoneNumber, int subCategoryId)
         {
             var poster = _unitOfWork.PosterRepository.asQueryablePoster();
             poster = poster.Where(x => !x.IsDelete);
+            if (subCategoryId != 0)
+                poster = poster.Where(x => x.PosterFeatures.SubCategoryId == subCategoryId);
+            if (name != null)
+                poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.Name, $"%{name}%"));
+            if (phoneNumber != null)
+                poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.PhoneNumber, $"%{phoneNumber}%"));
+
             return poster;
         }
+        public async Task<List<SubCategory>> GetSubCategories()
+        {
+            var subCategories = await _unitOfWork.SubCategoryRepository.GetAllAsync(x => !x.IsDelete);
+            if (subCategories == null)
+                throw new NotFoundException("Error");
+            return subCategories.ToList();
+        }
+        public async Task<List<Category>> GetCategories()
+        {
+            var subCategories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
+            if (subCategories == null)
+                throw new NotFoundException("Error");
+            return subCategories.ToList();
+        }
+
+      
     }
 }

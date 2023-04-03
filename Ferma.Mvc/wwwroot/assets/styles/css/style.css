@@ -6,6 +6,12 @@ body .validation-summary-errors ul li {
     font-weight: 600;
 }
 
+body .userTermPBox p {
+    margin-bottom: 0.7px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
 body main #categorySlider {
     padding: 25px 0px;
     margin-top: 80px

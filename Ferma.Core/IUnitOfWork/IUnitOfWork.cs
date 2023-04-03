@@ -23,7 +23,7 @@ namespace Ferma.Core.IUnitOfWork
         IUserAuthenticationRepository UserAuthenticationRepository { get; }
         IServiceDurationRepository ServiceDurationRepository { get; }
         IPaymentRepository PaymentRepository { get; }
-
+        IUserTermRepository UserTermRepository { get;  }
         Task<int> CommitAsync();
 
     }

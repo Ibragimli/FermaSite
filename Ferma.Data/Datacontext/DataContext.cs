@@ -27,6 +27,7 @@ namespace Ferma.Data.Datacontext
         public DbSet<UserAuthentication> UserAuthentications { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<ServiceDuration> ServiceDurations { get; set; }
+        public DbSet<UserTerm> UserTerms { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

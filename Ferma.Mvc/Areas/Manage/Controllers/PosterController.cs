@@ -18,12 +18,14 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
     public class PosterController : Controller
     {
         private readonly IAdminPosterIndexServices _posterIndexServices;
+        private readonly IPosterDeleteServices _posterDeleteServices;
         private readonly IAdminPosterDetailIndexServices _adminPosterDetailServices;
         private readonly IAdminPosterEditServices _adminPosterEditServices;
 
-        public PosterController(IAdminPosterIndexServices posterIndexServices, IAdminPosterEditServices adminPosterEditServices, IAdminPosterDetailIndexServices adminPosterDetailServices)
+        public PosterController(IAdminPosterIndexServices posterIndexServices, IPosterDeleteServices posterDeleteServices, IAdminPosterEditServices adminPosterEditServices, IAdminPosterDetailIndexServices adminPosterDetailServices)
         {
             _posterIndexServices = posterIndexServices;
+            _posterDeleteServices = posterDeleteServices;
             _adminPosterDetailServices = adminPosterDetailServices;
             _adminPosterEditServices = adminPosterEditServices;
         }
@@ -38,12 +40,15 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                     Posters = PagenetedList<Poster>.Create(poster, page, 10),
                     Categories = await _adminPosterDetailServices.GetCategories(),
                     SubCategories = await _adminPosterDetailServices.GetSubCategories(),
+                    PosterDeleteModal = new PosterDeleteModal(),
+
                 };
             }
             catch (NotFoundException)
             {
                 return RedirectToAction("index", "notfound");
             }
+
             catch (Exception)
             {
                 return RedirectToAction("index", "notfound");
@@ -166,7 +171,29 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             TempData["Success"] = ("Proses uğurlu oldu");
             return View("Detail", posterVM);
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var posterVM = new AdminPosterEditViewModel();
 
+            try
+            {
+                posterVM = await _detailVM(id);
+                await _posterDeleteServices.DeletePoster(id);
+
+            }
+            catch (ItemNotFoundException ex)
+            {
+                TempData["Success"] = (ex.Message);
+                return Ok(posterVM);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+                //return RedirectToAction("index", "notfound");
+            }
+            TempData["Success"] = ("Elan silindi!");
+            return Ok(posterVM);
+        }
 
         private async Task<AdminPosterEditViewModel> _detailVM(int id)
         {

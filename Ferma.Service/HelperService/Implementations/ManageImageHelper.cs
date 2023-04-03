@@ -23,10 +23,10 @@ namespace Ferma.Service.HelperService.Implementations
         public void PosterCheck(IFormFile PosterImageFile)
         {
             if (PosterImageFile.ContentType != _key.ValueStr("ImageType1") && PosterImageFile.ContentType != _key.ValueStr("ImageType2"))
-                throw new ImageFormatException("Poster şekli yalnız (png ve ya jpg) type-ında ola biler");
+                throw new ImageFormatException("Şəkil yalnız (png ve ya jpg) type-ında ola bilər");
 
             if (PosterImageFile.Length > _key.ValueInt("ImageSize") * 1048576)
-                throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
+                throw new ImageFormatException("Şəklin max yaddaşı" + _key.ValueInt("ImageSize") + "MB ola bilər!");
         }
         public void ImagesCheck(List<IFormFile> Images)
         {
@@ -35,11 +35,11 @@ namespace Ferma.Service.HelperService.Implementations
 
             foreach (var image in Images)
             {
-                
+
                 if (image.ContentType != _key.ValueStr("ImageType1") && image.ContentType != _key.ValueStr("ImageType2"))
-                    throw new ImageFormatException("Poster şekli yalnız (png ve ya jpeg) type-ında ola biler");
+                    throw new ImageFormatException("Şəkil yalnız (png ve ya jpeg) type-ında ola bilər");
                 if (image.Length > _key.ValueInt("ImageSize") * 1048576)
-                    throw new ImageFormatException("Poster şeklinin max yaddaşı 2MB ola biler!");
+                    throw new ImageFormatException("Şəklin max yaddaşı " + _key.ValueInt("ImageSize") + "MB ola bilər!");
             }
         }
         public string FileSave(IFormFile Image, string folderName)

@@ -1,0 +1,43 @@
+﻿@model ContactUsReplyViewDto
+@{
+}
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">ContactUs /</span> Reply ContactUs</h4>
+        <!-- Bordered Table -->
+        <div class="card">
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <br />
+                <div class="contact-form bg-light p-30">
+                    <div id="success"></div>
+                    <form asp-action="replyContactUs" method="post">
+
+                        @*<div class="control-group mb-3">
+                                <input oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')" asp-for="ContactUs.FullName" type="text" class="form-control" placeholder="Adı" required="required" />
+                                <span asp-validation-for="ContactUs.FullName" class="help-block text-danger"></span>
+                            </div>*@
+
+                        <h3>Ad Soyad : @Model.Fullname</h3>
+                        <input type="hidden" asp-for="ContactUsId" value="@Model.ContactUsId" />
+                        <div class="control-group  mb-3">
+                            <div class="col-8">
+                                <textarea oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')" asp-for="@Model.ReplyContactPostDto.ReplyText" class="form-control" rows="8" placeholder="Cavabınız" required="required"></textarea>
+                                <span asp-validation-for="ReplyContactPostDto.ReplyText" class="help-block text-danger"></span>
+                            </div>
+                        </div>
+                        <div><button class="btn btn-primary py-2 px-4" type="submit">Göndər </button></div>
+                        <a asp-action="index" asp-controller="contactus" class="btn btn-outline-warning mt-2">Geriyə qayıtmaq</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--/ Bordered Table -->
+    </div>
+    <!-- / Content -->
+</div>
+@section Scripts{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}

@@ -1,0 +1,18 @@
+﻿@model PosterDeleteModal
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h2>@Model.Text</h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Xeyr</button>
+                <a  class="btn btn-danger" asp-route-id="@Model.Id" asp-action="@Model.Action" asp-controller="@Model.Controller">Bəli</a>
+            </div>
+        </div>
+    </div>
+</div>

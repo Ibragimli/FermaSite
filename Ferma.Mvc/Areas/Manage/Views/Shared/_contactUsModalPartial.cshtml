@@ -1,0 +1,22 @@
+﻿@model ContactUs
+<div class="modal fade" id="infoModal-@TempData["ContactUsModal"]" tabindex="-1" aria-labelledby="infoModal-@TempData["ContactUsModal"]-Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModal-@TempData["ContactUsModal"]-Label">Comment Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="card-title">Ad Soyad: @Model.FullName</h5>
+                <h5 class="card-title">Email: @Model.Email</h5>
+                <h5 class="card-title">Mövzu: @Model.Subject</h5>
+                <p class="">
+                    @Model.Message
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>

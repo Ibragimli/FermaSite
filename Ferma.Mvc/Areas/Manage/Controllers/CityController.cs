@@ -70,6 +70,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 ModelState.AddModelError("name", ex.Message);
                 return View(oldCity);
             }
+            catch (ItemAlreadyException ex)
+            {
+                ModelState.AddModelError("name", ex.Message);
+                return View(oldCity);
+            }
 
             catch (ImageNullException ex)
             {
@@ -86,7 +91,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("Dəyişikliklər uğurlu oldu!");
-            return View("index", cityViewModel);
+            return RedirectToAction("index", cityViewModel);
 
         }
 
@@ -140,6 +145,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 ModelState.AddModelError("image", ex.Message);
                 return View(oldCity);
             }
+            catch (ItemAlreadyException ex)
+            {
+                ModelState.AddModelError("name", ex.Message);
+                return View(oldCity);
+            }
             catch (ImageFormatException ex)
             {
                 ModelState.AddModelError("image", ex.Message);
@@ -184,7 +194,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             var cities = _adminCityServices.GetCities(name);
             CityViewModel = new CityViewModel
             {
-                Cities = PagenetedList<City>.Create(cities, page, 3),
+                Cities = PagenetedList<City>.Create(cities, page, 8),
             };
             return CityViewModel;
         }

@@ -22,10 +22,6 @@
                         }
                         else {
                             alert("xeta bas verdi")
-                            console.log(response.status)
-                            console.log(response.statusText)
-                            console.log(response.body)
-                            console.log(response)
                         }
                     })
             }

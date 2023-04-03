@@ -72,6 +72,7 @@ namespace Ferma.Mvc
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IWishItemRepository, WishItemRepository>();
+            services.AddScoped<IUserTermRepository, UserTermRepository>();
 
 
             services.AddScoped<IEmailServices, EmailServices>();
@@ -105,11 +106,17 @@ namespace Ferma.Mvc
             services.AddScoped<IAdminSubCategoryServices, AdminSubCategoryServices>();
             services.AddScoped<IAdminCityServices, AdminCityServices>();
             services.AddScoped<IAdminServiceDurationServices, AdminServiceDurationServices>();
-
+            services.AddScoped<ISettingEditServices, SettingEditServices>();
+            services.AddScoped<ISettingIndexServices, SettingIndexServices>();
+            services.AddScoped<IContactUsDeleteServices, ContactUsDeleteServices>();
+            services.AddScoped<IContactUsIndexServices, ContactUsIndexServices>();
+            services.AddScoped<IContactRespondServices, ContactRespondServices>();
+            services.AddScoped<IPosterDeleteServices, PosterDeleteServices>();
+            services.AddScoped<IAdminUserTermServices, AdminUserTermServices>();
+            services.AddScoped<IUserTermIndexServices, UserTermIndexServices>();
+            
 
             //services.AddScoped<IUrlHelper>();
-
-
 
         }
 

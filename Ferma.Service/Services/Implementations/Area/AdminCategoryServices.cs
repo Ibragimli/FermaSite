@@ -25,6 +25,8 @@ namespace Ferma.Service.Services.Implementations.Area
         public async Task CategoryCreate(Category category)
         {
             Category newCategory = new Category();
+            if (await _unitOfWork.CategoryRepository.IsExistAsync(x => x.Name == category.Name))
+                throw new ItemAlreadyException("Bu adda kategoriya mövcuddur!");
 
             bool check = false;
             if (category.CategoryImageFile != null)
@@ -60,6 +62,9 @@ namespace Ferma.Service.Services.Implementations.Area
         {
             bool check = false;
             var oldCategory = await _unitOfWork.CategoryRepository.GetAsync(x => x.Id == category.Id);
+            if (await _unitOfWork.CategoryRepository.IsExistAsync(x => x.Name == category.Name))
+                throw new ItemAlreadyException("Bu adda kategoriya mövcuddur!");
+
             if (category.CategoryImageFile != null)
                 _manageImageHelper.PosterCheck(category.CategoryImageFile);
 

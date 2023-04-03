@@ -25,6 +25,9 @@ namespace Ferma.Service.Services.Implementations.Area
             bool check = false;
             if (SubCategory.Name != null)
             {
+                if (await _unitOfWork.SubCategoryRepository.IsExistAsync(x => x.Name == SubCategory.Name))
+                    throw new ItemAlreadyException("Bu adda altkategoriya mövcuddur!");
+
                 if (SubCategory.Name.Length > 100)
                     throw new ItemFormatException("Şəhərin adı maksimum  uzunluğu 100 ola bilər");
                 newSubCategory.Name = SubCategory.Name;
@@ -55,6 +58,9 @@ namespace Ferma.Service.Services.Implementations.Area
 
             if (subCategory.Name != null)
             {
+                if (await _unitOfWork.SubCategoryRepository.IsExistAsync(x => x.Name == subCategory.Name))
+                    throw new ItemAlreadyException("Bu adda altkategoriya mövcuddur!");
+
                 if (subCategory.Name.Length > 100)
                     throw new ItemFormatException("AltKategoriya adının maksimum  uzunluğu 100 ola bilər");
                 if (subCategory.Name != oldSubCategory.Name)

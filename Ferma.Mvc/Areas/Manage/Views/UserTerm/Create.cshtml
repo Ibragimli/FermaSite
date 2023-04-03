@@ -1,0 +1,72 @@
+﻿@model UserTerm
+@{
+    DateTime now = DateTime.UtcNow;
+}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">İstifadəçi qaydası /</span> Yaratmaq</h4>
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin UserTerm  Create Start -->
+                <section style="margin-top: 10px;" id="createPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
+                                <form class="form-control" asp-action="create" asp-controller="UserTerm" method="post">
+                                    <!-- UserTerm Title  Start -->
+                                    <div class="mb-3 posterTitle">
+                                        <label asp-for="Title" class="form-label">İstifadəçi qaydasının adı*</label>
+                                        <input asp-for="Title" maxlength="80" type="text" class="form-control">
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                    <!-- UserTerm Title   End -->
+                                    <!-- UserTerm Text  Start -->
+                                    <div class="mb-3 posterTitle">
+                                        <label asp-for="Text" class="form-label">İstifadəçi qaydasının mətni*</label>
+                                        <textarea id="editor" style="height:300px; " maxlength="15000" asp-for="Text" class="form-control"></textarea>
+
+                                        <span asp-validation-for="Text" class="text-danger"></span>
+                                    </div>
+                                    <!-- UserTerm Text   End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="UserTerm" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Yaratmaq</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin UserTerm  Create  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+
+@section Scripts{
+    <script src="~/plugins/ckeditor5-build-classic/ckeditor.js"></script>
+    <script>
+
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+}

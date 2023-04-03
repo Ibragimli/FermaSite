@@ -25,6 +25,9 @@ namespace Ferma.Service.Services.Implementations.Area
             bool check = false;
             if (City.Name != null)
             {
+                if (await _unitOfWork.CityRepository.IsExistAsync(x => x.Name == City.Name))
+                    throw new ItemAlreadyException("Bu adda şəhər mövcuddur!");
+
                 if (City.Name.Length > 30)
                     throw new ItemFormatException("Şəhərin adı maksimum  uzunluğu 30 ola bilər");
                 newCity.Name = City.Name;
@@ -47,6 +50,9 @@ namespace Ferma.Service.Services.Implementations.Area
 
             if (City.Name != null)
             {
+                if (await _unitOfWork.CityRepository.IsExistAsync(x => x.Name == City.Name))
+                    throw new ItemAlreadyException("Bu adda şəhər mövcuddur!");
+
                 if (City.Name.Length > 30)
                     throw new ItemFormatException("Şəhərin adının maksimum  uzunluğu 30 ola bilər");
                 if (City.Name != oldCity.Name)
@@ -56,7 +62,7 @@ namespace Ferma.Service.Services.Implementations.Area
                 }
             }
             else
-                throw new ItemNullException("Kategoriya boş ola bilməz");
+                throw new ItemNullException("Şəhər adı boş ola bilməz");
 
             if (check)
             {

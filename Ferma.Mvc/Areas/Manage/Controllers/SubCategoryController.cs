@@ -68,6 +68,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View(subCategory);
             }
+            catch (ItemAlreadyException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(subCategory);
+            }
             catch (ItemFormatException ex)
             {
                 ModelState.AddModelError("", ex.Message);
@@ -89,7 +94,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             try
             {
                 subCategory = await _adminSubCategoryServices.GetSubCategory(id);
-                subCategoryVM = await SubCategoryEditVM(1, subCategoryVM,id, null, null);
+                subCategoryVM = await SubCategoryEditVM(1, subCategoryVM, id, null, null);
 
             }
             catch (ItemNotFoundException)
@@ -106,11 +111,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SubCategory subCategory)
         {
-            SubCategory oldSubCategory = new SubCategory();
+            //SubCategory oldSubCategory = new SubCategory();
             var subCategoryVM = new SubCategoryViewModel();
             try
             {
-                oldSubCategory = await _adminSubCategoryServices.GetSubCategory(subCategory.Id);
+                //oldSubCategory = await _adminSubCategoryServices.GetSubCategory(subCategory.Id);
 
                 subCategoryVM = await SubCategoryEditVM(1, subCategoryVM, subCategory.Id, null, null);
 
@@ -122,6 +127,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             }
 
             catch (ItemNullException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(subCategoryVM);
+            }
+            catch (ItemAlreadyException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(subCategoryVM);
@@ -144,7 +154,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             SubCategoryViewModel SubCategoryViewModel = new SubCategoryViewModel();
             try
             {
-                SubCategoryViewModel = await SubCategoryEditVM(1, SubCategoryViewModel,id, null, null);
+                SubCategoryViewModel = await SubCategoryEditVM(1, SubCategoryViewModel, id, null, null);
                 await _adminSubCategoryServices.SubCategoryDelete(id);
             }
             catch (ImageNullException ex)
@@ -181,7 +191,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             var cities = _adminSubCategoryServices.GetSubCategorys(category, subCategory);
             SubCategoryViewModel = new SubCategoryViewModel
             {
-                SubCategories = PagenetedList<SubCategory>.Create(cities, page, 3),
+                SubCategories = PagenetedList<SubCategory>.Create(cities, page, 8),
                 Categories = await _adminSubCategoryServices.GetCategories(),
                 SubCategory = new SubCategory(),
             };

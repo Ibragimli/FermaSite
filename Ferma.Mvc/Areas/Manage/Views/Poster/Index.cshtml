@@ -94,6 +94,9 @@
                         <tbody>
                             @foreach (var poster in Model.Posters)
                             {
+                                @*Delete Modal*@
+                                @await Html.PartialAsync("_deleteItemModalPartiral", new PosterDeleteModal { Action = "delete", Controller = "poster", Text = "Elanı silmək istəyirsinizmi?", Id = poster.Id })
+                                @*Delete Modal*@
                                 <tr>
                                     <td class="text-center">
                                         <img src="~/uploads/poster/@poster.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" width="100" height="100" />
@@ -146,7 +149,11 @@
                                         <div class="d-flex justify-content-sm-around">
                                             @*  <a asp-route-id="@poster.Id" asp-action="edit" asp-controller="poster"><i style="font-size: 26px !important;" class="bx bx-edit-alt me-1"></i> </a>*@
                                             <a asp-route-id="@poster.Id" asp-action="detail" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-info-circle me-1"></i> </a>
-                                            <a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-trash me-1"></i> </a>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                <i style="font-size:26px !important;" class="bx bx-trash me-1 "></i>
+                                            </button>
+                                            <a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster">
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -159,6 +166,8 @@
             </div>
         </div>
         <!--/ Bordered Table -->
+
+
     </div>
     <!-- / Content -->
 </div>

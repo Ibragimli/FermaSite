@@ -64,6 +64,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 ModelState.AddModelError("name", ex.Message);
                 return View(oldCategory);
             }
+            catch (ItemAlreadyException ex)
+            {
+                ModelState.AddModelError("name", ex.Message);
+                return View(oldCategory);
+            }
             catch (ItemFormatException ex)
             {
                 ModelState.AddModelError("name", ex.Message);
@@ -85,8 +90,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("Dəyişikliklər uğurlu oldu!");
-            return View("index", categoryViewModel);
-
+            return RedirectToAction("index", categoryViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -133,7 +137,11 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 ModelState.AddModelError("name", ex.Message);
                 return View(oldCategory);
             }
-
+            catch (ItemAlreadyException ex)
+            {
+                ModelState.AddModelError("name", ex.Message);
+                return View(oldCategory);
+            }
             catch (ImageNullException ex)
             {
                 ModelState.AddModelError("image", ex.Message);
@@ -183,7 +191,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             var categories = _adminCategoryServices.GetCategories(name);
             categoryViewModel = new CategoryViewModel
             {
-                Categories = PagenetedList<Category>.Create(categories, page, 3),
+                Categories = PagenetedList<Category>.Create(categories, page, 8),
             };
             return categoryViewModel;
         }

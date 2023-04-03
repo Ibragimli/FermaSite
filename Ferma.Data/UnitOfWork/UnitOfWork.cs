@@ -27,6 +27,7 @@ namespace Ferma.Data.UnitOfWork
         private IUserAuthenticationRepository _userAuthenticationRepository;
         private IPaymentRepository _paymentRepository;
         private IServiceDurationRepository _serviceDurationRepository;
+        private IUserTermRepository _userTermRepository;
 
 
         public UnitOfWork(DataContext context)
@@ -63,6 +64,8 @@ namespace Ferma.Data.UnitOfWork
         public IServiceDurationRepository ServiceDurationRepository => _serviceDurationRepository = _serviceDurationRepository ?? new ServiceDurationRepository(_context);
 
         public IPaymentRepository PaymentRepository => _paymentRepository = _paymentRepository ?? new PaymentRepository(_context);
+
+        public IUserTermRepository UserTermRepository => _userTermRepository = _userTermRepository ?? new UserTermRepository(_context);
 
         public async Task<int> CommitAsync()
         {

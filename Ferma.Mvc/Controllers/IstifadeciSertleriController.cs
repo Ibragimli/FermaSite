@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ferma.Service.Services.Interfaces.User;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,16 @@ namespace Ferma.Mvc.Controllers
 {
     public class IstifadeciSertleriController : Controller
     {
-        public IActionResult Index()
+        private readonly IUserTermIndexServices _userTermIndexServices;
+
+        public IstifadeciSertleriController(IUserTermIndexServices userTermIndexServices)
         {
-            return View();
+            _userTermIndexServices = userTermIndexServices;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var terms = await _userTermIndexServices.UserTerms();
+            return View(terms);
         }
     }
 }

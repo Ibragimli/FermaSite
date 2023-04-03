@@ -1,0 +1,57 @@
+﻿@model SettingEditDto
+@{
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Setting /</span>Edit</h4>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <h5 class="card-header">Setting</h5>
+                    <div class="card-body">
+                        <form asp-action="edit" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
+
+                                @* Value *@
+                                <div class="col-lg-9 mb-3">
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                                        <label asp-for="Value" class="control-label" style=" color: #886CC0; font-weight: 700; font-size: 20px; ">Dəyər</label>
+                                        @if (@Model.Value != null && Model.Key.EndsWith("Image"))
+                                        {
+                                            <input asp-for="KeyImageFile" />
+                                            <input type="hidden" asp-for="Value" value="@Model.Value" />
+
+                                            @if (@Model.Value != null && @Model.Key.EndsWith("Image"))
+                                            {
+                                                <img style="width:200px; height:180px;" src="~/uploads/setting/@Model.Value" />
+
+                                            }
+                                            <span asp-validation-for="KeyImageFile" class="text-danger"></span>
+                                        }
+                                        @if (@Model.Value != null && !@Model.Key.EndsWith("Image"))
+                                        {
+                                            <textarea style="height:100px; max-height:200px" maxlength="1000" asp-for="Value" class="form-control"></textarea>
+                                            <span asp-validation-for="Value" class="text-danger"></span>
+                                        }
+                                    </div>
+
+                                    <div class="d-flex justify-content-end col-12">
+                                        <a asp-action="index" asp-controller="Setting" class="btn btn-outline-warning mt-2">Geriyə qayıtmaq</a>
+                                        <button type="submit" class="ms-3 btn btn-outline-primary mt-2">Düzənləmək</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content-backdrop fade"></div>
+

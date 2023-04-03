@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.Services.Interfaces.User;
 using System;
@@ -19,6 +20,8 @@ namespace Ferma.Service.Services.Implementations.User
         public IQueryable<Poster> AllPosters(string phoneNumber)
         {
             var poster = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.PhoneNumber == phoneNumber);
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
+
             return poster;
         }
 
@@ -27,6 +30,7 @@ namespace Ferma.Service.Services.Implementations.User
             DateTime now = DateTime.UtcNow;
             var poster = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.PhoneNumber == phoneNumber);
             poster = poster.Where(x => x.PosterFeatures.ExpirationDateVip > now);
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
             return poster;
         }
         public IQueryable<Poster> PremiumPosters(string phoneNumber)
@@ -34,7 +38,7 @@ namespace Ferma.Service.Services.Implementations.User
             DateTime now = DateTime.UtcNow;
             var poster = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.PhoneNumber == phoneNumber);
             poster = poster.Where(x => x.PosterFeatures.ExpirationDatePremium > now);
-
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
             return poster;
         }
     }

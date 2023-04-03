@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces.User;
@@ -32,6 +33,7 @@ namespace Ferma.Service.Services.Implementations.User
 
             if (searchDto.PosterName != null)
                 poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.Name, $"%{searchDto.PosterName}%"));
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
 
             return poster;
         }
@@ -51,6 +53,8 @@ namespace Ferma.Service.Services.Implementations.User
                 poster = poster.Where(i => EF.Functions.Like(i.PosterFeatures.Name, $"%{searchDto.PosterName}%"));
             var now = DateTime.UtcNow;
             poster = poster.Where(x => x.PosterFeatures.ExpirationDateVip > now);
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
+
             return poster;
         }
         public IQueryable<Poster> SearchPosterPremium(SearchDto searchDto)
@@ -70,6 +74,7 @@ namespace Ferma.Service.Services.Implementations.User
 
             var now = DateTime.UtcNow;
             poster = poster.Where(x => x.PosterFeatures.ExpirationDatePremium > now);
+            poster = poster.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
 
             return poster;
         }

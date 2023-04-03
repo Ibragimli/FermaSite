@@ -19,7 +19,8 @@
                 <div class="item">
                     <a asp-action="axtaris" asp-controller="elanlar" asp-route-categoryId="@category.Id" title="Alətlər">
                         <div class="iconBox">
-                            <i class="fa-solid fa-fish-fins"></i>
+                            @*<i class="fa-solid fa-fish-fins"></i>*@
+                            <img style=" width:45px; height:45px; " src="~/uploads/category/@category?.Image" />
                         </div>
                         <h3>@category.Name</h3>
                     </a>
@@ -206,14 +207,14 @@
             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
                 <img src="~/uploads/poster/@posterAll.PosterImages.FirstOrDefault(x => x.IsPoster == true)?.Image" alt="">
             </a>
-            @if (posterAll.PosterFeatures.ExpirationDateVip >now)
+            @if (posterAll.PosterFeatures.ExpirationDateVip > now)
             {
 <div class="posterVipIconBox">
     <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
         <i class="fa-brands fa-sketch"></i>
     </a>
 </div>}
-            @if (posterAll.PosterFeatures.ExpirationDatePremium >now)
+            @if (posterAll.PosterFeatures.ExpirationDatePremium > now)
             {
 <div class="posterQueenIconBox">
     <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
@@ -280,22 +281,19 @@
                     <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex-1)" class="page-link" aria-label="Previous">
                         <span style=" color: whitesmoke;" aria-hidden="true">&laquo;</span>
                     </a>
-                </li>
-}
+                </li>}
                             @for (int i = 1; i <= Model.PagenatedItemsAll.TotalPages; i++)
                             {
                 <li aria-current="page" class="page-item" @(Model.PagenatedItemsAll.PageIndex == i ? "active" : "" )>
                     <a asp-action="index" asp-controller="anasehife" asp-route-page="@i" class="page-link">@i</a>
-                </li>
-}
+                </li>}
                             @if (Model.PagenatedItemsAll.HasNext)
                             {
                 <li class="page-item">
                     <a style=" background: #32cd32; " asp-action="index" asp-controller="anasehife" asp-route-page="@(Model.PagenatedItemsAll.PageIndex+1)" class="page-link" aria-label="Next">
                         <span style=" color: whitesmoke;" aria-hidden="true">&raquo;</span>
                     </a>
-                </li>
-}
+                </li>}
                         </ul>
                     </nav>
                 </div>

@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.EntityFrameworkCore;
@@ -28,24 +29,29 @@ namespace Ferma.Service.Services.Implementations.User
         public IQueryable<Poster> GetPostersAsync()
         {
             var posters = _unitOfWork.PosterRepository.asQueryablePoster();
+            posters = posters.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
             return posters;
         }
         public IQueryable<Poster> GetVipPosterAsync()
         {
             var now = DateTime.Now;
             var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDateVip > now);
+            posters = posters.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
             return posters;
         }
         public IQueryable<Poster> GetPremiumPosterAsync()
         {
             var now = DateTime.Now;
             var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDatePremium > now);
+            posters = posters.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
+
             return posters;
         }
         public IQueryable<Poster> GetPrePosterAsync()
         {
             var now = DateTime.Now;
             var posters = _unitOfWork.PosterRepository.asQueryablePoster().Where(x => x.PosterFeatures.ExpirationDatePremium > now || x.PosterFeatures.ExpirationDatePremium > now);
+            posters = posters.Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active);
             return posters;
         }
 

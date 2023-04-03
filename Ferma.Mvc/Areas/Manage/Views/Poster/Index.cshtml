@@ -148,12 +148,11 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-sm-around">
                                             @*  <a asp-route-id="@poster.Id" asp-action="edit" asp-controller="poster"><i style="font-size: 26px !important;" class="bx bx-edit-alt me-1"></i> </a>*@
-                                            <a asp-route-id="@poster.Id" asp-action="detail" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-info-circle me-1"></i> </a>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <a style="display:flex; align-items:center;" asp-route-id="@poster.Id" asp-action="detail" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-info-circle me-1"></i> </a>
+                                            <button style="color:red;" type="button" class="btn " data-bs-toggle="modal" data-bs-target="#deleteModal">
                                                 <i style="font-size:26px !important;" class="bx bx-trash me-1 "></i>
                                             </button>
-                                            <a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster">
-                                            </a>
+                                            @*<a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster"></a>*@
                                         </div>
                                     </td>
                                 </tr>

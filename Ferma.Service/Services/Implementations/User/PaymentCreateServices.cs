@@ -4,6 +4,7 @@ using Ferma.Core.IUnitOfWork;
 using Ferma.Service.CustomExceptions;
 using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces.User;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,10 +15,12 @@ namespace Ferma.Service.Services.Implementations.User
     public class PaymentCreateServices : IPaymentCreateServices
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PaymentCreateServices(IUnitOfWork unitOfWork)
+        public PaymentCreateServices(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task PaymentCheck(PaymentCreateDto paymentCreateDto)
         {
@@ -84,6 +87,7 @@ namespace Ferma.Service.Services.Implementations.User
                 poster.PosterFeatures.ExpirationDatePremium = DateTime.Now.AddDays(duration.Duration);
             }
             user.Balance = user.Balance - duration.Amount;
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("paymentDto");
             await _unitOfWork.CommitAsync();
         }
         public async Task PaymentCreateBankCard(PaymentCreateDto paymentCreateDto)
@@ -113,6 +117,8 @@ namespace Ferma.Service.Services.Implementations.User
                 poster.PosterFeatures.IsPremium = true;
                 poster.PosterFeatures.ExpirationDatePremium = DateTime.Now.AddDays(duration.Duration);
             }
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("paymentDto");
+
             await _unitOfWork.CommitAsync();
         }
     }

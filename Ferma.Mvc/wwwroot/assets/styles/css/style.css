@@ -6,6 +6,21 @@ body .validation-summary-errors ul li {
     font-weight: 600;
 }
 
+body .dropdown-toggle {
+    background-color: none;
+    background: none;
+    border: none;
+}
+    body .dropdown-toggle::after {
+        display: none;
+        margin-left: 0em;
+        vertical-align: 0em;
+        border-top: 0em solid;
+        border-right: 0em solid transparent;
+        border-bottom: 0;
+        border-left: 0em solid transparent;
+    }
+
 body .userTermPBox p {
     margin-bottom: 0.7px;
     font-size: 18px;

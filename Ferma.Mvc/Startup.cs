@@ -114,7 +114,8 @@ namespace Ferma.Mvc
             services.AddScoped<IPosterDeleteServices, PosterDeleteServices>();
             services.AddScoped<IAdminUserTermServices, AdminUserTermServices>();
             services.AddScoped<IUserTermIndexServices, UserTermIndexServices>();
-            
+            services.AddScoped<IDashboardServices, DashboardServices>();
+
 
             //services.AddScoped<IUrlHelper>();
 

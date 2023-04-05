@@ -22,13 +22,19 @@
     <link rel="stylesheet" href="~/assets/styles/css/style.css">
     <link rel="stylesheet" href="~/assets/styles/css/owl.carousel.min.css">
     <link rel="stylesheet" href="~/assets/styles/css/owl.theme.default.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    @*Bootstrap  *@
+    <link href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap-utilities.min.css" />
+    <link rel="stylesheet" href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap-reboot.min.css" />
+    <link rel="stylesheet" href="~/plugins/bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css" />
+    @*Bootstrap  *@
     <link rel="shortcut icon" href="~/uploads/setting/@settings.FirstOrDefault(x => x.Key == "SmallLogoImage")?.Value" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/assets/styles/css/flexslider.css">
 
-    <title>PULSUZ ELAN SAYTI</title>
+    <title>@settings.FirstOrDefault(x => x.Key == "Title")?.Value </title>
 </head>
 
 <body>
@@ -83,19 +89,28 @@
                             {
 
                                 <li class="headUser">
-
-                                    <a asp-action="index" asp-controller="profile">
-                                        <i class="fa-solid fa-circle-user"></i>
-                                        <span>@(user.Name.Length>7?(user.Name.Substring(0,7)):(user.Name))</span>
-                                    </a>
-
+                                    <div class="dropdown">
+                                        <button class=" dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i style=" margin-right: 2px; color: #32CD32; font-size: 23px; " class="fa-solid fa-circle-user"></i>
+                                            <span style=" color: gray; font-size: 18px; ">@(user.Name.Length>8?(user.Name.Substring(0,8)):(user.Name))</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li class="headUser mb-2">
+                                                <a style=" display: flex !important; flex-direction: row; justify-content: center; align-items: center; "  asp-action="index" asp-controller="profile">
+                                                    <i class="fa-solid fa-circle-user"></i>
+                                                    <span>Profile</span>
+                                                </a>
+                                            </li>
+                                            <li class="headLogin">
+                                                <a style=" display: flex !important; flex-direction: row; justify-content: center; align-items: center; " asp-action="logout" asp-controller="profile">
+                                                    <i class="fa-solid fa-circle-right"></i>
+                                                    <span>Çıxış</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
-                                <li class="headLogin">
-                                    <a asp-action="logout" asp-controller="profile">
-                                        <i class="fa-solid fa-circle-right"></i>
-                                        <span>Çıxış</span>
-                                    </a>
-                                </li>
+
                             }
                             else
                             {
@@ -238,10 +253,6 @@
                                 <p>
                                     <a asp-action="index" asp-controller="bizimleelaqe">Əlaqə</a>
                                 </p>
-
-
-
-
                             </div>
                             <!-- Grid column -->
                             <!-- Grid column -->
@@ -259,7 +270,7 @@
                                 <p>
                                     <i class="fas fa-phone me-3"></i>
                                     <a href="tel:@settings.FirstOrDefault(x => x.Key == "FooterNumber")?.Value ">
-                                        @settings.FirstOrDefault(x => x.Key == "FooterNumber")?.Value  
+                                        @settings.FirstOrDefault(x => x.Key == "FooterNumber")?.Value
                                     </a>
                                 </p>
                             </div>
@@ -288,13 +299,14 @@
     <!-- Footer -->
 
 
+    <script src="~/plugins/bootstrap-5.3.0-alpha3-dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
             integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js" integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/assets/js/Wishlist.js"></script>
     @*toastr*@

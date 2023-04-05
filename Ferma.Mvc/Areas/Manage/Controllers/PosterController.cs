@@ -173,11 +173,19 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            var posterVM = new AdminPosterEditViewModel();
+            PosterIndexViewModel posterVM = new PosterIndexViewModel();
 
             try
             {
-                posterVM = await _detailVM(id);
+                var poster = _posterIndexServices.GetPoster(null, null, 0);
+                posterVM = new PosterIndexViewModel
+                {
+                    Posters = PagenetedList<Poster>.Create(poster, 1, 10),
+                    Categories = await _adminPosterDetailServices.GetCategories(),
+                    SubCategories = await _adminPosterDetailServices.GetSubCategories(),
+                    PosterDeleteModal = new PosterDeleteModal(),
+
+                };
                 await _posterDeleteServices.DeletePoster(id);
 
             }

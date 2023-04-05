@@ -68,12 +68,15 @@ namespace Ferma.Mvc.Controllers
 
                     foreach (var item in cookieWishItems)
                     {
-                        WishlistItemViewModel checkoutItem = new WishlistItemViewModel
+                        if (_context.Posters.Any(x => x.Id == item.PosterId))
                         {
-                            Poster = _context.Posters.Include(x => x.PosterFeatures).Include(x => x.PosterImages).Include(x => x.PosterFeatures.City).FirstOrDefault(x => x.Id == item.PosterId),
-
-                        };
-                        wishlistItems.Add(checkoutItem);
+                            WishlistItemViewModel checkoutItem = new WishlistItemViewModel
+                            {
+                                Poster = _context.Posters.Include(x => x.PosterFeatures).Include(x => x.PosterImages).Include(x => x.PosterFeatures.City).FirstOrDefault(x => x.Id == item.PosterId),
+                            };
+                            wishlistItems.Add(checkoutItem);
+                        }
+                       
                     }
                 }
 

@@ -11,8 +11,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Xeyr</button>
-                <a  class="btn btn-danger" asp-route-id="@Model.Id" asp-action="@Model.Action" asp-controller="@Model.Controller">Bəli</a>
+                <a class="delete-btn btn btn-danger" asp-route-id="@Model.Id" asp-action="@Model.Action" asp-controller="@Model.Controller">Bəli</a>
             </div>
         </div>
     </div>
 </div>
+
+@section Script{
+}

@@ -13,14 +13,14 @@
                     <div class="breadCrumbBox">
                         <ul>
                             <li>
-                                <a href="../pages/main.html">
+                                <a asp-action="index" asp-controller="anasehife">
                                     <span>
                                         Ana Səhifə
                                     </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a asp-action="yenielan" asp-controller="elanlar">
                                     <span>
                                         Elan yaratmaq
                                     </span>
@@ -41,10 +41,7 @@
                 <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
                     <h1>Yeni Elan</h1>
                     <form class="form-control" asp-action="yenielan" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" style="color:red;">
-
-                        </div>
-
+                        <div asp-validation-summary="ModelOnly" style="color:red;"></div>
                         <!-- Poster Kategoriya Start -->
                         <div class=" mb-3 posterCategorys">
                             <label class="  form-label">Kategoriya*</label>
@@ -72,14 +69,12 @@
                         <!-- Poster Price  Start -->
                         <div class="mb-3 posterPriceBox">
                             <label class="form-label">Qiymət*</label>
-
                             <div class="posterPrice">
                                 <div>
                                     <input placeholder="0,00" asp-for="PosterCreateDto.Price" title="" value="" min="0" max="9999999" type="text"
                                            class="form-control posterPriceInput">
                                     <span asp-validation-for="PosterCreateDto.Price" class="text-danger"></span>
                                 </div>
-
                                 <div class="posterPriceCurrency">
                                     <div class="form-check ">
                                         <input asp-for="PosterCreateDto.PriceCurrency" class="form-check-input" type="radio"
@@ -98,12 +93,10 @@
                                     <span asp-validation-for="PosterCreateDto.PriceCurrency" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
                         <!-- Poster Price  End -->
                         <!-- Poster NewAndCargo  Start -->
-
-                        <div class="row">
+                        <div class="row mb-3">
 
                             @* Çatdirilma *@
                             <div class="col-3 d-flex align-items-center">
@@ -121,7 +114,6 @@
                             </div>
                             @* Yeni-Kohne *@
                         </div>
-
                         <!-- Poster NewAndCargo  End -->
                         <!-- Poster City Start -->
                         <div class="mb-3 posterCitys">

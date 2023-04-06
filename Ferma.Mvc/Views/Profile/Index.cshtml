@@ -297,7 +297,7 @@
                                                                             </a>
                                                                         </div>
                                                                     </div>
-                                                                    @if (poster.PosterFeatures.ExpirationEndDate > now)
+                                                                    @if (poster.PosterFeatures.ExpirationDateActive > now && poster.PosterFeatures.ExpirationDateDisabled > now)
                                                                     {
                                                                         <div class="posterActionBox">
                                                                             <div class="posterRepairButtonBox">

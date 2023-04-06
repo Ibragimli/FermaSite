@@ -18,11 +18,26 @@ namespace Ferma.Service.Services.Implementations.Area
         {
             _unitOfWork = unitOfWork;
         }
+        public async Task IsActive()
+        {
+            var now = DateTime.UtcNow.AddHours(4);
+            var posterCheck = await _unitOfWork.PosterRepository.IsExistAsync(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active && x.PosterFeatures.ExpirationDateActive < now, "PosterFeatures");
+            if (posterCheck)
+            {
+                var posters = await _unitOfWork.PosterRepository.GetAllAsync(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active && x.PosterFeatures.ExpirationDateActive < now, "PosterFeatures");
+                foreach (var poster in posters)
+                {
+                    poster.PosterFeatures.PosterStatus = PosterStatus.DeActive;
+                    await _unitOfWork.CommitAsync();
+                }
+            }
+        }
         public async Task<int> AllPosterCount()
         {
             var count = await _unitOfWork.PosterRepository.GetTotalCountAsync(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active, "PosterFeatures");
             return count;
         }
+
 
         public async Task<int> NewContactCount()
         {

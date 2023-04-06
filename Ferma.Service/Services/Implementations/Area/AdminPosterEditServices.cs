@@ -75,7 +75,10 @@ namespace Ferma.Service.Services.Implementations.Area
                 throw new ItemNotFoundException("Elan tapılmadı");
 
             poster.PosterFeatures.PosterStatus = PosterStatus.Active;
-            poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(30);
+            poster.PosterFeatures.ExpirationDateActive = now.AddDays(30);
+            poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(90);
+            poster.PosterFeatures.IsDisabled = false;
+
             await _unitOfWork.CommitAsync();
         }
 

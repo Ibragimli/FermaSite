@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.CustomExceptions;
 using Ferma.Service.Dtos.User;
@@ -19,6 +20,21 @@ namespace Ferma.Service.Services.Implementations.Area
         public AdminPosterIndexServices(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+        public async Task IsDisabled()
+        {
+            var now = DateTime.UtcNow.AddHours(4);
+            var posterCheck = await _unitOfWork.PosterRepository.IsExistAsync(x => !x.IsDelete && !x.PosterFeatures.IsDisabled && x.PosterFeatures.ExpirationDateDisabled < now, "PosterFeatures");
+            if (posterCheck)
+            {
+                var posters = await _unitOfWork.PosterRepository.GetAllAsync(x => !x.IsDelete && !x.PosterFeatures.IsDisabled && x.PosterFeatures.ExpirationDateDisabled < now, "PosterFeatures");
+                foreach (var poster in posters)
+                {
+                    poster.PosterFeatures.PosterStatus = PosterStatus.Disabled;
+                    poster.PosterFeatures.IsDisabled = true;
+                    await _unitOfWork.CommitAsync();
+                }
+            }
         }
         public IQueryable<Poster> GetPoster(string name, string phoneNumber, int subCategoryId)
         {
@@ -48,6 +64,6 @@ namespace Ferma.Service.Services.Implementations.Area
             return subCategories.ToList();
         }
 
-      
+
     }
 }

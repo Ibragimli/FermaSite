@@ -35,6 +35,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             try
             {
                 var poster = _posterIndexServices.GetPoster(name, phoneNumber, subCategoryId);
+                await _posterIndexServices.IsDisabled();
                 posterVM = new PosterIndexViewModel
                 {
                     Posters = PagenetedList<Poster>.Create(poster, page, 10),

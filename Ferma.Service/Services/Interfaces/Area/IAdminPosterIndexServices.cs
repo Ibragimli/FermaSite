@@ -12,6 +12,8 @@ namespace Ferma.Service.Services.Interfaces.Area
         public IQueryable<Poster> GetPoster(string name, string phoneNumber, int subCategoryId);
         public Task<List<SubCategory>> GetSubCategories();
         public Task<List<Category>> GetCategories();
+        public Task IsDisabled();
+
 
     }
 }

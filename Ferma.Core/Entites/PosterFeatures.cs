@@ -21,8 +21,8 @@ namespace Ferma.Core.Entites
         public bool IsPremium { get; set; }
         public DateTime ExpirationDateVip { get; set; }
         public DateTime ExpirationDatePremium { get; set; }
-        public DateTime ExpirationDateDisabled { get; set; } = DateTime.Now.AddDays(30);
-        public DateTime ExpirationEndDate { get; set; } = DateTime.Now.AddDays(90);
+        public DateTime ExpirationDateDisabled { get; set; } = DateTime.Now.AddDays(90);
+        public DateTime ExpirationDateActive { get; set; } = DateTime.Now.AddDays(30);
         public bool IsDisabled { get; set; }
         public int SubCategoryId { get; set; }
         public int CityId { get; set; }

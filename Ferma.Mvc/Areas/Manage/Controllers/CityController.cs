@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 namespace Ferma.Mvc.Areas.Manage.Controllers
 {
     [Area("manage")]
+    //[Authorize(Roles = "SuperAdmin,Admin")]
+
     public class CityController : Controller
     {
 

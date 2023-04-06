@@ -42,6 +42,7 @@ namespace Ferma.Service.Services.Implementations.User
             poster.PosterFeatures.IsVip = false;
             poster.PosterFeatures.ExpirationDatePremium = time;
             poster.PosterFeatures.ExpirationDateVip = time;
+            poster.PosterFeatures.ExpirationDateActive = time;
             await _unitOfWork.CommitAsync();
         }
         public async Task posterActive(int id)
@@ -53,13 +54,13 @@ namespace Ferma.Service.Services.Implementations.User
 
             if (poster == null)
                 throw new ItemNotFoundException("Elan tapılmadı");
-            if (poster.PosterFeatures.ExpirationEndDate < now)
+            if (poster.PosterFeatures.ExpirationDateDisabled < now)
                 throw new ExpirationDateException("Elanın müddəti bitmişdir");
             if (poster.PosterFeatures.PosterStatus != PosterStatus.DeActive)
                 throw new ItemFormatException("Xəta baş verdi");
 
             poster.PosterFeatures.PosterStatus = PosterStatus.Active;
-            poster.PosterFeatures.ExpirationDateDisabled = now.AddDays(30);
+            poster.PosterFeatures.ExpirationDateActive = now.AddDays(30);
             await _unitOfWork.CommitAsync();
         }
 

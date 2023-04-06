@@ -22,7 +22,17 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var dashboardVM = await DashboardVM();
+            var dashboardVM = new DashboardViewModel();
+            try
+            {
+                dashboardVM = await DashboardVM();
+                await _dashboardServices.IsActive();
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("index", "notfound");
+            }
             return View(dashboardVM);
         }
         private async Task<DashboardViewModel> DashboardVM()

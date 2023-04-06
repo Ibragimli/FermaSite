@@ -15,5 +15,7 @@ namespace Ferma.Service.Services.Interfaces.Area
         public Task<int> NewContactCount();
         public Task<decimal?> PaymentMoney();
         public Task<List<Payment>> Payments();
+        public Task IsActive();
+
     }
 }

@@ -80,7 +80,7 @@
                                             <a data-bs-toggle="modal" data-bs-target="#infoModal-@count" style="cursor:pointer;"><i style=" font-size:24px; margin-right:2px  " class="fa-solid fa-info"></i> </a>
                                             <a asp-route-contactUsId="@ContactUs.Id" asp-action="ReplyContactUs" asp-controller="ContactUs"><i style="font-size: 24px; margin-right: 2px !important; " class="fa-solid fa-reply"></i></a>
 
-                                            <a asp-route-id="@ContactUs.Id" asp-action="delete" asp-controller="ContactUs"><i style="font-size:24px !important; color:red;" class="bx bx-trash me-1"></i> </a>
+                                            <a class="delete-btn" asp-route-id="@ContactUs.Id" asp-action="delete" asp-controller="ContactUs"><i style="font-size:24px !important; color:red;" class="bx bx-trash me-1"></i> </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -98,4 +98,7 @@
 </div>
 @section Scripts{
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/assets/js/SweetAlertItem.js"></script>
 }

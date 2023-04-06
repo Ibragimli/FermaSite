@@ -6,11 +6,61 @@ body .validation-summary-errors ul li {
     font-weight: 600;
 }
 
+.posterAuthor {
+    position: relative;
+}
+
+    .posterAuthor .posterWishIconBox {
+        position: absolute;
+        top: 10px;
+        right: 12px
+    }
+
+        .posterAuthor .posterWishIconBox a .wishIcon {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            color: #b4b7bbd2;
+            max-width: 100%;
+            font-size: 27px;
+            -webkit-transition: all 0.4s;
+            transition: all 0.4s
+        }
+
+        .posterAuthor.posterWishIconBox a .wishIconActive {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            color: #32dc32;
+            max-width: 100%;
+            font-size: 27px;
+            -webkit-transition: all 0.4s;
+            transition: all 0.4s
+        }
+
+        .posterAuthor.posterWishIconBox a .wishIcon:hover {
+            color: #32dc32
+        }
+
+
 body .dropdown-toggle {
     background-color: none;
     background: none;
     border: none;
 }
+
     body .dropdown-toggle::after {
         display: none;
         margin-left: 0em;
@@ -26,7 +76,7 @@ body .userTermPBox p {
     font-size: 18px;
     line-height: 1.5;
 }
-
+/*up*/
 body main #categorySlider {
     padding: 25px 0px;
     margin-top: 80px

@@ -173,26 +173,14 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            PosterIndexViewModel posterVM = new PosterIndexViewModel();
-
             try
             {
-                var poster = _posterIndexServices.GetPoster(null, null, 0);
-                posterVM = new PosterIndexViewModel
-                {
-                    Posters = PagenetedList<Poster>.Create(poster, 1, 10),
-                    Categories = await _adminPosterDetailServices.GetCategories(),
-                    SubCategories = await _adminPosterDetailServices.GetSubCategories(),
-                    PosterDeleteModal = new PosterDeleteModal(),
-
-                };
                 await _posterDeleteServices.DeletePoster(id);
-
             }
             catch (ItemNotFoundException ex)
             {
                 TempData["Success"] = (ex.Message);
-                return Ok(posterVM);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -200,7 +188,7 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 //return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("Elan silindi!");
-            return Ok(posterVM);
+            return Ok();
         }
 
         private async Task<AdminPosterEditViewModel> _detailVM(int id)

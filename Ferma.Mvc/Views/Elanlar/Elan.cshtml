@@ -298,6 +298,14 @@
                             <span class="authorName">@Model.User.AppUser.Name</span>
                             <a asp-action="IstifadecininElanlari" asp-controller="elanlar" asp-route-phoneNumber="@posterFeature.PhoneNumber" class="authorPosters">İstifadəçinin bütün elanları</a>
                         </div>
+
+                        <div class="posterWishIconBox">
+                            <a class="addWish" href="/elanlar/addwishlist/67">
+                                <i class="wishIcon fa-solid fa-heart"></i>
+                                <!-- <i class="wishIconActive fa-solid fa-heart"></i> -->
+                            </a>
+                        </div>
+
                         <div class="authorNumbersBox">
                             <div class="authorNumbers">
                                 <div class="authorNumber">
@@ -309,6 +317,7 @@
 
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

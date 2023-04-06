@@ -32,46 +32,46 @@ namespace Ferma.Service.Services.Implementations.Area
             var wishItems = await _unitOfWork.WishItemRepository.GetAllAsync(x => !x.IsDelete && x.PosterId == poster.Id);
             var feature = await _unitOfWork.PosterFeaturesRepository.GetAsync(x => x.Id == poster.PosterFeaturesId && !x.IsDelete);
 
-            //if (images != null)
-            //{
-            //    foreach (var image in images)
-            //    {
-            //        _unitOfWork.PosterImageRepository.Remove(image);
-            //        _manageImageHelper.DeleteFile(image.Image, "poster");
-            //    }
-            //    check = true;
-            //}
-            //if (payments != null)
-            //{
-            //    foreach (var payment in payments)
-            //    {
-            //        _unitOfWork.PaymentRepository.Remove(payment);
-            //    }
-            //    check = true;
+            if (images != null)
+            {
+                foreach (var image in images)
+                {
+                    _unitOfWork.PosterImageRepository.Remove(image);
+                    _manageImageHelper.DeleteFile(image.Image, "poster");
+                }
+                check = true;
+            }
+            if (payments != null)
+            {
+                foreach (var payment in payments)
+                {
+                    _unitOfWork.PaymentRepository.Remove(payment);
+                }
+                check = true;
 
-            //}
-            //if (posterUserIds != null)
-            //{
-            //    foreach (var posterUserId in posterUserIds)
-            //    {
-            //        _unitOfWork.PosterUserIdRepository.Remove(posterUserId);
-            //    }
-            //    check = true;
-            //}
-            //if (wishItems != null)
-            //{
-            //    foreach (var wishItem in wishItems)
-            //    {
-            //        _unitOfWork.WishItemRepository.Remove(wishItem);
-            //    }
-            //    check = true;
-            //}
-            //if (check)
-            //{
-            //    _unitOfWork.PosterRepository.Remove(poster);
-            //    _unitOfWork.PosterFeaturesRepository.Remove(feature);
-            //    await _unitOfWork.CommitAsync();
-            //}
+            }
+            if (posterUserIds != null)
+            {
+                foreach (var posterUserId in posterUserIds)
+                {
+                    _unitOfWork.PosterUserIdRepository.Remove(posterUserId);
+                }
+                check = true;
+            }
+            if (wishItems != null)
+            {
+                foreach (var wishItem in wishItems)
+                {
+                    _unitOfWork.WishItemRepository.Remove(wishItem);
+                }
+                check = true;
+            }
+            if (check)
+            {
+                _unitOfWork.PosterRepository.Remove(poster);
+                _unitOfWork.PosterFeaturesRepository.Remove(feature);
+                await _unitOfWork.CommitAsync();
+            }
 
         }
     }

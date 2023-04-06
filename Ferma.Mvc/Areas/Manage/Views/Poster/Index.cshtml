@@ -149,10 +149,11 @@
                                         <div class="d-flex justify-content-sm-around">
                                             @*  <a asp-route-id="@poster.Id" asp-action="edit" asp-controller="poster"><i style="font-size: 26px !important;" class="bx bx-edit-alt me-1"></i> </a>*@
                                             <a style="display:flex; align-items:center;" asp-route-id="@poster.Id" asp-action="detail" asp-controller="poster"><i style="font-size:26px !important;" class="bx bx-info-circle me-1"></i> </a>
-                                            <button style="color:red;" type="button" class="btn " data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                                <i style="font-size:26px !important;" class="bx bx-trash me-1 "></i>
-                                            </button>
-                                            @*<a asp-route-id="@poster.Id" asp-action="delete" asp-controller="poster"></a>*@
+                                            <a class="delete-btn" asp-controller="poster" asp-action="delete" asp-route-id="@poster.Id"><i style="font-size:26px !important; color:red;" class="bx bx-trash me-1 "></i> </a>
+
+                                            @*<button style="color:red;" type="button" class="btn " data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                    <i style="font-size:26px !important;" class="bx bx-trash me-1 "></i>
+                                                </button>*@
                                         </div>
                                     </td>
                                 </tr>
@@ -172,7 +173,9 @@
 </div>
 
 @section Scripts{
-    <script src="~/manage/js/alertModal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/assets/js/SweetAlertPoster.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }

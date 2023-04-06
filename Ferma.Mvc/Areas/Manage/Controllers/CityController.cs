@@ -168,25 +168,21 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             CityViewModel CityViewModel = new CityViewModel();
             try
             {
-                CityViewModel = CityVM(1, CityViewModel, null);
                 await _adminCityServices.CityDelete(id);
             }
-            catch (ImageNullException ex)
-            {
-                TempData["Error"] = (ex.Message);
-                return View(CityViewModel);
-            }
+
             catch (ItemUseException ex)
             {
                 TempData["Error"] = (ex.Message);
-                return View(CityViewModel);
+                return Ok();
             }
             catch (Exception)
             {
                 return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("Şəhər silindi!");
-            return Ok(CityViewModel);
+            return Ok();
+
         }
 
         private CityViewModel CityVM(int page, CityViewModel CityViewModel, string name)

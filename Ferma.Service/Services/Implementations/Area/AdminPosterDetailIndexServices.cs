@@ -35,10 +35,10 @@ namespace Ferma.Service.Services.Implementations.Area
         }
         public async Task<List<Category>> GetCategories()
         {
-            var subCategories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
-            if (subCategories == null)
+            var categories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete);
+            if (categories == null)
                 throw new NotFoundException("Error");
-            return subCategories.ToList();
+            return  categories.ToList();
         }
         public async Task<PosterUserId> GetAppUser(int posterId)
         {

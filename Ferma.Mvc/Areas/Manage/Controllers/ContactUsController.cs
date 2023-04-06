@@ -101,13 +101,15 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
                 if (ex.HResult == -2146233088)
                 {
                     TempData["Error"] = ("ContactUs məhsulda istifade olunur deye silmek mümkün olmadı!");
-                    return RedirectToAction(nameof(Index));
+                    return Ok();
+
                 }
                 TempData["Error"] = ("Proses uğursuz oldu!");
-                return RedirectToAction(nameof(Index));
+                return Ok();
+
             }
             TempData["Success"] = ("Proses uğurlu oldu!");
-            return RedirectToAction(nameof(Index));
+            return Ok();
         }
     }
 }

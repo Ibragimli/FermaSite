@@ -151,28 +151,23 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            SubCategoryViewModel SubCategoryViewModel = new SubCategoryViewModel();
             try
             {
-                SubCategoryViewModel = await SubCategoryEditVM(1, SubCategoryViewModel, id, null, null);
                 await _adminSubCategoryServices.SubCategoryDelete(id);
-            }
-            catch (ImageNullException ex)
-            {
-                TempData["Error"] = (ex.Message);
-                return View(SubCategoryViewModel);
             }
             catch (ItemUseException ex)
             {
                 TempData["Error"] = (ex.Message);
-                return View(SubCategoryViewModel);
+                return Ok();
+
             }
             catch (Exception)
             {
                 return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("AltKategoriya silindi!");
-            return Ok(SubCategoryViewModel);
+            return Ok();
+
         }
 
         private async Task<SubCategoryViewModel> SubCategoryEditVM(int page, SubCategoryViewModel SubCategoryViewModel, int id, string category, string subCategory)

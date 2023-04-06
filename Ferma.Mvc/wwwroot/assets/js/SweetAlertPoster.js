@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $(document).on("click", ".disabled-btn",  function (e) {
+    $(document).on("click", ".delete-btn",  function (e) {
         e.preventDefault();
         let url = $(this).attr("href");
          Swal.fire({
@@ -14,7 +14,7 @@
             width: "26em",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch("https://localhost:44364/" + url)
+                fetch(url)
                     .then(response => {
                         if (response.ok) {
                             window.location.reload(true)
@@ -22,10 +22,7 @@
                         else {
                             alert("xeta bas verdi")
                             console.log(url)
-                            console.log(response.status)
                             console.log(response.statusText)
-                            console.log(response.body)
-                            console.log(response)
                         }
                     })
             }

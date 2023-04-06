@@ -162,28 +162,26 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            CategoryViewModel categoryViewModel = new CategoryViewModel();
             try
             {
-                categoryViewModel = CategoryVM(1, categoryViewModel, null);
                 await _adminCategoryServices.CategoryDelete(id);
             }
             catch (ImageNullException ex)
             {
                 TempData["Error"] = (ex.Message);
-                return View(categoryViewModel);
+                return Ok();
             }
             catch (ItemAlreadyException ex)
             {
                 TempData["Error"] = (ex.Message);
-                return View(categoryViewModel);
+                return Ok();
             }
             catch (Exception)
             {
                 return RedirectToAction("index", "notfound");
             }
             TempData["Success"] = ("Kategoriya silindi!");
-            return Ok(categoryViewModel);
+            return Ok();
         }
 
         private CategoryViewModel CategoryVM(int page, CategoryViewModel categoryViewModel, string name)

@@ -104,8 +104,6 @@ namespace Ferma.Service.Services.Implementations.Area
             if (check)
                 throw new ItemAlreadyException("Kategoriya altkateqoriyalarda istifadə olunur!!!");
             PosterImageDelete(oldCategory);
-
-
             _unitOfWork.CategoryRepository.Remove(oldCategory);
             await _unitOfWork.CommitAsync();
         }

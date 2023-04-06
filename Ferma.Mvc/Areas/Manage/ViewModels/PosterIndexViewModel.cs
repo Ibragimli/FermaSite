@@ -10,7 +10,7 @@ namespace Ferma.Mvc.Areas.Manage.ViewModels
     public class PosterIndexViewModel
     {
         public PagenetedList<Poster> Posters { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<Category>Categories { get; set; }
         public List<SubCategory> SubCategories { get; set; }
         public PosterDeleteModal PosterDeleteModal { get; set; }
     }

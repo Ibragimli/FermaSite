@@ -46,79 +46,13 @@ namespace Ferma.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-         
+
             services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<PosterCreateDto>());
+           
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            services.AddIdentity<AppUser, IdentityRole>(opt =>
-            {
-                opt.Password.RequiredUniqueChars = 0;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.User.RequireUniqueEmail = false;
-            }).AddDefaultTokenProviders().AddEntityFrameworkStores<DataContext>();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            services.AddScoped<IPosterRepository, PosterRepository>();
-            services.AddScoped<IPosterFeaturesRepository, PosterFeaturesRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<IContactUsRepository, ContactUsRepository>();
-            services.AddScoped<IImageSettingRepository, ImageSettingRepository>();
-            services.AddScoped<IPosterFeaturesRepository, PosterFeaturesRepository>();
-            services.AddScoped<IPosterImageRepository, PosterImageRepository>();
-            services.AddScoped<ISettingRepository, SettingRepository>();
-            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IWishItemRepository, WishItemRepository>();
-            services.AddScoped<IUserTermRepository, UserTermRepository>();
-
-
-            services.AddScoped<IEmailServices, EmailServices>();
-            services.AddScoped<IPosterCreateServices, PosterCreateServices>();
-            services.AddScoped<IManageImageHelper, ManageImageHelper>();
-            services.AddScoped<IImageValue, ImageValue>();
-            services.AddScoped<ILayoutServices, LayoutServices>();
-            services.AddScoped<IAnaSehifeIndexServices, AnaSehifeIndexServices>();
-            services.AddScoped<IPosterCreateIndexServices, PosterCreateIndexServices>();
-            services.AddScoped<IAuthenticationServices, AuthenticationServices>();
-            services.AddScoped<IPosterCreateValueCheckServices, PosterCreateValueCheckServices>();
-            services.AddScoped<IPaymentCreateServices, PaymentCreateServices>();
-            services.AddScoped<IProfileLoginServices, ProfileLoginServices>();
-            services.AddScoped<IPhoneNumberServices, PhoneNumberServices>();
-            services.AddScoped<IProfileEditServices, ProfileEditServices>();
-            services.AddScoped<IPosterEditServices, PosterEditServices>();
-            services.AddScoped<IBalanceIncreaseServices, BalanceIncreaseServices>();
-            services.AddScoped<IPosterWishlistAddServices, PosterWishlistAddServices>();
-            services.AddScoped<IPosterWishlistDeleteServices, PosterWishlistDeleteServices>();
-            services.AddScoped<IPosterSearchServices, PosterSearchServices>();
-            services.AddScoped<IContactUsServices, ContactUsServices>();
-            services.AddScoped<IUserPostersServices, UserPostersServices>();
-            services.AddScoped<IPosterDetailIndexServices, PosterDetailIndexServices>();
-            services.AddScoped<IAdminLoginServices, AdminLoginServices>();
-            services.AddScoped<IAdminPosterDetailIndexServices, AdminPosterDetailIndexServices>();
-            services.AddScoped<IAdminPosterIndexServices, AdminPosterIndexServices>();
-            services.AddScoped<IAdminPosterEditServices, AdminPosterEditServices>();
-            services.AddScoped<IBalancePaymentIndexServices, BalancePaymentIndexServices>();
-            services.AddScoped<IPosterPaymentIndexServices, PosterPaymentIndexServices>();
-            services.AddScoped<IAdminCategoryServices, AdminCategoryServices>();
-            services.AddScoped<IAdminSubCategoryServices, AdminSubCategoryServices>();
-            services.AddScoped<IAdminCityServices, AdminCityServices>();
-            services.AddScoped<IAdminServiceDurationServices, AdminServiceDurationServices>();
-            services.AddScoped<ISettingEditServices, SettingEditServices>();
-            services.AddScoped<ISettingIndexServices, SettingIndexServices>();
-            services.AddScoped<IContactUsDeleteServices, ContactUsDeleteServices>();
-            services.AddScoped<IContactUsIndexServices, ContactUsIndexServices>();
-            services.AddScoped<IContactRespondServices, ContactRespondServices>();
-            services.AddScoped<IPosterDeleteServices, PosterDeleteServices>();
-            services.AddScoped<IAdminUserTermServices, AdminUserTermServices>();
-            services.AddScoped<IUserTermIndexServices, UserTermIndexServices>();
-            services.AddScoped<IDashboardServices, DashboardServices>();
-
-
-            //services.AddScoped<IUrlHelper>();
+            services.AddIdentityServiceExtention();
+            services.AddServiceScopeExtention();
 
         }
 

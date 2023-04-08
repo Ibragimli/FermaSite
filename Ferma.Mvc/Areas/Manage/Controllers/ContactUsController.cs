@@ -4,6 +4,7 @@ using Ferma.Service.Dtos.Area;
 using Ferma.Service.Helper;
 using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.Area;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Ferma.Mvc.Areas.Manage.Controllers
 {
     [Area("manage")]
-    //[Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin")]
 
     public class ContactUsController : Controller
     {

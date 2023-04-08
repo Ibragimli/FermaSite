@@ -2,6 +2,7 @@
 using Ferma.Mvc.Areas.Manage.ViewModels;
 using Ferma.Service.Helper;
 using Ferma.Service.Services.Interfaces.Area;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace Ferma.Mvc.Areas.Manage.Controllers
 {
     [Area("manage")]
-    //[Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class BalancePaymentsController : Controller
     {
         private readonly IBalancePaymentIndexServices _balancePaymentIndexServices;

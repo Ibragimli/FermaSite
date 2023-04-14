@@ -96,7 +96,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li class="headUser mb-2">
-                                                <a style=" display: flex !important; flex-direction: row; justify-content: center; align-items: center; "  asp-action="index" asp-controller="profile">
+                                                <a style=" display: flex !important; flex-direction: row; justify-content: center; align-items: center; " asp-action="index" asp-controller="profile">
                                                     <i class="fa-solid fa-circle-user"></i>
                                                     <span>Profile</span>
                                                 </a>
@@ -192,11 +192,20 @@
                     </a>
                 </li>
                 <li class="tabBar-li tabBar-li-login">
-                    <a class="tabBar-link" asp-action="daxilol" asp-controller="profile">
-                        <i class="tabBar-icon fa-solid fa-circle-user"></i>
-                        <span class="tabBar-text">Giriş</span>
-                    </a>
-                </li>
+                    @if (user != null && user.IsAdmin == false)
+                    {
+                        <a class="tabBar-link" asp-action="index" asp-controller="profile">
+                            <i class="tabBar-icon fa-solid fa-circle-user"></i>
+                            <span class="tabBar-text">@(user.Name.Length>6?(user.Name.Substring(0,6)):(user.Name))</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="daxilol" asp-controller="profile">
+                            <i class="tabBar-icon fa-solid fa-circle-user"></i>
+                            <span class="tabBar-text">Giriş</span>
+                        </a>
+                    }
             </ul>
         </section>
         <!-- TabBar End -->

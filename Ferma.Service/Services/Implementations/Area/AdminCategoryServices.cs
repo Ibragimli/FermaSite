@@ -62,7 +62,7 @@ namespace Ferma.Service.Services.Implementations.Area
         {
             bool check = false;
             var oldCategory = await _unitOfWork.CategoryRepository.GetAsync(x => x.Id == category.Id);
-            if (await _unitOfWork.CategoryRepository.IsExistAsync(x => x.Name == category.Name))
+            if (await _unitOfWork.CategoryRepository.IsExistAsync(x => x.Name == category.Name && x.Id != category.Id))
                 throw new ItemAlreadyException("Bu adda kategoriya mövcuddur!");
 
             if (category.CategoryImageFile != null)

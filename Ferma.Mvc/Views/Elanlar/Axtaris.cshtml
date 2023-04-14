@@ -83,7 +83,10 @@
                                     <div class="posterDetailBox">
                                         <div class="posterPriceBox">
                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
-                                                <span>@posterVip.PosterFeatures.Price  @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                <span>
+                                                    @String.Format("{0:0.##}", posterVip.PosterFeatures.Price)
+                                                    @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                </span>
                                             </a>
                                         </div>
 
@@ -163,7 +166,11 @@
                                     <div class="posterDetailBox">
                                         <div class="posterPriceBox">
                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterVip.Id">
-                                                <span>@posterVip.PosterFeatures.Price  @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                <span>
+                                                    @String.Format("{0:0.##}", posterVip.PosterFeatures.Price)
+
+                                                    @(!posterVip.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                </span>
                                             </a>
                                         </div>
 
@@ -241,7 +248,10 @@
                                     <div class="posterDetailBox">
                                         <div class="posterPriceBox">
                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@posterAll.Id">
-                                                <span>@posterAll.PosterFeatures.Price  @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                <span>
+                                                    @String.Format("{0:0.##}", posterAll.PosterFeatures.Price)
+                                                    @(!posterAll.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                </span>
                                             </a>
                                         </div>
 

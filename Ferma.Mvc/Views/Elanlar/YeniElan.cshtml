@@ -99,7 +99,7 @@
                         <div class="row mb-3">
 
                             @* Çatdirilma *@
-                            <div class="col-3 d-flex align-items-center">
+                            <div class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-center">
                                 <input style="margin-right:4px; margin-top:0px !important;" class="form-check-input" asp-for="@Model.PosterCreateDto.IsShipping" placeholder="...." />
                                 <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Çatdırılma</span>
                                 <span asp-validation-for="@Model.PosterCreateDto.IsShipping" class="text-danger"></span>
@@ -107,7 +107,7 @@
                             @* Çatdirilma *@
 
                             @* Yeni-Kohne *@
-                            <div class="col-3 d-flex align-items-center">
+                            <div class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-center">
                                 <input style="margin-right: 4px; margin-top: 0px !important;" class="form-check-input" asp-for="@Model.PosterCreateDto.IsNew" placeholder="...." />
                                 <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Yeni</span>
                                 <span asp-validation-for="@Model.PosterCreateDto.IsNew" class="text-danger"></span>

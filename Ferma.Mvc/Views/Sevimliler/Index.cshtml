@@ -60,7 +60,11 @@
                                         <div class="posterDetailBox">
                                             <div class="posterPriceBox">
                                                 <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Poster.Id">
-                                                    <span>@poster.Poster.PosterFeatures.Price  @(!poster.Poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                    <span>
+                                                        @String.Format("{0:0.##}", poster.Poster.PosterFeatures.Price)
+
+                                                        @(!poster.Poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                    </span>
 
                                                 </a>
                                             </div>
@@ -87,31 +91,7 @@
                     </div>
                 </div>
             </div>
-            @if (Model.WishlistItems.Count > 0)
-            {
-                <div class="row navRow  justify-content-center ">
-                    <div class="col-lg-10 col-md-11 col-sm-12 d-flex justify-content-end">
-                        <nav aria-label="...">
-                            <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <span class="page-link">Əvvəl</span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active">
-                                    <span class="page-link">
-                                        2
-                                        <span class="sr-only">(current)</span>
-                                    </span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Sonra</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>}
-
+         
         </div>
     </section>
     <!-- Wishlist Poster End -->

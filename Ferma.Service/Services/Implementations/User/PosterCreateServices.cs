@@ -106,8 +106,6 @@ namespace Ferma.Service.Services.Implementations.User
             return features;
         }
 
-
-
         public async Task<Poster> CreatePoster(PosterFeatures features)
         {
             Poster poster = new Poster
@@ -132,9 +130,6 @@ namespace Ferma.Service.Services.Implementations.User
 
         }
 
-
-
-
         public async void SaveChange(Poster Poster)
         {
             await _unitOfWork.PosterRepository.InsertAsync(Poster);
@@ -144,19 +139,12 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
         }
 
-
-
-
         public void SendCode(string email, string code)
         {
             _emailServices.Send(email, "Doğrulama kodunuz", code);
         }
 
-        public string CreateUrl(string email)
-        {
-            throw new NotImplementedException();
-        }
-
+   
         public void CreatePosterCookie(List<IFormFile> imageFiles, PosterCreateDto posterCreateDto)
         {
             foreach (var item in imageFiles)
@@ -170,8 +158,6 @@ namespace Ferma.Service.Services.Implementations.User
             var posterStr = JsonConvert.SerializeObject(posterCreateDto);
             _contextAccessor.HttpContext.Response.Cookies.Append("posterVM", posterStr);
         }
-
-
 
 
         public async Task<UserAuthentication> CheckAuthentication(string code, string phoneNumber, string token, List<string> images)

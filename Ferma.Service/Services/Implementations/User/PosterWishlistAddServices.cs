@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Core.IUnitOfWork;
 using Ferma.Service.CustomExceptions;
 using Ferma.Service.Dtos.User;
@@ -34,6 +35,7 @@ namespace Ferma.Service.Services.Implementations.User
                 wishItems = JsonConvert.DeserializeObject<List<CookieWishItemDto>>(existWishItem);
             }
             CookieWishItemDto item = wishItems.Find(x => x.PosterId == id);
+          
             if (item == null)
             {
                 item = new CookieWishItemDto
@@ -62,10 +64,14 @@ namespace Ferma.Service.Services.Implementations.User
             {
                 throw new ItemNotFoundException("Mehsul Tapilmadi");
             }
+            if (await _unitOfWork.PosterRepository.IsExistAsync(x => x.PosterFeatures.PosterStatus != PosterStatus.Active && x.Id == id))
+            {
+                throw new ItemFormatException("Elan aktiv deyil!");
+            }
         }
         public async Task<WishPosterCreateDto> UserAddWish(int id, AppUser user)
         {
-            WishItem wishItem = await _unitOfWork.WishItemRepository.GetAsync(x => x.AppUserId == user.Id && x.PosterId == id,"Poster", "Poster.PosterFeatures");
+            WishItem wishItem = await _unitOfWork.WishItemRepository.GetAsync(x => x.AppUserId == user.Id && x.PosterId == id, "Poster", "Poster.PosterFeatures");
 
             if (wishItem == null)
             {

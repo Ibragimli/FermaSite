@@ -416,17 +416,22 @@ namespace Ferma.Mvc.Controllers
                 await _posterWishlistAddServices.IsPoster(id);
                 var user = await _posterWishlistAddServices.IsAuthenticated();
                 if (user != null && user.IsAdmin == false) await _posterWishlistAddServices.UserAddWish(id, user);
-                else _posterWishlistAddServices.CookieAddWish(id);
+                else  _posterWishlistAddServices.CookieAddWish(id);
             }
             catch (ItemNotFoundException ex)
             {
-                TempData["Success"] = ex.Message;
-                return View();
+                TempData["Error"] = ex.Message;
+                return Ok(false);
+            }
+            catch (ItemFormatException ex)
+            {
+                TempData["Error"] = ex.Message;
+                return Ok(false);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View();
+                return Ok(false);
             }
 
             TempData["Success"] = "Elan sevimlilərə əlavə edildi";

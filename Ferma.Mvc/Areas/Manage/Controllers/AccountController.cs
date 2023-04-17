@@ -66,14 +66,14 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
 
         //private async Task<IActionResult> CreateRole()
         //{
-            //var role1 = await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
-            //var role2 = await _roleManager.CreateAsync(new IdentityRole("Admin"));
-            //var role3 = await _roleManager.CreateAsync(new IdentityRole("Member"));
+        //    var role1 = await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+        //    var role2 = await _roleManager.CreateAsync(new IdentityRole("Admin"));
+        //    var role3 = await _roleManager.CreateAsync(new IdentityRole("Member"));
 
-            //AppUser SuperAdmin = new AppUser { Name = "Elnur", UserName = "SuperAdmin" };
-            //var admin = await _userManager.CreateAsync(SuperAdmin, "admin123");
-            //var resultRole = await _userManager.AddToRoleAsync(SuperAdmin, "SuperAdmin");
-            //return Ok(resultRole);
+        //    AppUser SuperAdmin = new AppUser { Name = "Name", UserName = "Username" };
+        //    var admin = await _userManager.CreateAsync(SuperAdmin, "password");
+        //    var resultRole = await _userManager.AddToRoleAsync(SuperAdmin, "Admin");
+        //    return Ok(resultRole);
         //}
 
     }

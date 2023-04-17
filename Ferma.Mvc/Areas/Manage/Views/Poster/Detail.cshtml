@@ -105,13 +105,13 @@
                                         @if (Model.Poster.PosterFeatures.PosterStatus != PosterStatus.Disabled)
                                         {
                                             <div class="col mb-1 ms-2">
-                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posterdisabled" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-danger disabled-btn">Ləğv etmək</a>
+                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posterdisabled" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-danger deactive-btn">Ləğv etmək</a>
                                             </div>
                                         }
                                         @if (Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Waiting || Model.Poster.PosterFeatures.PosterStatus == PosterStatus.Disabled)
                                         {
                                             <div class="col mb-1 ms-2">
-                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posteraccept" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-success disabled-btn">Qəbul etmək</a>
+                                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="posteraccept" asp-controller="poster" asp-route-id="@Model.Poster.Id" class="btn  btn-success active-btn">Qəbul etmək</a>
                                             </div>
                                         }
                                         <div class="col mb-1 posterButton ms-2 ">
@@ -274,8 +274,9 @@
 
 @section Scripts{
 
-   
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
 
-    <script src="~/assets/js/SweetAlert.js"></script>
+    <script src="~/assets/js/SweetAlertActive.js"></script>
+    <script src="~/assets/js/SweetAlertDeAktive.js"></script>
 }

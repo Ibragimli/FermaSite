@@ -10,9 +10,7 @@
 
                 }
                 else {
-                    console.log(response.status)
-                    console.log(response)
-
+                    window.location.reload(true);
                 }
             })
     })

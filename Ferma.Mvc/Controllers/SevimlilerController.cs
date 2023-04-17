@@ -1,4 +1,5 @@
 ﻿using Ferma.Core.Entites;
+using Ferma.Core.Enums;
 using Ferma.Data.Datacontext;
 using Ferma.Mvc.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -51,12 +52,15 @@ namespace Ferma.Mvc.Controllers
 
                 foreach (var item in wishItems)
                 {
-                    WishlistItemViewModel wishlistItem = new WishlistItemViewModel
+                    if (item.Poster.PosterFeatures.PosterStatus == PosterStatus.Active)
                     {
-                        Poster = item.Poster,
-
-                    };
-                    wishlistItems.Add(wishlistItem);
+                        WishlistItemViewModel wishlistItem = new WishlistItemViewModel
+                        {
+                            Poster = item.Poster,
+                        };
+                        wishlistItems.Add(wishlistItem);
+                    }
+                   
                 }
             }
             else
@@ -68,20 +72,17 @@ namespace Ferma.Mvc.Controllers
 
                     foreach (var item in cookieWishItems)
                     {
-                        if (_context.Posters.Any(x => x.Id == item.PosterId))
+                        if (await _context.Posters.AnyAsync(x => x.Id == item.PosterId && x.PosterFeatures.PosterStatus == PosterStatus.Active))
                         {
                             WishlistItemViewModel checkoutItem = new WishlistItemViewModel
                             {
-                                Poster = _context.Posters.Include(x => x.PosterFeatures).Include(x => x.PosterImages).Include(x => x.PosterFeatures.City).FirstOrDefault(x => x.Id == item.PosterId),
+                                Poster = _context.Posters.Include(x => x.PosterFeatures).Include(x => x.PosterImages).Include(x => x.PosterFeatures.City).FirstOrDefault(x => x.Id == item.PosterId && x.PosterFeatures.PosterStatus == PosterStatus.Active),
                             };
                             wishlistItems.Add(checkoutItem);
                         }
-                       
                     }
                 }
-
             }
-
             return wishlistItems;
         }
     }

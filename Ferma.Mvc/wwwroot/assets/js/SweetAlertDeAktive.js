@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $(document).on("click", ".disabled-btn",  function (e) {
+    $(document).on("click", ".deactive-btn",  function (e) {
         e.preventDefault();
         let url = $(this).attr("href");
          Swal.fire({

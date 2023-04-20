@@ -8,6 +8,8 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         string PhoneNumberFilter(string phoneNumber);
         void PhoneNumberValidation(string phoneNumber);
+        void PhoneNumberPrefixValidation(string phoneNumber);
+
 
     }
 }

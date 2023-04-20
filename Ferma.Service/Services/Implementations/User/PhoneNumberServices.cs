@@ -20,6 +20,16 @@ namespace Ferma.Service.Services.Implementations.User
                     throw new ItemFormatException("Nömrə yanlışdır");
             }
         }
+        public void PhoneNumberPrefixValidation(string phoneNumber)
+        {
+            string phoneRegex = @"^(050|051|055|070|077|010)(\d{7})$";
+            if (phoneNumber != null)
+            {
+                if (!Regex.IsMatch(phoneNumber, phoneRegex))
+                    throw new ItemFormatException("Nömrənin prefiksi yanlışdır!");
+            }
+        }
+
         public string PhoneNumberFilter(string phoneNumber)
         {
             string number = "";

@@ -10,5 +10,6 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         public Task CheckValue(ProfileEditDto editDto);
         public Task Edit(ProfileEditDto editDto);
+        public Task<PosterEditGetDto> EditVM(int id);
     }
 }

@@ -63,6 +63,16 @@ namespace Ferma.Service.Services.Implementations.User
             poster.PosterFeatures.ExpirationDateActive = now.AddDays(30);
             await _unitOfWork.CommitAsync();
         }
+        public void posterEditCheck(Poster poster)
+        {
+
+            if (poster.PosterFeatures.Describe == null)
+                throw new ItemNullException("Təsvir hissəsi boş ola bilməz!");
+            if (poster.PosterFeatures.Name == null)
+                throw new ItemNullException("Elanın adı boş ola bilməz!");
+            if (poster.PosterFeatures.Price == 0 || poster.PosterFeatures.Price == null)
+                throw new ItemNullException("Elanın qiyməti 0₼-dan çox olmalıdır!");
+        }
 
         public async Task posterEdit(Poster poster)
         {
@@ -122,7 +132,7 @@ namespace Ferma.Service.Services.Implementations.User
                 checkBool = true;
             if (await CreateImageFormFile(poster.ImageFiles, poster.Id, deleteCount) == 1)
                 checkBool = true;
-           
+
             if (checkBool)
             {
                 oldPoster.ModifiedDate = DateTime.UtcNow.AddHours(4);

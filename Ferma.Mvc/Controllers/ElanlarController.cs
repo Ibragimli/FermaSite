@@ -163,7 +163,7 @@ namespace Ferma.Mvc.Controllers
             }
 
         }
-        public IActionResult ConfirmPayment()
+        private IActionResult ConfirmPayment()
         {
             return View();
         }
@@ -231,7 +231,12 @@ namespace Ferma.Mvc.Controllers
 
                 //SubCategory check 
                 _posterCreateValueCheckServices.SubCategoryValidation(posterCreateDto.SubCategoryId);
+                
+                //City check 
                 _posterCreateValueCheckServices.CityValidation(posterCreateDto.CityId);
+
+                //Describe check 
+                _posterCreateValueCheckServices.CheckDescribe(posterCreateDto.Describe);
 
                 //nomre yoxlanilmasi
                 _numberServices.PhoneNumberValidation(posterCreateDto.PhoneNumber);
@@ -243,6 +248,7 @@ namespace Ferma.Mvc.Controllers
                 //nomre filterlemesi
                 posterCreateDto.PhoneNumber = _numberServices.PhoneNumberFilter(posterCreateDto.PhoneNumber);
 
+                _numberServices.PhoneNumberPrefixValidation(posterCreateDto.PhoneNumber);
 
                 //CheckImage
                 _imageHelper.ImagesCheck(posterCreateDto.ImageFiles);
@@ -416,7 +422,7 @@ namespace Ferma.Mvc.Controllers
                 await _posterWishlistAddServices.IsPoster(id);
                 var user = await _posterWishlistAddServices.IsAuthenticated();
                 if (user != null && user.IsAdmin == false) await _posterWishlistAddServices.UserAddWish(id, user);
-                else  _posterWishlistAddServices.CookieAddWish(id);
+                else _posterWishlistAddServices.CookieAddWish(id);
             }
             catch (ItemNotFoundException ex)
             {

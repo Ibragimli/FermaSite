@@ -50,5 +50,20 @@ namespace Ferma.Service.Services.Implementations.User
             if (checkBool)
                 await _unitOfWork.CommitAsync();
         }
+
+        public async Task<PosterEditGetDto> EditVM(int id)
+        {
+            PosterEditGetDto posterEditVM = new PosterEditGetDto
+            {
+                PosterEditDto = new PosterEditDto(),
+
+                Poster = await _unitOfWork.PosterRepository.GetAsync(x => x.Id == id && x.IsDelete == false && x.PosterFeatures.IsDisabled == false,
+                "PosterImages", "PosterFeatures.SubCategory", "PosterFeatures.SubCategory.Category", "PosterUserIds.AppUser", "PosterFeatures.City"),
+
+                Categories = await _unitOfWork.CategoryRepository.GetAllAsync(x => !x.IsDelete),
+                SubCategories = await _unitOfWork.SubCategoryRepository.GetAllAsync(x => !x.IsDelete),
+            };
+            return posterEditVM;
+        }
     }
 }

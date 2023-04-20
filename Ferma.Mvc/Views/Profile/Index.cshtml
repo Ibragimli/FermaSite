@@ -11,7 +11,7 @@
     DateTime now = DateTime.UtcNow;
 
 }
-@model ProfileViewModel
+@model ProfileGetDto
 
 <main>
     <!-- Profile   Start -->
@@ -160,7 +160,11 @@
                                                                     <div class="posterDetailBox">
                                                                         <div class="posterPriceBox">
                                                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                                                <span>
+                                                                                    @String.Format("{0:0.##}", poster.PosterFeatures.Price)
+
+                                                                                    @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                                                </span>
 
                                                                             </a>
                                                                         </div>
@@ -186,7 +190,7 @@
                                                                             </a>
                                                                         </div>
                                                                         <div class="posterDisabledButtonBox">
-                                                                            <a asp-controller="profile" asp-action="DisabledPoster" asp-route-id="@poster.Id" class="disabled-btn">
+                                                                            <a asp-controller="profile" asp-action="DisabledPoster" asp-route-id="@poster.Id" class="deactive-btn">
                                                                                 Deaktiv et
                                                                             </a>
                                                                         </div>
@@ -276,7 +280,11 @@
                                                                     <div class="posterDetailBox">
                                                                         <div class="posterPriceBox">
                                                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                                                <span>
+                                                                                    @String.Format("{0:0.##}", poster.PosterFeatures.Price)
+
+                                                                                    @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                                                </span>
 
                                                                             </a>
                                                                         </div>
@@ -372,7 +380,11 @@
                                                                     <div class="posterDetailBox">
                                                                         <div class="posterPriceBox">
                                                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                                                <span>
+                                                                                    @String.Format("{0:0.##}", poster.PosterFeatures.Price)
+
+                                                                                    @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                                                </span>
 
                                                                             </a>
                                                                         </div>
@@ -456,7 +468,11 @@
                                                                     <div class="posterDetailBox">
                                                                         <div class="posterPriceBox">
                                                                             <a asp-action="elan" asp-controller="elanlar" asp-route-id="@poster.Id">
-                                                                                <span>@poster.PosterFeatures.Price  @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))</span>
+                                                                                <span>
+                                                                                    @String.Format("{0:0.##}", poster.PosterFeatures.Price)
+
+                                                                                    @(!poster.PosterFeatures.PriceCurrency?("AZN"):("USD"))
+                                                                                </span>
 
                                                                             </a>
                                                                         </div>
@@ -640,7 +656,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form asp-action="balanceIncrease" method="post" id="balansId">
+                    <form asp-controller="notfound" asp-action="index" method="post" id="balansId">
                         <hr>
                         <h1>BALANS ARTIMI</h1>
                         <hr>
@@ -725,5 +741,5 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
 
-    <script src="~/assets/js/SweetAlert.js"></script>
+    <script src="~/assets/js/SweetAlertDeAktive.js"></script>
 }

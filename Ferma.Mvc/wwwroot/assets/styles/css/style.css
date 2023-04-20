@@ -6,6 +6,11 @@ body .validation-summary-errors ul li {
     font-weight: 600;
 }
 
+#login #phone::placeholder {
+    color: black;
+    opacity: 50%;
+}
+
 header #tabBar .tabBar-ul li .tabBar-link i {
     color: #32CD32;
     font-size: 24px;
@@ -37,7 +42,7 @@ header #tabBar .tabBar-ul li .tabBar-link span {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            color: #b4b7bbd2;
+            color: white;
             max-width: 100%;
             font-size: 27px;
             -webkit-transition: all 0.4s;
@@ -1426,6 +1431,7 @@ body {
         padding-right: 29% !important;
         text-align: center;
     }
+
     main .profileBody nav #nav-tab {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -1532,7 +1538,7 @@ body {
 
 @media only screen and (max-width: 420px) {
 
-    
+
 
     main #breadCrumbs .casket .row .breadCrumbBox {
         left: 6.5%
@@ -1640,6 +1646,7 @@ body {
         padding-left: 25% !important;
         padding-right: 25% !important;
     }
+
     main #profile .container .row .profileBody #nav-tabContent #nav-home nav #elan-tab button {
         width: 50%;
         font-size: 13px
@@ -1655,6 +1662,7 @@ body {
         padding-left: 21% !important;
         padding-right: 21% !important;
     }
+
     header #tabBar .tabBar-ul li .tabBar-link .tabBar-text {
         font-size: 11px
     }
@@ -2833,7 +2841,7 @@ footer #footerCopyright {
                                     -webkit-box-align: center;
                                     -ms-flex-align: center;
                                     align-items: center;
-                                    color: #b4b7bbd2;
+                                    color: white;
                                     max-width: 100%;
                                     font-size: 27px;
                                     -webkit-transition: all 0.4s;
@@ -3200,7 +3208,7 @@ footer #footerCopyright {
                                     -webkit-box-align: center;
                                     -ms-flex-align: center;
                                     align-items: center;
-                                    color: #b4b7bbd2;
+                                    color: white;
                                     max-width: 100%;
                                     font-size: 27px;
                                     -webkit-transition: all 0.4s;
@@ -3624,7 +3632,7 @@ footer #footerCopyright {
                                         -webkit-box-align: center;
                                         -ms-flex-align: center;
                                         align-items: center;
-                                        color: #b4b7bbd2;
+                                        color: white;
                                         max-width: 100%;
                                         font-size: 27px;
                                         -webkit-transition: all 0.4s;
@@ -4086,7 +4094,7 @@ footer #footerCopyright {
                 padding: auto;
                 padding-left: 33%;
                 padding-right: 33%;
-                text-align:center;
+                text-align: center;
             }
 
             #authentication .container .row .card .card-body form .form-outline label {

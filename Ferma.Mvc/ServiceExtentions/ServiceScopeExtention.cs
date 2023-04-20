@@ -79,6 +79,8 @@ namespace Ferma.Mvc.ServiceExtentions
             services.AddScoped<IAdminUserTermServices, AdminUserTermServices>();
             services.AddScoped<IUserTermIndexServices, UserTermIndexServices>();
             services.AddScoped<IDashboardServices, DashboardServices>();
+            services.AddScoped<IProfileIndexServices, ProfileIndexServices>();
+
         }
 
     }

@@ -21,6 +21,7 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly IProfileIndexServices _profileIndexServices;
         private readonly IBalanceIncreaseServices _balanceIncreaseServices;
         private readonly IPosterEditServices _posterEditServices;
         private readonly IProfileEditServices _profileEditServices;
@@ -29,9 +30,10 @@ namespace Ferma.Mvc.Controllers
         private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public ProfileController(DataContext context, IBalanceIncreaseServices balanceIncreaseServices, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public ProfileController(DataContext context, IProfileIndexServices profileIndexServices, IBalanceIncreaseServices balanceIncreaseServices, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _profileIndexServices = profileIndexServices;
             _balanceIncreaseServices = balanceIncreaseServices;
             _posterEditServices = posterEditServices;
             _profileEditServices = profileEditServices;
@@ -50,7 +52,7 @@ namespace Ferma.Mvc.Controllers
             if (user == null)
                 return RedirectToAction("daxilol", "profile");
 
-            var profileVM = await _profileVM(user);
+            var profileVM = await _profileIndexServices._profileVM(user);
 
             return View(profileVM);
         }
@@ -91,6 +93,8 @@ namespace Ferma.Mvc.Controllers
 
                 //phone filter
                 string number = _numberServices.PhoneNumberFilter(phoneNumber);
+                _numberServices.PhoneNumberPrefixValidation(number);
+
                 //random code
                 string code = _authenticationServices.CodeCreate();
                 var UserExists = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == number);
@@ -129,6 +133,11 @@ namespace Ferma.Mvc.Controllers
             catch (NotFoundException)
             {
                 return RedirectToAction("index", "notfound");
+            }
+            catch (ItemFormatException ex)
+            {
+                ModelState.AddModelError("PhoneNumber", ex.Message);
+                return View();
             }
             catch (Exception ex)
             {
@@ -184,16 +193,13 @@ namespace Ferma.Mvc.Controllers
             return RedirectToAction("index", "anasehife");
         }
 
-
-
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int id)
         {
-            var posterEditVM = await _editVM(id);
+            var posterEditVM = await _profileEditServices.EditVM(id);
 
             return View(posterEditVM);
         }
-
 
         [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
@@ -202,11 +208,14 @@ namespace Ferma.Mvc.Controllers
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
-            var profileVM = await _profileVM(user);
-            var editVM = await _editVM(poster.Id);
+            var profileVM = await _profileIndexServices._profileVM(user);
+
+            var editVM = await _profileEditServices.EditVM(poster.Id);
 
             try
             {
+                _posterEditServices.posterEditCheck(poster);
+
                 await _posterEditServices.posterEdit(poster);
             }
 
@@ -220,42 +229,44 @@ namespace Ferma.Mvc.Controllers
                 ModelState.AddModelError("", msg.Message);
                 TempData["Error"] = (msg.Message);
 
-                return RedirectToAction("edit", editVM);
+                return View(editVM);
+
             }
             catch (ItemFormatException msg)
             {
                 ModelState.AddModelError("", msg.Message);
                 TempData["Error"] = (msg.Message);
 
-                return RedirectToAction("edit", editVM);
+                return View(editVM);
+
             }
             catch (ImageNullException msg)
             {
                 ModelState.AddModelError("ImageFiles", msg.Message);
                 TempData["Error"] = (msg.Message);
 
-                return RedirectToAction("edit", editVM);
+                return View(editVM);
+
             }
             catch (ImageFormatException msg)
             {
                 ModelState.AddModelError("ImageFiles", msg.Message);
                 TempData["Error"] = (msg.Message);
-
-                return RedirectToAction("edit", editVM);
+                return View(editVM);
             }
 
             catch (ImageCountException msg)
             {
                 ModelState.AddModelError("ImageFiles", msg.Message);
                 TempData["Error"] = (msg.Message);
-                return RedirectToAction("edit", editVM);
+                return View(editVM);
             }
             catch (ValueAlreadyExpception msg)
             {
                 ModelState.AddModelError("", msg.Message);
                 TempData["Error"] = (msg.Message);
+                return View(editVM);
 
-                return RedirectToAction("edit", editVM);
             }
             catch (Exception)
             {
@@ -267,7 +278,6 @@ namespace Ferma.Mvc.Controllers
             return RedirectToAction("index", "profile");
         }
 
-
         [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -275,7 +285,7 @@ namespace Ferma.Mvc.Controllers
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
-            var profileVM = await _profileVM(user);
+            var profileVM = await _profileIndexServices._profileVM(user);
 
             try
             {
@@ -310,12 +320,12 @@ namespace Ferma.Mvc.Controllers
         }
 
         [Authorize(Roles = "User")]
-
         public async Task<IActionResult> DisabledPoster(int id)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
-            var profileVM = await _profileVM(user);
+            var profileVM = await _profileIndexServices._profileVM(user);
+
 
             try
             {
@@ -343,7 +353,8 @@ namespace Ferma.Mvc.Controllers
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
-            var profileVM = await _profileVM(user);
+            var profileVM = await _profileIndexServices._profileVM(user);
+
 
             try
             {
@@ -380,12 +391,11 @@ namespace Ferma.Mvc.Controllers
         [Authorize(Roles = "User")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> BalanceIncrease(BalanceDto balanceDto)
+        private async Task<IActionResult> BalanceIncrease(BalanceDto balanceDto)
         {
             AppUser user = User.Identity.IsAuthenticated ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
 
-            var profileVM = await _profileVM(user);
-
+            var profileVM = await _profileIndexServices._profileVM(user);
             try
             {
                 await _balanceIncreaseServices.CheckBalanceIncrease(balanceDto);
@@ -410,9 +420,6 @@ namespace Ferma.Mvc.Controllers
             return RedirectToAction("index", "profile");
         }
 
-
-
-
         private LoginAuthenticationViewModel _autenticaitonVM(string token, string phoneNumber)
         {
             LoginAuthenticationViewModel authenticationViewModel = new LoginAuthenticationViewModel
@@ -421,41 +428,6 @@ namespace Ferma.Mvc.Controllers
                 PhoneNumber = phoneNumber,
             };
             return authenticationViewModel;
-        }
-
-        private async Task<ProfileViewModel> _profileVM(AppUser user)
-        {
-            ProfileViewModel profileVM = new ProfileViewModel
-            {
-                User = user,
-                ActivePosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Active).Take(50).ToListAsync(),
-                DeactivePosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.DeActive).Take(50).ToListAsync(),
-                WaitedPosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Waiting).Take(50).ToListAsync(),
-                DisabledPosters = await _context.Posters.Include(x => x.PosterImages).Include(x => x.PosterFeatures).ThenInclude(x => x.City).Where(x => !x.IsDelete && x.PosterFeatures.PosterStatus == PosterStatus.Disabled).Take(50).ToListAsync(),
-                PersonalPayments = await _context.Payments.Include(x => x.AppUser).Where(x => !x.IsDelete && x.Service == PaymentService.BalancePayment && x.AppUserId == user.Id).ToListAsync(),
-                PosterPayments = await _context.Payments.Include(x => x.AppUser).Include(x => x.Posters).ThenInclude(x => x.PosterFeatures).Where(x => !x.IsDelete && x.Service == PaymentService.PosterPayment && x.AppUserId == user.Id).ToListAsync(),
-                ProfileEditDto = new ProfileEditDto(),
-            };
-            return profileVM;
-
-        }
-        private async Task<PosterEditViewModel> _editVM(int id)
-        {
-            PosterEditViewModel posterEditVM = new PosterEditViewModel
-            {
-                PosterEditDto = new PosterEditDto(),
-                Poster = await _context.Posters.Include(x => x.PosterFeatures)
-                .Include(x => x.PosterUserIds).ThenInclude(x => x.AppUser)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.City)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory)
-                .Include(x => x.PosterFeatures).ThenInclude(x => x.SubCategory.Category)
-                .Include(x => x.PosterImages).Where(x => x.IsDelete == false && x.PosterFeatures.IsDisabled == false)
-                .FirstOrDefaultAsync(x => x.Id == id),
-                Categories = _context.Categories.ToList(),
-                SubCategories = _context.SubCategories.ToList(),
-                Cities = _context.Cities.ToList(),
-            };
-            return posterEditVM;
         }
 
     }

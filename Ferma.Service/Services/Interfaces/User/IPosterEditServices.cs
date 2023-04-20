@@ -10,7 +10,7 @@ namespace Ferma.Service.Services.Interfaces.User
     {
         public Task posterDisabled(int id);
         public Task posterActive(int id);
-        
+        public void posterEditCheck(Poster poster);
         public Task posterEdit(Poster poster );
     }
 }

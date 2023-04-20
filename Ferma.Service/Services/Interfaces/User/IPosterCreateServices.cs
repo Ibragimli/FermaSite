@@ -10,6 +10,7 @@ namespace Ferma.Service.Services.Interfaces.User
 {
     public interface IPosterCreateServices
     {
+    
         Task<PosterFeatures> CreatePosterFeature(PosterCreateDto PosterDto);
         Task CreateImageString(List<string> imageFiles, int posterId);
         Task CreateImageFormFile(List<IFormFile> imageFiles, int posterId);

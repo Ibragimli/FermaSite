@@ -1,6 +1,7 @@
 ﻿using Ferma.Core.IUnitOfWork;
 using Ferma.Data.Datacontext;
 using Ferma.Service.CustomExceptions;
+using Ferma.Service.Dtos.User;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -19,7 +20,13 @@ namespace Ferma.Service.Services.Implementations.User
             _unitOfWork = unitOfWork;
         }
 
-
+        public void CheckDescribe(string describe)
+        {
+            if (describe == null)
+            {
+                throw new ItemNullException("Təsvir hissəsi boş ola bilməz!");
+            }
+        }
         public void SubCategoryValidation(int subCategoryId)
         {
             if (subCategoryId == 0)
@@ -29,7 +36,7 @@ namespace Ferma.Service.Services.Implementations.User
             if (!check)
                 throw new ItemNotFoundException("Düzgün kategoriya seçilməyib");
         }
-       
+
 
         public void ImageCheck(List<IFormFile> images)
         {

@@ -5,7 +5,7 @@
 
 
 
-@model PosterEditViewModel
+@model PosterEditGetDto
 <main>
 
     <!-- Create Poster   Start -->
@@ -75,10 +75,10 @@
                         </div>
                         <!-- Poster Price  End -->
                         <!-- Poster Shipping and IsNew  Start -->
-
                         <div class="row">
                             @* Çatdirilma *@
-                            <div class="col-3 d-flex align-items-center">
+
+                            <div class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-center">
                                 <input style="margin-right:4px; margin-top:0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsShipping" placeholder="...." />
                                 <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Çatdırılma</span>
                                 <span asp-validation-for="Poster.PosterFeatures.IsShipping" class="text-danger"></span>
@@ -86,7 +86,7 @@
                             @* Çatdirilma *@
 
                             @* Yeni-Kohne *@
-                            <div class="col-3 d-flex align-items-center">
+                            <div class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-center">
                                 <input style="margin-right: 4px; margin-top: 0px !important;" class="form-check-input" asp-for="Poster.PosterFeatures.IsNew" placeholder="...." />
                                 <span style="font-size:17px; font-weight:700" class="d-flex align-items-center">Yeni</span>
                                 <span asp-validation-for="Poster.PosterFeatures.IsNew" class="text-danger"></span>
@@ -167,9 +167,15 @@
                         </div>
                         <!--  Images End -->
                         <!-- Button  Start -->
-                        <div class="mb-3 posterButton text-end">
-                            <button type="submit" class="btn ">Əlavə et</button>
+                        <div class="row d-flex justify-content-end mb-3 posterButton">
+                            <div class="col-lg-2 col-md-4 col-sm-3 col-4 mb-1 me-3">
+                                <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="profile" class="btn   btn-dark">Geri dön</a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-3 col-4 mb-1 ">
+                                <button style=" height: 100%; width: 100%;" type="submit" class="btn  ">Əlavə et</button>
+                            </div>
                         </div>
+
 
                         <!-- Button  Start -->
 

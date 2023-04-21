@@ -32,6 +32,7 @@ namespace Ferma.Data.Datacontext
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            
             builder.ApplyConfigurationsFromAssembly(typeof(CategoryConfiguration).Assembly);
             base.OnModelCreating(builder);
         }

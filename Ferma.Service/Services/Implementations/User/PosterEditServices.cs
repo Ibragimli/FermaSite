@@ -65,7 +65,6 @@ namespace Ferma.Service.Services.Implementations.User
         }
         public void posterEditCheck(Poster poster)
         {
-
             if (poster.PosterFeatures.Describe == null)
                 throw new ItemNullException("Təsvir hissəsi boş ola bilməz!");
             if (poster.PosterFeatures.Name == null)
@@ -161,17 +160,16 @@ namespace Ferma.Service.Services.Implementations.User
             return 0;
 
         }
-
         private int DeleteImages(Poster poster, Poster posterExist)
         {
             int i = 0;
-            var posterImages = posterExist.PosterImages;
+            ICollection<PosterImage> posterImages = posterExist.PosterImages;
             if (poster.PosterImagesIds != null)
             {
-                foreach (var item in posterImages.ToList().Where(x => x.IsDelete == false && !x.IsPoster && !poster.PosterImagesIds.Contains(x.Id)))
+                foreach (var image in posterImages.ToList().Where(x => x.IsDelete == false && !x.IsPoster && !poster.PosterImagesIds.Contains(x.Id)))
                 {
-                    _manageImageHelper.DeleteFile(item.Image, "poster");
-                    posterExist.PosterImages.Remove(item);
+                    _manageImageHelper.DeleteFile(image.Image, "poster");
+                    posterExist.PosterImages.Remove(image);
                     i++;
                 }
                 posterImages.ToList().RemoveAll(x => !poster.PosterImagesIds.Contains(x.Id));
@@ -179,6 +177,8 @@ namespace Ferma.Service.Services.Implementations.User
             }
             else
             {
+                //if (posterExist.PosterImages?.Count() > 1)
+                //{
                 if (poster.ImageFiles?.Count() > 0)
                 {
                     foreach (var item in posterImages.ToList().Where(x => !x.IsDelete && !x.IsPoster))
@@ -189,9 +189,9 @@ namespace Ferma.Service.Services.Implementations.User
                     }
                     return i;
                 }
-
                 else throw new ImageCountException("Axırıncı şəkil silinə bilməz!");
-
+                //}
+                //return i;
             }
         }
         private async Task<int> CreateImageFormFile(List<IFormFile> imageFiles, int posterId, int deleteCount)

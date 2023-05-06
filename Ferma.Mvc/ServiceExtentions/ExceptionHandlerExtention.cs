@@ -56,6 +56,9 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 400;
                         if (contextFeature.Error is ItemUseException)
                             code = 500;
+                        if (contextFeature.Error is SmsSenderException)
+                            code = 400;
+
 
                     }
 

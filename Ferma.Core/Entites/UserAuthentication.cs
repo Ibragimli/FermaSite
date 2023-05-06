@@ -11,6 +11,6 @@ namespace Ferma.Core.Entites
         public string Code { get; set; }
         public bool IsDisabled { get; set; }
         public int Count { get; set; }
-        public DateTime ExpirationDate { get; set; } = DateTime.UtcNow.AddHours(4).AddMinutes(5);
+        public DateTime ExpirationDate { get; set; } = DateTime.UtcNow.AddHours(4).AddMinutes(10);
     }
 }

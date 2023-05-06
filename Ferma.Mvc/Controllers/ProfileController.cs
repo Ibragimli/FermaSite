@@ -13,7 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Ferma.Mvc.Controllers
@@ -21,6 +25,7 @@ namespace Ferma.Mvc.Controllers
     public class ProfileController : Controller
     {
         private readonly DataContext _context;
+        private readonly ISmsSenderServices _smsSenderServices;
         private readonly IProfileIndexServices _profileIndexServices;
         private readonly IBalanceIncreaseServices _balanceIncreaseServices;
         private readonly IPosterEditServices _posterEditServices;
@@ -30,9 +35,10 @@ namespace Ferma.Mvc.Controllers
         private readonly IAuthenticationServices _authenticationServices;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public ProfileController(DataContext context, IProfileIndexServices profileIndexServices, IBalanceIncreaseServices balanceIncreaseServices, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public ProfileController(DataContext context, ISmsSenderServices smsSenderServices, IProfileIndexServices profileIndexServices, IBalanceIncreaseServices balanceIncreaseServices, IPosterEditServices posterEditServices, IProfileEditServices profileEditServices, IPhoneNumberServices numberServices, IProfileLoginServices loginServices, IAuthenticationServices authenticationServices, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _context = context;
+            _smsSenderServices = smsSenderServices;
             _profileIndexServices = profileIndexServices;
             _balanceIncreaseServices = balanceIncreaseServices;
             _posterEditServices = posterEditServices;
@@ -124,10 +130,14 @@ namespace Ferma.Mvc.Controllers
                     var authentication = await _authenticationServices.CreateAuthentication(token, code, number);
                     await _loginServices.UserResetPassword(number, code);
 
-                    //url
-                    url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
 
-                    return Redirect(url);
+                    // Response yoxlanması
+                    if (await _smsSenderServices.SmsSend(number, code))
+                    {
+                        //url
+                        url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
+                        return Redirect(url);
+                    }
                 }
             }
             catch (NotFoundException)
@@ -135,6 +145,11 @@ namespace Ferma.Mvc.Controllers
                 return RedirectToAction("index", "notfound");
             }
             catch (ItemFormatException ex)
+            {
+                ModelState.AddModelError("PhoneNumber", ex.Message);
+                return View();
+            }
+            catch (SmsSenderException ex)
             {
                 ModelState.AddModelError("PhoneNumber", ex.Message);
                 return View();

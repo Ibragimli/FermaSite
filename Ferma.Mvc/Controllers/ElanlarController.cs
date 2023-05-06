@@ -23,6 +23,7 @@ namespace Ferma.Mvc.Controllers
     public class ElanlarController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly ISmsSenderServices _smsSenderServices;
         private readonly IPosterDetailIndexServices _posterDetailIndexServices;
         private readonly IUserPostersServices _userPostersServices;
         private readonly IPosterSearchServices _searchServices;
@@ -37,9 +38,10 @@ namespace Ferma.Mvc.Controllers
         private readonly IPosterCreateServices _createServices;
         private readonly DataContext _context;
 
-        public ElanlarController(UserManager<AppUser> userManager, IPosterDetailIndexServices posterDetailIndexServices, IUserPostersServices userPostersServices, IPosterSearchServices searchServices, IPosterWishlistAddServices posterWishlistAddServices, IPosterWishlistDeleteServices posterWishlistDeleteServices, IPhoneNumberServices numberServices, IPaymentCreateServices paymentCreateServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
+        public ElanlarController(UserManager<AppUser> userManager, ISmsSenderServices smsSenderServices, IPosterDetailIndexServices posterDetailIndexServices, IUserPostersServices userPostersServices, IPosterSearchServices searchServices, IPosterWishlistAddServices posterWishlistAddServices, IPosterWishlistDeleteServices posterWishlistDeleteServices, IPhoneNumberServices numberServices, IPaymentCreateServices paymentCreateServices, IPosterCreateValueCheckServices posterCreateValueCheckServices, IAuthenticationServices autenticationServices, IManageImageHelper imageHelper, IPosterCreateIndexServices posterIndexServices, IPosterCreateServices createServices, DataContext context)
         {
             _userManager = userManager;
+            _smsSenderServices = smsSenderServices;
             _posterDetailIndexServices = posterDetailIndexServices;
             _userPostersServices = userPostersServices;
             _searchServices = searchServices;
@@ -231,7 +233,7 @@ namespace Ferma.Mvc.Controllers
 
                 //SubCategory check 
                 _posterCreateValueCheckServices.SubCategoryValidation(posterCreateDto.SubCategoryId);
-                
+
                 //City check 
                 _posterCreateValueCheckServices.CityValidation(posterCreateDto.CityId);
 
@@ -271,12 +273,17 @@ namespace Ferma.Mvc.Controllers
                     //tesdiqleme modelinin yaranmasi
                     var authentication = await _autenticationServices.CreateAuthentication(token, code, posterCreateDto.PhoneNumber);
 
-                    //Link
-                    url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
 
                     //Cookie yaradilmasi ve seklin uploads papkasina yuklenmesi
                     _createServices.CreatePosterCookie(posterCreateDto.ImageFiles, posterCreateDto);
-                    return Redirect(url);
+                   
+                    // Response yoxlanması
+                    if (await _smsSenderServices.SmsSend(posterCreateDto.PhoneNumber, code))
+                    {
+                        //url
+                        url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
+                        return Redirect(url);
+                    }
                 }
                 //Hesaba daxil olubsa
                 else
@@ -326,6 +333,11 @@ namespace Ferma.Mvc.Controllers
             catch (ImageNullException ex)
             {
                 ModelState.AddModelError("PosterCreateDto.ImageFiles", ex.Message);
+                return View(posterCreateView);
+            }
+            catch (SmsSenderException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
                 return View(posterCreateView);
             }
             catch (Exception ex)

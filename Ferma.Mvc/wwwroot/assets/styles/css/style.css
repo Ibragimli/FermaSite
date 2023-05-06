@@ -11,6 +11,8 @@ body .validation-summary-errors ul li {
     opacity: 50%;
 }
 
+
+
 header #tabBar .tabBar-ul li .tabBar-link i {
     color: #32CD32;
     font-size: 24px;
@@ -4127,4 +4129,19 @@ footer #footerCopyright {
 
 #loginFooter {
     padding-top: 0px !important
+}
+@media only screen and (max-width: 450px) {
+    header #headSearch .casket .row .headSearch form button {
+        margin-left: 5px !important;
+        width: 85px;
+        height: 36px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    header #headSearch .casket .row .headSearch form button {
+        margin-left: 5px !important;
+        width: 67px;
+        height: 36px;
+    }
 }

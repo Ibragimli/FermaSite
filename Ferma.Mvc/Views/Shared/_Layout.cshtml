@@ -34,10 +34,58 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/assets/styles/css/flexslider.css">
 
+    <meta property="og:site_name" content="minimall.az">
+    <meta property="og:url" content="https://minimall.az/">
+    <meta property="og:type" content="website">
+    <meta name="description" content="Minimall.az -  pulsuz elanlar, geniş imkanlar! Heyvanlar, yemlər,ləvazimatlar və s. – azərbaycan'da almaq və satmaq heç vaxt bu qədər asan olmayıb!">
+    <meta property="og:description" content="minimall.az – pulsuz elanlar, geniş imkanlar! Heyvanlar, yemlər,ləvazimatlar və s. – azərbaycan'da almaq və satmaq heç vaxt bu qədər asan olmayıb! ">
+
+    @*Google*@
+    <meta name="google-site-verification" content="_HwsZ7rlEKZDT8hbyfgwlAhg-si7c6WGYUtqUtcnSAQ" />
+
+    <!-- Google Analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-XXXXX-Y', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+    <!-- Google Tag Manager -->
+    <script>
+    (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KGM98ZK');</script>
+    <!-- End Google Tag Manager -->
+    @*google*@
+
+
+    <meta name="keywords" content=" ev heyvanları üçün ləvazimatlar, ev heyvanları üçün yemlər, iribuynuzlu,Iribuynuzlu, buğa, dana, inək, düyə, buzov, yem, camış, iribuynuzlular üçün ləvazimatlar, digər, Xırdabuynuzlu, quzu, heyvan bazarı, qoyun, qoç, keçi, xırdabuynuzlular üçün ləvazimatlar, digər, ev heyvanları, at, it, pişik, dovşan,
+          xamyak, uzunqulaq, qatır, digər, donuz, quşlar, xoruz, toyuq, cücə, göyərcin, bildirçin, qırqovul, ördək, qaz, hinduşka, ot, tutuquşu, tovuzquşu, quşlar üçün ləvazimatlar, quşlar üçün yemlər, digər, Balıqlar, dəniz, cay balıqları, akvarium balıqları balıqlar üçün yem, Ot-yem, arpa, buğda, yarma, qarışıq yemlər, quş yemləri, yonca,
+          ev heyvanları üçün yemlər, digər, toxum, gübrə və qatqılar, toxumlar, qatqılar, gübrələr, digər, Topdan ət alış/satış, ət alıram, ət satıram, baş-ayaq, dəri-yun, ciyər, digər, fermalar və meyvə bağları, hazır ferma, icarə ferma, torpaqlar, bağlar, digər, Baytarlıq, baytar həkim, aptek, fermerlərə məsləhətlər, digər,
+          Ekoloji təmiz qida, süd, qatıq, qaymaq, pendir, xama, şor,süzmə, yumurta, bal, Yükdaşıma, heyvanların daşınması, ot-yem daşınması, digər , texnika, ferma üçün,
+          broyler üçün, əkin işləri üçün, ehtiyat hissələri, xırdavat, digər, iş elanları, qəssab, coban, baxıcı, bağban, gözətçi, digər, ovçuluq, ov silahları, geyim, alətlər, digər, Meyvə-tərəvəz, meyvələr, tərəvəzlər, soyuducu kameralar, digər, inkubator, inkubator üçün avadanlıq, yumurta qoyma, inkubator üçün yümürta, digər, Ağaclar və güllər, ağaclar,
+          şitillər, güllər, dekorativ bitkilər, qazon, dekorativ landşaft işləri, digər, ARIÇILIQ, arı yeşikləri, arıçılıq avadanlıqları, bal, digər, CƏRƏZLƏR, qoz, fındıq, şabalıd, badam, digər,">
     <title>@settings.FirstOrDefault(x => x.Key == "Title")?.Value </title>
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KGM98ZK"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     @if (TempData["Error"] != null)
     {
         <input type="hidden" id="toaster-error" value="@TempData["Error"]" />
@@ -53,7 +101,7 @@
             <div class="casket">
                 <div class="row">
                     <!-- Head Logo Start -->
-                    <div class="col-6 headLogo">
+                    <div class="col-lg-6 col-md-6  col-6 headLogo">
                         <div class="headImageBox">
                             <a asp-controller="anasehife" asp-action="index">
                                 <img src="~/uploads/setting/@settings.FirstOrDefault(x => x.Key == "LogoImage")?.Value" alt="">
@@ -63,7 +111,7 @@
                     <!-- Head Logo End -->
                     <!-- Head Login Start -->
 
-                    <div class="col-6  d-flex justify-content-end align-items-center ">
+                    <div class="col-lg-6 col-md-5  col-6 d-flex justify-content-end align-items-center ">
                         <ul class="headCreateLogin me-2">
                             <li class="headCreateBtn media800">
                                 <a asp-controller="elanlar" asp-action="yenielan" class="btn">
@@ -140,17 +188,17 @@
         <section class="secDisplay " id="headSearch">
             <div class="casket">
                 <div class="row">
-                    <div class="col-lg-11 col-md-10 headSearch">
+                    <div class="col-lg-11 col-md-10 col-sm-11 headSearch">
                         <form asp-action="axtaris" asp-controller="elanlar">
                             <div class="col-1 d-flex justify-content-end">
                                 <a>
                                     <i class=" fa-solid fa-magnifying-glass"></i>
                                 </a>
                             </div>
-                            <div class="col-lg-6 col-7 ">
+                            <div class="col-lg-6 col-md-6 col-sm-6  col-6 ">
                                 <input placeholder="Axtarış" type="text" name="posterName" class="form-control">
                             </div>
-                            <div class="col-lg-2 media800">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-2 media800">
                                 <select name="cityId" class="form-select">
                                     <option selected disabled>Şəhər</option>
                                     @foreach (var city in cities)
@@ -159,7 +207,7 @@
                                     }
                                 </select>
                             </div>
-                            <div class="col-lg-2 col-md-1">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-2">
                                 <button type="submit" class="ms-5 btn">Axtar</button>
                             </div>
                         </form>

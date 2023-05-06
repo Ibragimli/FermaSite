@@ -80,8 +80,7 @@ namespace Ferma.Mvc.ServiceExtentions
             services.AddScoped<IUserTermIndexServices, UserTermIndexServices>();
             services.AddScoped<IDashboardServices, DashboardServices>();
             services.AddScoped<IProfileIndexServices, ProfileIndexServices>();
-
+            services.AddScoped<ISmsSenderServices, SmsSenderServices>();
         }
-
     }
 }

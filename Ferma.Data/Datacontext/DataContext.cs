@@ -32,7 +32,49 @@ namespace Ferma.Data.Datacontext
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
+            //builder.Entity<SubCategory>()
+            //    .HasKey(x => new { x.CategoryId });
+
+            //builder.Entity<Poster>()
+            //   .HasKey(x => new { x.PosterFeaturesId });
+
+            //builder.Entity<PosterUserId>()
+            //    .HasKey(x => new { x.PosterId, x.AppUserId });
+
+            //builder.Entity<PosterUserId>()
+            //    .HasOne(x => x.AppUser)
+            //    .WithMany(x => x.PosterUserIds)
+            //    .HasForeignKey(x => x.AppUserId);
+
+            //builder.Entity<PosterUserId>()
+            //           .HasOne(x => x.Poster)
+            //           .WithMany(x => x.PosterUserIds)
+            //           .HasForeignKey(x => x.PosterId);
+
+            //builder.Entity<WishItem>()
+            //    .HasKey(x => new { x.AppUserId, x.PosterId });
+
+            //builder.Entity<WishItem>()
+            //         .HasOne(x => x.AppUser)
+            //         .WithMany(x => x.WishItems)
+            //         .HasForeignKey(x => x.AppUserId);
+
+            //builder.Entity<WishItem>()
+            //           .HasOne(x => x.Poster)
+            //           .WithMany(x => x.WishItems)
+            //           .HasForeignKey(x => x.PosterId);
+
+
+            //builder.Entity<PosterImage>()
+            //    .HasKey(x => new { x.PosterId });
+
+            //builder.Entity<Payment>()
+            //    .HasKey(x => new { x.AppUserId, x.PosterId });
+
+            //builder.Entity<PosterFeatures>()
+            //    .HasKey(x => new { x.CityId, x.SubCategoryId });
+
+
             builder.ApplyConfigurationsFromAssembly(typeof(CategoryConfiguration).Assembly);
             base.OnModelCreating(builder);
         }

@@ -1,5 +1,6 @@
 ﻿using Ferma.Core.Entites;
 using Ferma.Core.IUnitOfWork;
+using Ferma.Service.CustomExceptions;
 using Ferma.Service.Services.Interfaces.User;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,9 @@ namespace Ferma.Service.Services.Implementations.User
         }
         public async Task<UserAuthentication> CreateAuthentication(string token, string code, string phoneNumber)
         {
+            //RareLimitCheck
+            await RareLimit(phoneNumber);
+
             var oldAuthentication = await _unitOfWork.UserAuthenticationRepository.GetAllAsync(x => x.IsDisabled == false && x.PhoneNumber == phoneNumber);
 
             if (oldAuthentication != null)
@@ -68,7 +72,13 @@ namespace Ferma.Service.Services.Implementations.User
             await _unitOfWork.CommitAsync();
             return authentication;
         }
-
-       
+        private async Task RareLimit(string phoneNumber)
+        {
+            var before = DateTime.UtcNow.AddHours(4).Minute - 5;
+            var now = DateTime.UtcNow.AddHours(4);
+            var count = await _unitOfWork.UserAuthenticationRepository.GetTotalCountAsync(x => x.CreatedDate.Minute > before && x.CreatedDate < now && x.PhoneNumber == phoneNumber);
+            if (count > 5)
+                throw new RareLimitException("5 dəqiqə ərzindəki sorğu limitini keçmisiz! Biraz gözləməyiniz xahiş olunur.");
+        }
     }
 }

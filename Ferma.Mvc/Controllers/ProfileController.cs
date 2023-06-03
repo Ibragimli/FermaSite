@@ -154,6 +154,11 @@ namespace Ferma.Mvc.Controllers
                 ModelState.AddModelError("PhoneNumber", ex.Message);
                 return View();
             }
+            catch (RareLimitException ex)
+            {
+                ModelState.AddModelError("PhoneNumber", ex.Message);
+                return View();
+            }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);

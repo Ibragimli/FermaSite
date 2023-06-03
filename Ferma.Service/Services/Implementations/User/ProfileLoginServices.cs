@@ -96,7 +96,7 @@ namespace Ferma.Service.Services.Implementations.User
             authentication.IsDisabled = true;
             await _unitOfWork.CommitAsync();
 
-            //return RedirectToAction("index", "anasehife");
+    
         }
 
         public async Task UserResetPassword(string phoneNumber, string code)

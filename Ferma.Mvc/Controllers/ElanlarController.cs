@@ -335,11 +335,17 @@ namespace Ferma.Mvc.Controllers
                 ModelState.AddModelError("PosterCreateDto.ImageFiles", ex.Message);
                 return View(posterCreateView);
             }
+            catch (RareLimitException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
             catch (SmsSenderException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(posterCreateView);
             }
+
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);

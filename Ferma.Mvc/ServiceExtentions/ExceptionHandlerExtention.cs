@@ -58,8 +58,8 @@ namespace Ferma.Mvc.ServiceExtentions
                             code = 500;
                         if (contextFeature.Error is SmsSenderException)
                             code = 400;
-
-
+                        if (contextFeature.Error is RareLimitException)
+                            code = 429;
                     }
 
                     context.Response.StatusCode = code;

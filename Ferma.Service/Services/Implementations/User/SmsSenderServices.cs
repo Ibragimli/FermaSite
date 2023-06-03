@@ -1,5 +1,6 @@
 ﻿using Ferma.Service.CustomExceptions;
 using Ferma.Service.Services.Interfaces.User;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,6 +11,12 @@ namespace Ferma.Service.Services.Implementations.User
 {
     public class SmsSenderServices : ISmsSenderServices
     {
+        private readonly IConfiguration _configuration;
+
+        public SmsSenderServices(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public async Task<bool> SmsSend(string number, string code)
         {
             //Mesaj məzmunu
@@ -17,13 +24,16 @@ namespace Ferma.Service.Services.Implementations.User
             // XML məzmunu 
             string xmlContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
                                 <SMS-InsRequest>
-                                    <CLIENT user=""demoapi"" pwd=""bVLj48xz"" from=""SOFTLINE""/>
+                                    <CLIENT user=""username"" pwd=""apikey"" from=""senderName""/>
                                     <INSERTMSG text=""metn"">
                                         <TO>nomre</TO>
                                     </INSERTMSG>
                                 </SMS-InsRequest>";
             xmlContent = xmlContent.Replace("metn", newText);
             xmlContent = xmlContent.Replace("nomre", number);
+            xmlContent = xmlContent.Replace("username", _configuration.GetSection("SmsService:Username").Value);
+            xmlContent = xmlContent.Replace("apikey", _configuration.GetSection("SmsService:ApiKey").Value);
+            xmlContent = xmlContent.Replace("senderName", _configuration.GetSection("SmsService:Sendername").Value);
             // HttpClient 
             using (HttpClient client = new HttpClient())
             {

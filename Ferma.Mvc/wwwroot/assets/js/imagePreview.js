@@ -1,5 +1,3 @@
-
-
 var p = document.getElementById("imageErrorMessage")
 
 const fileInput = document.getElementById('imageInput')
@@ -9,18 +7,17 @@ const dt = new DataTransfer();
 var files = []
 
 fileInput.onchange = (e) => {
-    files = Object.values(e.target.files)
-
+    //files = Object.values(e.target.files)
+    const files = Array.from(e.target.files);
     if (files.length > 8) {
-        p.innerHTML = "*Maksimum 8 şəkil əlavə edə bilərsiz!";
-        // for (let index = 1; index < 9; index++) {
-        //     removeFile(index)
-        // }
-        // e.target.value = null\
+        p.innerHTML = "* Maksimum 8 şəkil əlavə edə bilərsiz!";
+        fileInput.value = ''; // Inputun değerini sıfırla
     }
     else {
         if (selectedFiles.length > 7) {
-            p.innerHTML = "*Maksimum 8 şəkil əlavə edə bilərsiz!";
+            p.innerHTML = "* Maksimum 8 şəkil əlavə edə bilərsiz!";
+            fileInput.value = ''; // Inputun değerini sıfırla
+
         }
         else {
             if (files.length > 0) {
@@ -34,7 +31,9 @@ fileInput.onchange = (e) => {
                             src: src,
                             degree: 0,
                         });
-
+                        if (selectedFiles.length <= 8) {
+                            setImages();
+                        }
                     };
                     if (typeof file != "undefined") {
                         reader.readAsDataURL(file);
@@ -44,8 +43,6 @@ fileInput.onchange = (e) => {
             }
         }
     }
-
-
 }
 const setImages = () => {
     let html = ''
@@ -60,22 +57,21 @@ const setImages = () => {
         </div>`
         }
     })
-    previewImages.innerHTML = html
-}
+    previewImages.innerHTML = html;
+    updateInputFiles();
 
+}
+const updateInputFiles = () => {
+    dt.items.clear();
+    selectedFiles.forEach(file => {
+        dt.items.add(file.file);
+    });
+    fileInput.files = dt.files;
+};
 const removeFile = (index) => {
     const fileInput = document.getElementById('imageInput')
-    dt.items.remove(index-1)
+    dt.items.remove(index - 1)
     fileInput.files = dt.files
-    selectedFiles.splice(index-1, 1)
+    selectedFiles.splice(index - 1, 1)
     setImages()
 }
-
-
-
-
-
-
-
-
-

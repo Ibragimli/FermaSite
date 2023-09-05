@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+@model RoleManagerCreateDto
+
+@{
+    DateTime now = DateTime.UtcNow;
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">RoleManager /</span> Yaratmaq</h4>
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin Layihə   Create Start -->
+                <section style="margin-top: 10px;" id="createPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+
+                                <form class="form-control" asp-action="create" asp-controller="RoleManager" method="post" enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <!-- Layihə  Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="Role" class="form-label">Role adı*</label>
+                                        <input asp-for="Role" maxlength="150" type="text" class="form-control">
+                                        <span asp-validation-for="Role" class="text-danger"></span>
+                                    </div>
+                                    <!-- Layihə Name   End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="RoleManager" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Yaratmaq</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin Project  Create  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+
+@section Scripts{
+
+}

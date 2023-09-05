@@ -47,12 +47,17 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             {
                 await _adminLoginServices.Login(adminLoginPostDto);
             }
+            catch (ItemNullException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
             catch (UserNotFoundException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View();
             }
-
+            
             return RedirectToAction("index", "dashboard");
         }
 
@@ -63,18 +68,6 @@ namespace Ferma.Mvc.Areas.Manage.Controllers
             return RedirectToAction("login", "account");
         }
 
-
-        //private async Task<IActionResult> CreateRole()
-        //{
-        //    var role1 = await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
-        //    var role2 = await _roleManager.CreateAsync(new IdentityRole("Admin"));
-        //    var role3 = await _roleManager.CreateAsync(new IdentityRole("Member"));
-
-        //    AppUser SuperAdmin = new AppUser { Name = "Name", UserName = "Username" };
-        //    var admin = await _userManager.CreateAsync(SuperAdmin, "password");
-        //    var resultRole = await _userManager.AddToRoleAsync(SuperAdmin, "Admin");
-        //    return Ok(resultRole);
-        //}
 
     }
 }

@@ -18,7 +18,7 @@ namespace Ferma.Core.Entites
         public List<IFormFile> ImageFiles { get; set; }
         [NotMapped]
         public IFormFile PosterImageFile { get; set; }
-     
+
         [NotMapped]
         public List<int> PosterImagesIds { get; set; }
 

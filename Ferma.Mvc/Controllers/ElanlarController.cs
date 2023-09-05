@@ -276,14 +276,14 @@ namespace Ferma.Mvc.Controllers
 
                     //Cookie yaradilmasi ve seklin uploads papkasina yuklenmesi
                     _createServices.CreatePosterCookie(posterCreateDto.ImageFiles, posterCreateDto);
-                   
+
                     // Response yoxlanması
-                    if (await _smsSenderServices.SmsSend(posterCreateDto.PhoneNumber, code))
-                    {
-                        //url
-                        url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
-                        return Redirect(url);
-                    }
+                    //if (await _smsSenderServices.SmsSend(posterCreateDto.PhoneNumber, code))
+                    //{
+                    //url
+                    url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
+                    return Redirect(url);
+                    //}
                 }
                 //Hesaba daxil olubsa
                 else

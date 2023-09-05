@@ -6,9 +6,13 @@ using Ferma.Service.HelperService.Implementations;
 using Ferma.Service.HelperService.Interfaces;
 using Ferma.Service.Services.Implementations;
 using Ferma.Service.Services.Implementations.Area;
+using Ferma.Service.Services.Implementations.Area.RoleManagers;
+using Ferma.Service.Services.Implementations.Area.UserManagers;
 using Ferma.Service.Services.Implementations.User;
 using Ferma.Service.Services.Interfaces;
 using Ferma.Service.Services.Interfaces.Area;
+using Ferma.Service.Services.Interfaces.Area.RoleManagers;
+using Ferma.Service.Services.Interfaces.Area.UserManagers;
 using Ferma.Service.Services.Interfaces.User;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -81,6 +85,17 @@ namespace Ferma.Mvc.ServiceExtentions
             services.AddScoped<IDashboardServices, DashboardServices>();
             services.AddScoped<IProfileIndexServices, ProfileIndexServices>();
             services.AddScoped<ISmsSenderServices, SmsSenderServices>();
+
+            services.AddScoped<IAdminRoleManagerCreateServices, AdminRoleManagerCreateServices>();
+            services.AddScoped<IAdminRoleManagerEditServices, AdminRoleManagerEditServices>();
+            services.AddScoped<IAdminRoleManagerDeleteServices, AdminRoleManagerDeleteServices>();
+            services.AddScoped<IAdminRoleManagerIndexServices, AdminRoleManagerIndexServices>();
+
+            services.AddScoped<IAdminUserManagerCreateServices, AdminUserManagerCreateServices>();
+            services.AddScoped<IAdminUserManagerEditServices, AdminUserManagerEditServices>();
+            services.AddScoped<IAdminUserManagerDeleteServices, AdminUserManagerDeleteServices>();
+            services.AddScoped<IAdminUserManagerIndexServices, AdminUserManagerIndexServices>();
+
         }
     }
 }

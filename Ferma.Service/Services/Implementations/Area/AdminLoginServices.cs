@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Ferma.Service.Services.Implementations.Area
 {
-    public class AdminLoginServices: IAdminLoginServices
+    public class AdminLoginServices : IAdminLoginServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
@@ -25,6 +25,8 @@ namespace Ferma.Service.Services.Implementations.Area
         }
         public async Task<bool> Login(AdminLoginPostDto adminLoginPostDto)
         {
+            CheckValues(adminLoginPostDto);
+
             AppUser adminExist = await _unitOfWork.UserRepository.GetAsync(x => x.UserName == adminLoginPostDto.Username);
 
             if (adminExist != null && adminExist.IsAdmin == true)
@@ -37,7 +39,13 @@ namespace Ferma.Service.Services.Implementations.Area
             throw new UserNotFoundException("Username və ya Passoword yanlışdır!");
         }
 
-
+        private void CheckValues(AdminLoginPostDto adminLoginPostDto)
+        {
+            if (adminLoginPostDto.Username == null)
+                throw new ItemNullException("Username-i daxil edin");
+            if (adminLoginPostDto.Password == null)
+                throw new ItemNullException("Password-u daxil edin");
+        }
         public async void Logout()
         {
             await _signInManager.SignOutAsync();

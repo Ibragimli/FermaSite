@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    DateTime now = DateTime.UtcNow;
+
+}
+@model RoleManagerIndexViewModel
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">RoleManagers </span> </h4>
+
+        <!-- Bordered Table -->
+        <div class="card">
+            <div class="card-body">
+                @* Pagination *@
+                <div class="row">
+                    <form asp-action="index" asp-controller="RoleManager" asp-route-page="@ViewBag.Page" class="row d-flex">
+
+                        <div class="d-flex align-items-center col-lg-3 col-md-4 col-sm-6 mb-2">
+                            <input name="name" class="form-control " type="search" placeholder="Ad" aria-label="Ad">
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-2 text-center">
+                            <button class="btn btn-outline-primary" type="submit">Axtarış</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 mb-2 text-end">
+                            <a class="btn btn-danger" asp-action="create" asp-controller="RoleManager">Yeni RoleManager</a>
+                        </div>
+                    </form>
+
+                    <div class="d-flex align-items-center col-11 mt-2" style="display:flex; justify-content:flex-end;">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                @if (Model.RoleManagers.HasPrev)
+                                {
+
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="RoleManager" asp-route-page="@(Model.RoleManagers.PageIndex-1)" asp-route-name="@(ViewBag.Name)" class="page-link" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.RoleManagers.TotalPages; i++)
+                                {
+                                    <li aria-current="page" class="page-item" @(Model.RoleManagers.PageIndex == i ? "active" : "")>
+                                        <a asp-action="index" asp-controller="RoleManager" asp-route-page="@i" asp-route-name="@(ViewBag.Name)" class="page-link">@i</a>
+                                    </li>
+                                }
+                                @if (Model.RoleManagers.HasNext)
+                                {
+                                    <li class="page-item">
+                                        <a asp-action="index" asp-controller="RoleManager" asp-route-page="@(Model.RoleManagers.PageIndex+1)" asp-route-name="@(ViewBag.Name)" class="page-link" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                @* Pagination *@
+
+                <br />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <br />
+                @*table*@
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Role adı</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var RoleManager in Model.RoleManagers)
+                            {
+                                <tr>
+
+                                    <td class="text-center"><a>@RoleManager.Name</a></td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-sm-around">
+                                            <a asp-route-id="@RoleManager.Id" asp-action="edit" asp-controller="RoleManager"><i style="font-size: 26px !important; color:orange" class="fa-regular fa-pen-to-square"></i></a>
+                                            <a class="delete-btn" asp-controller="RoleManager" asp-action="delete" asp-route-id="@RoleManager.Id"><i style="font-size:26px !important; color:red;" class="bx bx-trash me-1 "></i> </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!--/ Bordered Table -->
+
+
+    </div>
+    <!-- / Content -->
+</div>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/assets/js/SweetAlertItem.js"></script>
+}

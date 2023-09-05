@@ -177,8 +177,7 @@ namespace Ferma.Service.Services.Implementations.User
             }
             else
             {
-                //if (posterExist.PosterImages?.Count() > 1)
-                //{
+
                 if (poster.ImageFiles?.Count() > 0)
                 {
                     foreach (var item in posterImages.ToList().Where(x => !x.IsDelete && !x.IsPoster))
@@ -189,10 +188,23 @@ namespace Ferma.Service.Services.Implementations.User
                     }
                     return i;
                 }
+                else if (posterImages.Any(x => !x.IsPoster))
+                {
+                    foreach (var item in posterImages.ToList().Where(x => !x.IsDelete && !x.IsPoster))
+                    {
+                        _manageImageHelper.DeleteFile(item.Image, "poster");
+                        posterExist.PosterImages.Remove(item);
+                        i++;
+                    }
+                    return i;
+                }
+                else if (posterImages.Any(x => x.IsPoster))
+                {
+                    return i;
+                }
                 else throw new ImageCountException("Axırıncı şəkil silinə bilməz!");
-                //}
-                //return i;
             }
+
         }
         private async Task<int> CreateImageFormFile(List<IFormFile> imageFiles, int posterId, int deleteCount)
         {

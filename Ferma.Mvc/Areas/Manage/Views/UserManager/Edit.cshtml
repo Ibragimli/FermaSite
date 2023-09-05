@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+@model UserManagerEditViewModel
+
+@{
+    DateTime now = DateTime.UtcNow;
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User /</span> Redaktə etmək</h4>
+        <div class="card">
+            <div class="card-body">
+                <!-- Admin Project  Edit Start -->
+                <section style="margin-top: 10px;" id="EditPoster">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class=" formBox  col-lg-8 col-md-12 col-sm-12 ">
+
+                                <form class="form-control" asp-action="edit" asp-controller="UserManager" method="post" enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" value="@Model.UserManagerEditDto.Id" asp-for="UserManagerEditDto.Id" />
+                                    <!-- Layihə  Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="UserManagerEditDto.Username" class="form-label">Username *</label>
+                                        <input asp-for="UserManagerEditDto.Username" maxlength="150" type="text" class="form-control">
+                                        <span asp-validation-for="UserManagerEditDto.Username" class="text-danger"></span>
+                                    </div>
+                                    <!-- Layihə Name   End -->
+                                    <!-- Layihə  Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="UserManagerEditDto.Name" class="form-label">Ad Soyad*</label>
+                                        <input asp-for="UserManagerEditDto.Name" maxlength="150" type="text" class="form-control">
+                                        <span asp-validation-for="UserManagerEditDto.Name" class="text-danger"></span>
+                                    </div>
+                                    <!-- Layihə Name   End -->
+                                    <!-- Layihə  Name  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="UserManagerEditDto.Password" class="form-label">Password*</label>
+                                        <input autocomplete="off" asp-for="UserManagerEditDto.Password" maxlength="150" type="text" class="form-control">
+                                        <span asp-validation-for="UserManagerEditDto.Password" class="text-danger"></span>
+                                    </div>
+                                    <!-- Layihələr  Start -->
+                                    <!-- Layihə DescribeEn  Start -->
+                                    <div class="mb-3 posterName">
+                                        <label asp-for="UserManagerEditDto.IsAdmin" class="form-label"> Admin*</label>
+                                        <input class="form-check-input" asp-for="UserManagerEditDto.IsAdmin" placeholder="...." /> @Html.DisplayNameFor(model => model.UserManagerEditDto.IsAdmin) *
+                                        <span asp-validation-for="UserManagerEditDto.IsAdmin" class="text-danger"></span>
+                                    </div>
+                                    <!-- Layihə DescribeEn   End -->
+                                    <!-- Layihələr  Start -->
+                                    <div class="mb-3 highProjects">
+                                        <label class="form-label">Role seçin</label>
+                                        <span asp-validation-for="UserManagerEditDto.RoleId" class="text-danger"></span>
+                                        <select asp-for="UserManagerEditDto.RoleId" class="form-select">
+                                            <option hidden value="@Model.UserManagerEditDto.RoleId" selected disabled>@Model.RoleName</option>
+
+                                            @foreach (var role in Model.Roles)
+                                            {
+                                                <option value="@role.Id">@role.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- Layihələr   End -->
+                                    <!-- Button  Start -->
+                                    <div class="row d-flex justify-content-end mb-3">
+                                        <div class="col mb-1">
+                                            <a style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " asp-action="index" asp-controller="UserManager" class="btn  btn-dark">Geri dön</a>
+                                        </div>
+                                        <div class="col mb-1 posterButton ms-2 ">
+                                            <button style=" height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; " type="submit" class="btn  btn-primary">Redaktə et</button>
+                                        </div>
+                                    </div>
+                                    <!-- Button  Start -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  Admin Project  Edit  End -->
+
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+</div>
+
+
+

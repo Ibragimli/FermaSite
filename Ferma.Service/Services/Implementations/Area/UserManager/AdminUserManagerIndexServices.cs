@@ -25,7 +25,23 @@ namespace Ferma.Service.Services.Implementations.Area.UserManagers
 
 
             if (Users != null)
-                Users = Users.Where(i => EF.Functions.Like(i.Name, $"%{name}%"));
+            {
+                Users = Users.Where(i => EF.Functions.Like(i.UserName, $"%{name}%"));
+                Users = Users.Where(i => !i.IsAdmin);
+            }
+            return Users;
+        }
+        public IQueryable<AppUser> GetAdminManager(string name)
+        {
+            var Users = _UserManager.Users.Where(x => x.UserName != null).AsQueryable();
+
+
+            if (Users != null)
+            {
+                Users = Users.Where(i => EF.Functions.Like(i.UserName, $"%{name}%"));
+                Users = Users.Where(i => i.IsAdmin);
+
+            }
 
             return Users;
         }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Ferma.Mvc.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,Editor")]
 
     public class ContactUsController : Controller
     {

@@ -132,12 +132,12 @@ namespace Ferma.Mvc.Controllers
 
 
                     // Response yoxlanması
-                    //if (await _smsSenderServices.SmsSend(number, code))
-                    //{
+                    if (await _smsSenderServices.SmsSend(number, code))
+                    {
                         //url
                         url = Url.Action("LoginAuthentication", "profile", new { phoneNumber = number, token = token }, Request.Scheme);
                         return Redirect(url);
-                    //}
+                    }
                 }
             }
             catch (NotFoundException)

@@ -37,7 +37,29 @@ namespace Ferma.Mvc.Areas.manage.Controllers
             _adminUserManagerCreateServices = adminUserManagerCreateServices;
         }
 
-        public IActionResult Index(int page = 1, string name = null)
+        public IActionResult Admin(int page = 1, string name = null)
+        {
+            UserManagerIndexViewModel UserManagerIndexVM = new UserManagerIndexViewModel();
+            try
+            {
+                var UserManager = _adminUserManagerIndexServices.GetAdminManager(name);
+                UserManagerIndexVM = new UserManagerIndexViewModel
+                {
+                    AppUsers = PagenetedList<AppUser>.Create(UserManager, page, 5),
+                };
+            }
+            catch (NotFoundException)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+
+            catch (Exception)
+            {
+                return RedirectToAction("index", "notfound");
+            }
+            return View(UserManagerIndexVM);
+        }
+        public IActionResult Users(int page = 1, string name = null)
         {
             UserManagerIndexViewModel UserManagerIndexVM = new UserManagerIndexViewModel();
             try

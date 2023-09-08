@@ -46,7 +46,7 @@
                         <form asp-action="contactus" asp-controller="bizimleelaqe" method="post">
                             <div class="control-group mb-3">
                                 <input oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
-                                       asp-for="FullName" type="text" class="form-control" placeholder="Adı"
+                                       asp-for="FullName" type="text" class="form-control" placeholder="Ad Soyad"
                                        required="required" />
                                 <span asp-validation-for="FullName" class="help-block text-danger"></span>
                             </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div class="control-group mb-3">
                                 <textarea oninvalid="this.setCustomValidity('İşarələnmiş sahəni qeyd edin')"
-                                          asp-for="Message" class="form-control" rows="8" placeholder="Mesaj"
+                                          asp-for="Message" class="form-control" rows="8" placeholder="Müraciətiniz"
                                           required="required"></textarea>
                                 <span asp-validation-for="Message" class="help-block text-danger"></span>
                             </div>
@@ -76,7 +76,6 @@
                     <!-- <div class="contactImage col-lg-6 col-md-8 col-sm-6 ">
                         <div class="imageBox">
                             <img src="../assets/Images/inek1.jpg" alt="">
-
                         </div>
                     </div> -->
                 </div>

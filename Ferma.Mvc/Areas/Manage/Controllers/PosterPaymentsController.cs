@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Ferma.Mvc.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,Editor")]
     public class PosterPaymentsController : Controller
     {
         private readonly IPosterPaymentIndexServices _posterPaymentIndexServices;

@@ -278,12 +278,12 @@ namespace Ferma.Mvc.Controllers
                     _createServices.CreatePosterCookie(posterCreateDto.ImageFiles, posterCreateDto);
 
                     // Response yoxlanması
-                    //if (await _smsSenderServices.SmsSend(posterCreateDto.PhoneNumber, code))
-                    //{
-                    //url
-                    url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
+                    if (await _smsSenderServices.SmsSend(posterCreateDto.PhoneNumber, code))
+                    {
+                        //url
+                        url = Url.Action("NumberAuthentication", "elanlar", new { phoneNumber = posterCreateDto.PhoneNumber, token = token }, Request.Scheme);
                     return Redirect(url);
-                    //}
+                    }
                 }
                 //Hesaba daxil olubsa
                 else

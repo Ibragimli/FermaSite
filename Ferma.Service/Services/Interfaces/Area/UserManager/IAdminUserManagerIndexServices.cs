@@ -11,5 +11,7 @@ namespace Ferma.Service.Services.Interfaces.Area.UserManagers
     public interface IAdminUserManagerIndexServices
     {
         public IQueryable<AppUser> GetUserManager(string name);
+        public IQueryable<AppUser> GetAdminManager(string name);
+
     }
 }
